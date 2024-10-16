@@ -1,50 +1,33 @@
-# React + TypeScript + Vite
+# 🎯 Easy Budget
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**Easy Budget** is your go-to solution for managing personal finances, built with simplicity in mind. Whether you're tracking daily expenses or planning a larger budget, this app makes it effortless! 💸
 
-Currently, two official plugins are available:
+## 🚀 Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 📊 **Add and track expenses**: Quickly create budget categories and input your expenses with ease.
+- 👀 **Visual overview**: Instantly see your budget vs actual expenses to track progress.
+- 🧼 **Simple and clean interface**: Tailored for anyone — no advanced knowledge required!
 
-## Expanding the ESLint configuration
+## 🧐 What is it?
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+**Easy Budget** is a **web-based budget management app**. It works right in your browser, making it accessible from any device — laptop, tablet, or mobile. No installation necessary! 🌐
 
-- Configure the top-level `parserOptions` property like this:
+## 🛠 Technologies Used
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+This project is powered by modern web technologies:
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- ⚛️ **React**
+- 🟦 **TypeScript**
+- ⚡ **Vite**
+- 🎨 **TailwindCSS**
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## 🎯 Project Ambition
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+The goal of **Easy Budget** is to create an easy-to-use tool for individuals to manage their finances. We're currently in development, but the vision is to release a feature-packed, intuitive budgeting app for everyone to use. 💼
+
+## 🛠 Current Stage
+
+- 🏗️ **Development Phase**: We are currently setting up the environment.
+- 📈 **Next Steps**: Implementing visual features like dynamic tables and charts.
+
+Stay tuned for updates and new features! Feel free to contribute, share feedback, or simply follow along as the project grows. 🎉
