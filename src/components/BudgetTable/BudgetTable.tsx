@@ -1,33 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import { BudgetTableRow } from "./BudgetTable.types";
 
-const BudgetTable: React.FC = () => {
-  const [rows, setRows] = useState([
-    { quantity: 0, category: "none" },
-  ] as BudgetTableRow[]);
+type BudgetTableProps = {
+  rows: BudgetTableRow[];
+};
 
-  const addRow = (row: BudgetTableRow) => {
-    setRows([...rows, row]);
-  };
+const BudgetTable: React.FC<BudgetTableProps> = ({ rows }) => {
+  const headers = Object.keys(rows[0]);
 
   return (
     <>
-      <button onClick={() => addRow({ category: "test", quantity: 30 })}>
-        Add row
-      </button>
-
       <table className="size-20">
         <thead>
           <tr>
-            <th className="border">Quantity</th>
-            <th className="border">Category</th>
+            {headers.map((header) => (
+              <th key={header}>{header}</th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {rows.map((row) => (
-            <tr>
-              <td className="border">{row.quantity}</td>
-              <td className="border">{row.category}</td>
+          {rows.map((row, index) => (
+            <tr key={index}>
+              {Object.values(row).map((value, index) => (
+                <td key={index}>{value}</td>
+              ))}
             </tr>
           ))}
         </tbody>
