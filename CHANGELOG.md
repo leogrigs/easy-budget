@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/leogrigs/easy-budget/compare/v1.0.0...v1.0.1) (2024-10-16)
+
+
+### Bug Fixes
+
+* project version ([4e6d6d3](https://github.com/leogrigs/easy-budget/commit/4e6d6d389a64abe833b6c0f606f3db4ff6065356))
+
 # 0.0.1 (2024-10-15)
 
 ### Bug Fixes
