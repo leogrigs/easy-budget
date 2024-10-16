@@ -10,11 +10,13 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows }) => {
 
   return (
     <>
-      <table className="size-20">
+      <table className="size-full">
         <thead>
           <tr>
             {headers.map((header) => (
-              <th key={header}>{header}</th>
+              <th className="text-start" key={header}>
+                {header}
+              </th>
             ))}
           </tr>
         </thead>
@@ -22,7 +24,9 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows }) => {
           {rows.map((row, index) => (
             <tr key={index}>
               {Object.values(row).map((value, index) => (
-                <td key={index}>{value}</td>
+                <td className="text-start" key={index}>
+                  {value}
+                </td>
               ))}
             </tr>
           ))}
