@@ -1,10 +1,76 @@
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
+import BudgetTable from "./components/BudgetTable";
+import { BUDGET_TABLE_DATA_MOCK } from "./mocks/mockData";
+import * as ApiService from "./services/apiService";
 
 function App() {
+  const [tableData, setTableData] = useState(BUDGET_TABLE_DATA_MOCK);
+  const hasSearch = useRef(false);
+
+  const delay = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
+
+  const fetchData = async () => {
+    const data = await ApiService.getTableData(true);
+    console.log("Dados buscados: ", data);
+    setTableData(data);
+  };
+
+  useEffect(() => {
+    if (!hasSearch.current) {
+      fetchData().catch((error) =>
+        console.error("Erro ao buscar dados: ", error)
+      );
+      hasSearch.current = true;
+    }
+  }, []);
+
+  const postData = async () => {
+    await ApiService.postTableData({
+      id: tableData.length + 1,
+      name: "Teste",
+      price: 0,
+      date: "01/01/2001",
+      category: "teste",
+      type: "type",
+      method: "pix",
+      bank: "bank",
+    });
+    await delay(1000);
+    await fetchData();
+  };
+
+  const deleteData = async () => {
+    if (tableData.length > 0) {
+      const lastId = tableData[tableData.length - 1].id;
+      await ApiService.deleteTableDataById(lastId);
+      await delay(5000);
+      await fetchData();
+    }
+  };
+
   return (
-    <div className="w-screen h-screen bg-black flex justify-center items-center">
-      <h1 className="font-mono text-3xl font-bold text-white">Easy Budget</h1>
-    </div>
+    <>
+      <div className="w-screen h-screen">
+        <div className="border">
+          <h1>Easy Budget</h1>
+        </div>
+        <div>
+          <div>Income: 1000</div>
+          <div>Expenses: -300</div>
+        </div>
+        <div>
+          <label htmlFor="search">Search</label>
+          <input id="search" type="text" />
+          <button onClick={postData}>Add row</button>
+          <button onClick={deleteData}>Delete last row</button>
+        </div>
+        <div className="border">
+          <BudgetTable rows={tableData}></BudgetTable>
+        </div>
+      </div>
+    </>
   );
 }
 
