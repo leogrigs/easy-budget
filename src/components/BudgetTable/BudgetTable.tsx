@@ -1,8 +1,7 @@
 import React from "react";
-import { BudgetTableRow } from "./BudgetTable.types";
 
 type BudgetTableProps = {
-  rows: BudgetTableRow[];
+  rows: Array<object>;
 };
 
 const BudgetTable: React.FC<BudgetTableProps> = ({ rows }) => {
