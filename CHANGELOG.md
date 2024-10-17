@@ -1,3 +1,13 @@
+# [0.1.0](https://github.com/leogrigs/easy-budget/compare/v0.0.2...v0.1.0) (2024-10-17)
+
+
+### Features
+
+* **budget-table:** sheet best api integration ([d92c90b](https://github.com/leogrigs/easy-budget/commit/d92c90b7ea2628296e87a06eba6514059e35ff13))
+* **budgettable:** creating component and adding it to App.tsx ([c2f0233](https://github.com/leogrigs/easy-budget/commit/c2f023351c643d94de3dc1898676f073c8a5f3fe))
+* **BudgetTable:** mocking first data ([7628cfd](https://github.com/leogrigs/easy-budget/commit/7628cfd3bbf7ff1dc0644bec82785c9874309d8e))
+* print mock records on the screen ([6d87671](https://github.com/leogrigs/easy-budget/commit/6d876710e3673dc6dc450ca9a384206e340ca5f9))
+
 ## [1.0.1](https://github.com/leogrigs/easy-budget/compare/v1.0.0...v1.0.1) (2024-10-16)
 
 
