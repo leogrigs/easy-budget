@@ -1,3 +1,10 @@
+# [0.3.0](https://github.com/leogrigs/easy-budget/compare/v0.2.0...v0.3.0) (2024-10-18)
+
+
+### Features
+
+* **new-entry-modal:** component creation and forms structure ([7a97d3c](https://github.com/leogrigs/easy-budget/commit/7a97d3cd7fb93dc0cf31c05fd27b94ab438f5276))
+
 # [0.2.0](https://github.com/leogrigs/easy-budget/compare/v0.1.0...v0.2.0) (2024-10-18)
 
 
