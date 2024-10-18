@@ -1,3 +1,4 @@
+import { BudgetTableTypeEnum } from "../enums/BudgetTableType.enum";
 import { BudgetTableData } from "../interfaces/BudgetTable.interface";
 
 export const BUDGET_TABLE_DATA_MOCK: BudgetTableData[] = [
@@ -7,8 +8,7 @@ export const BUDGET_TABLE_DATA_MOCK: BudgetTableData[] = [
     price: 300,
     date: "01/01/2024",
     category: "food",
-    type: "fixed",
-    method: "credit card",
+    type: BudgetTableTypeEnum.EXPENSE,
     bank: "Nubank",
   },
   {
@@ -17,8 +17,7 @@ export const BUDGET_TABLE_DATA_MOCK: BudgetTableData[] = [
     price: 100,
     date: "01/01/2024",
     category: "food",
-    type: "fixed",
-    method: "credit card",
+    type: BudgetTableTypeEnum.EXPENSE,
     bank: "Nubank",
   },
   {
@@ -27,8 +26,7 @@ export const BUDGET_TABLE_DATA_MOCK: BudgetTableData[] = [
     price: 3000,
     date: "01/01/2024",
     category: "income",
-    type: "fixed",
-    method: "credit card",
+    type: BudgetTableTypeEnum.EXPENSE,
     bank: "Nubank",
   },
   {
@@ -37,8 +35,16 @@ export const BUDGET_TABLE_DATA_MOCK: BudgetTableData[] = [
     price: 300,
     date: "01/01/2024",
     category: "food",
-    type: "fixed",
-    method: "credit card",
+    type: BudgetTableTypeEnum.EXPENSE,
     bank: "Nubank",
+  },
+  {
+    id: 5,
+    name: "Salary",
+    price: 3000,
+    date: "03/01/2024",
+    category: "salary",
+    type: BudgetTableTypeEnum.INCOME,
+    bank: "Itau",
   },
 ];

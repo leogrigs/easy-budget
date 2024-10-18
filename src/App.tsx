@@ -3,13 +3,26 @@ import "./App.css";
 import BudgetTable from "./components/BudgetTable";
 import { BUDGET_TABLE_DATA_MOCK } from "./mocks/mockData";
 import * as ApiService from "./services/apiService";
+import { BudgetTableTypeEnum } from "./enums/BudgetTableType.enum";
 
 function App() {
   const [tableData, setTableData] = useState(BUDGET_TABLE_DATA_MOCK);
+
   const hasSearch = useRef(false);
 
   const delay = (ms: number) =>
     new Promise((resolve) => setTimeout(resolve, ms));
+
+  const reduceTablePriceByType = (type: string) =>
+    tableData.reduce((acc, curr) => {
+      if (curr.type === type) {
+        return acc + curr.price;
+      }
+      return acc;
+    }, 0);
+
+  const income = reduceTablePriceByType("Income");
+  const expense = reduceTablePriceByType("Expense");
 
   const fetchData = async () => {
     const data = await ApiService.getTableData(true);
@@ -33,8 +46,7 @@ function App() {
       price: 0,
       date: "01/01/2001",
       category: "teste",
-      type: "type",
-      method: "pix",
+      type: BudgetTableTypeEnum.INCOME,
       bank: "bank",
     });
     await delay(1000);
@@ -57,8 +69,9 @@ function App() {
           <h1>Easy Budget</h1>
         </div>
         <div>
-          <div>Income: 1000</div>
-          <div>Expenses: -300</div>
+          <div>Balance: {income - expense}</div>
+          <div>Income: {income}</div>
+          <div>Expenses: {expense}</div>
         </div>
         <div>
           <label htmlFor="search">Search</label>
