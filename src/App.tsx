@@ -3,15 +3,12 @@ import "./App.css";
 import BudgetTable from "./components/BudgetTable";
 import { BUDGET_TABLE_DATA_MOCK } from "./mocks/mockData";
 import * as ApiService from "./services/apiService";
-import { BudgetTableTypeEnum } from "./enums/BudgetTableType.enum";
+import NewEntryModal from "./components/NewEntryModal";
 
 function App() {
   const [tableData, setTableData] = useState(BUDGET_TABLE_DATA_MOCK);
 
   const hasSearch = useRef(false);
-
-  const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
 
   const reduceTablePriceByType = (type: string) =>
     tableData.reduce((acc, curr) => {
@@ -39,29 +36,6 @@ function App() {
     }
   }, []);
 
-  const postData = async () => {
-    await ApiService.postTableData({
-      id: tableData.length + 1,
-      name: "Teste",
-      price: 0,
-      date: "01/01/2001",
-      category: "teste",
-      type: BudgetTableTypeEnum.INCOME,
-      bank: "bank",
-    });
-    await delay(1000);
-    await fetchData();
-  };
-
-  const deleteData = async () => {
-    if (tableData.length > 0) {
-      const lastId = tableData[tableData.length - 1].id;
-      await ApiService.deleteTableDataById(lastId);
-      await delay(5000);
-      await fetchData();
-    }
-  };
-
   return (
     <>
       <div className="w-screen h-screen">
@@ -76,8 +50,7 @@ function App() {
         <div>
           <label htmlFor="search">Search</label>
           <input id="search" type="text" />
-          <button onClick={postData}>Add row</button>
-          <button onClick={deleteData}>Delete last row</button>
+          <NewEntryModal></NewEntryModal>
         </div>
         <div className="border">
           <BudgetTable rows={tableData}></BudgetTable>
