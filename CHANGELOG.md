@@ -1,3 +1,10 @@
+# [0.2.0](https://github.com/leogrigs/easy-budget/compare/v0.1.0...v0.2.0) (2024-10-18)
+
+
+### Features
+
+* include balance, income and expenses sums ([2712d9a](https://github.com/leogrigs/easy-budget/commit/2712d9a93bbbb89338c85cad90d3dfc44ebe4312))
+
 # [0.1.0](https://github.com/leogrigs/easy-budget/compare/v0.0.2...v0.1.0) (2024-10-17)
 
 
