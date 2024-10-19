@@ -1,19 +1,30 @@
 import {
-  Button,
   Dialog,
   DialogBackdrop,
   DialogPanel,
   DialogTitle,
-  Field,
-  Fieldset,
-  Input,
-  Label,
-  Select,
 } from "@headlessui/react";
-import React from "react";
+import React, { useState } from "react";
+import Input from "../Input";
 
-const NewEntryModal: React.FC = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
+type NewEntryModalProps = {
+  onNewEntry: (data: any) => void;
+};
+
+const NewEntryModal: React.FC<NewEntryModalProps> = ({ onNewEntry }) => {
+  const [isOpen, setIsOpen] = useState(true);
+  const [formData, setFormData] = useState({
+    name: "",
+    price: 0,
+    date: "",
+  });
+
+  const handleFormChanges = (name: string, value: string) => {
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const open = () => setIsOpen(true);
   const close = () => setIsOpen(false);
@@ -28,52 +39,67 @@ const NewEntryModal: React.FC = () => {
       >
         <DialogBackdrop className="fixed inset-0 bg-black/30" />
 
-        <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-          <DialogPanel className="max-w-lg space-y-4 border bg-white p-12">
+        <div className="fixed inset-0 flex w-screen items-center justify-center rad p-4">
+          <DialogPanel className="w-1/2 max-w-lg space-y-4 border rounded bg-white p-4">
             <DialogTitle>New entry</DialogTitle>
-            <Fieldset>
-              <Field>
-                <Label>Name</Label>
-                <Input name="name" type="text" />
-              </Field>
 
-              <Field>
-                <Label>Price</Label>
-                <Input name="price" type="number" />
-              </Field>
+            {/* Form */}
+            <form className="flex flex-col gap-4">
+              <div className="w-full max-w-sm min-w-[200px]">
+                <label className="block mb-2 text-sm text-slate-600">
+                  Name
+                </label>
+                <Input
+                  value={formData.name}
+                  placeholder="Entry name"
+                  onChange={handleFormChanges}
+                  name="name"
+                />
+              </div>
 
-              <Field>
-                <Label>Date</Label>
-                <Input name="date" type="text" />
-              </Field>
+              <div className="w-full max-w-sm min-w-[200px]">
+                <label className="block mb-2 text-sm text-slate-600">
+                  Price
+                </label>
+                <Input
+                  value={formData.price}
+                  type="number"
+                  placeholder="Entry price"
+                  onChange={handleFormChanges}
+                  name="price"
+                />
+              </div>
 
-              <Field>
-                <Label>Category</Label>
-                <Select name="category">
-                  <option value="food">Food</option>
-                  <option value="salary">Salary</option>
-                </Select>
-              </Field>
+              <div className="w-full max-w-sm min-w-[200px]">
+                <label className="block mb-2 text-sm text-slate-600">
+                  Date
+                </label>
+                <Input
+                  value={formData.date}
+                  type="text"
+                  placeholder="dd/mm/yyyy"
+                  onChange={handleFormChanges}
+                  name="date"
+                />
+              </div>
+            </form>
 
-              <Field>
-                <Label>Type</Label>
-                <Select name="type">
-                  <option value="Income">Income</option>
-                  <option value="Expense">Expense</option>
-                </Select>
-              </Field>
-
-              <Field>
-                <Label>Bank</Label>
-                <Select name="bank">
-                  <option value="Itau">Itau</option>
-                  <option value="Nubank">Nubank</option>
-                </Select>
-              </Field>
-            </Fieldset>
-            <div className="flex gap-4">
-              <Button onClick={close}>Cancel</Button>
-              <Button onClick={close}>Create</Button>
+            {/* Actions */}
+            <div className="flex gap-2 justify-between">
+              <button
+                onClick={close}
+                className="mt-4 w-full rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                type="button"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => onNewEntry(formData)}
+                className="mt-4 w-full rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                type="button"
+              >
+                Create
+              </button>
             </div>
           </DialogPanel>
         </div>
