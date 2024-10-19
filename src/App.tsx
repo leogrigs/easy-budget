@@ -38,11 +38,11 @@ function App() {
 
   return (
     <>
-      <div className="w-screen h-screen">
+      <div className="w-screen h-screen p-4">
         <div className="border">
           <h1>Easy Budget</h1>
         </div>
-        <div>
+        <div className="mb-4">
           <div>Balance: {income - expense}</div>
           <div>Income: {income}</div>
           <div>Expenses: {expense}</div>
@@ -52,7 +52,7 @@ function App() {
           <input id="search" type="text" />
           <NewEntryModal></NewEntryModal>
         </div>
-        <div className="border">
+        <div className="my-4">
           <BudgetTable rows={tableData}></BudgetTable>
         </div>
       </div>

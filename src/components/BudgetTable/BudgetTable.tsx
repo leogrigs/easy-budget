@@ -9,11 +9,11 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows }) => {
 
   return (
     <>
-      <table className="size-full">
+      <table className="size-full border-collapse">
         <thead>
           <tr>
             {headers.map((header) => (
-              <th className="text-start" key={header}>
+              <th className="text-start border p-2 bg-slate-100" key={header}>
                 {header}
               </th>
             ))}
@@ -21,9 +21,9 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows }) => {
         </thead>
         <tbody>
           {rows.map((row, index) => (
-            <tr key={index}>
+            <tr className="hover:bg-slate-50" key={index}>
               {Object.values(row).map((value, index) => (
-                <td className="text-start" key={index}>
+                <td className="text-start border p-2" key={index}>
                   {value}
                 </td>
               ))}
