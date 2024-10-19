@@ -5,6 +5,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import React, { useState } from "react";
+import Input from "../Input";
 
 type NewEntryModalProps = {
   onNewEntry: (data: any) => void;
@@ -14,12 +15,14 @@ const NewEntryModal: React.FC<NewEntryModalProps> = ({ onNewEntry }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
+    price: 0,
+    date: "",
   });
 
-  const handleFormChanges = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFormChanges = (name: string, value: string) => {
     setFormData({
       ...formData,
-      [event.target.name]: event.target.value,
+      [name]: value,
     });
   };
 
@@ -36,23 +39,47 @@ const NewEntryModal: React.FC<NewEntryModalProps> = ({ onNewEntry }) => {
       >
         <DialogBackdrop className="fixed inset-0 bg-black/30" />
 
-        <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-          <DialogPanel className="max-w-lg space-y-4 border bg-white p-12">
+        <div className="fixed inset-0 flex w-screen items-center justify-center rad p-4">
+          <DialogPanel className="w-1/2 max-w-lg space-y-4 border rounded bg-white p-4">
             <DialogTitle>New entry</DialogTitle>
 
             {/* Form */}
-            <form>
+            <form className="flex flex-col gap-4">
               <div className="w-full max-w-sm min-w-[200px]">
                 <label className="block mb-2 text-sm text-slate-600">
                   Name
                 </label>
-                <input
-                  type="text"
-                  name="name"
+                <Input
                   value={formData.name}
-                  onChange={handleFormChanges}
-                  className="w-full bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded-md px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-300 shadow-sm focus:shadow"
                   placeholder="Entry name"
+                  onChange={handleFormChanges}
+                  name="name"
+                />
+              </div>
+
+              <div className="w-full max-w-sm min-w-[200px]">
+                <label className="block mb-2 text-sm text-slate-600">
+                  Price
+                </label>
+                <Input
+                  value={formData.price}
+                  type="number"
+                  placeholder="Entry price"
+                  onChange={handleFormChanges}
+                  name="price"
+                />
+              </div>
+
+              <div className="w-full max-w-sm min-w-[200px]">
+                <label className="block mb-2 text-sm text-slate-600">
+                  Date
+                </label>
+                <Input
+                  value={formData.date}
+                  type="text"
+                  placeholder="dd/mm/yyyy"
+                  onChange={handleFormChanges}
+                  name="date"
                 />
               </div>
             </form>
