@@ -50,7 +50,7 @@ function App() {
         <div>
           <label htmlFor="search">Search</label>
           <input id="search" type="text" />
-          <NewEntryModal></NewEntryModal>
+          <NewEntryModal onNewEntry={(e) => console.log(e)}></NewEntryModal>
         </div>
         <div className="my-4">
           <BudgetTable rows={tableData}></BudgetTable>
