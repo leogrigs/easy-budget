@@ -1,3 +1,10 @@
+# [0.4.0](https://github.com/leogrigs/easy-budget/compare/v0.3.0...v0.4.0) (2024-10-19)
+
+
+### Features
+
+* **input:** new stylized input component ([090a565](https://github.com/leogrigs/easy-budget/commit/090a5652fb24a09871c6c21378db0e04bea11556))
+
 # [0.3.0](https://github.com/leogrigs/easy-budget/compare/v0.2.0...v0.3.0) (2024-10-18)
 
 
