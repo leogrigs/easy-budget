@@ -1,3 +1,11 @@
+# [0.5.0](https://github.com/leogrigs/easy-budget/compare/v0.4.0...v0.5.0) (2024-10-20)
+
+
+### Features
+
+* **new-entry:** included last fields on modal ([da5ac69](https://github.com/leogrigs/easy-budget/commit/da5ac697bf7714169e89f4942f24b3a23865d23e))
+* select input component ([a469542](https://github.com/leogrigs/easy-budget/commit/a46954252d79e7db34ef629af69d17a5779b5f3e))
+
 # [0.4.0](https://github.com/leogrigs/easy-budget/compare/v0.3.0...v0.4.0) (2024-10-19)
 
 
