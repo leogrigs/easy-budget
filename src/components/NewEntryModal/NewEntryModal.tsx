@@ -15,7 +15,7 @@ type NewEntryModalProps = {
 };
 
 const NewEntryModal: React.FC<NewEntryModalProps> = ({ onNewEntry }) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     price: 0,
