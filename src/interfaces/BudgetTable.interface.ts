@@ -7,5 +7,4 @@ export interface BudgetTableData {
   date: string;
   category: string; // TODO: transform into a type or enum
   type: BudgetTableType;
-  bank: string; // TODO: transform into a type or enum
 }
