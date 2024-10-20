@@ -9,7 +9,6 @@ export const BUDGET_TABLE_DATA_MOCK: BudgetTableData[] = [
     date: "01/01/2024",
     category: "food",
     type: BudgetTableTypeEnum.EXPENSE,
-    bank: "Nubank",
   },
   {
     id: 2,
@@ -18,7 +17,6 @@ export const BUDGET_TABLE_DATA_MOCK: BudgetTableData[] = [
     date: "01/01/2024",
     category: "food",
     type: BudgetTableTypeEnum.EXPENSE,
-    bank: "Nubank",
   },
   {
     id: 3,
@@ -27,7 +25,6 @@ export const BUDGET_TABLE_DATA_MOCK: BudgetTableData[] = [
     date: "01/01/2024",
     category: "income",
     type: BudgetTableTypeEnum.EXPENSE,
-    bank: "Nubank",
   },
   {
     id: 4,
@@ -36,7 +33,6 @@ export const BUDGET_TABLE_DATA_MOCK: BudgetTableData[] = [
     date: "01/01/2024",
     category: "food",
     type: BudgetTableTypeEnum.EXPENSE,
-    bank: "Nubank",
   },
   {
     id: 5,
@@ -45,6 +41,5 @@ export const BUDGET_TABLE_DATA_MOCK: BudgetTableData[] = [
     date: "03/01/2024",
     category: "salary",
     type: BudgetTableTypeEnum.INCOME,
-    bank: "Itau",
   },
 ];
