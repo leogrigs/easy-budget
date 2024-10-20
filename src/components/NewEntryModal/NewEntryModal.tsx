@@ -6,6 +6,9 @@ import {
 } from "@headlessui/react";
 import React, { useState } from "react";
 import Input from "../Input";
+import Select from "../Select";
+import { CATEGORY_OPTIONS } from "../../consts/category.options";
+import { TYPE_OPTIONS } from "../../consts/type.options";
 
 type NewEntryModalProps = {
   onNewEntry: (data: any) => void;
@@ -17,6 +20,9 @@ const NewEntryModal: React.FC<NewEntryModalProps> = ({ onNewEntry }) => {
     name: "",
     price: 0,
     date: "",
+    category: "food",
+    type: "expense",
+    bank: "itau",
   });
 
   const handleFormChanges = (name: string, value: string) => {
@@ -80,6 +86,30 @@ const NewEntryModal: React.FC<NewEntryModalProps> = ({ onNewEntry }) => {
                   placeholder="dd/mm/yyyy"
                   onChange={handleFormChanges}
                   name="date"
+                />
+              </div>
+
+              <div className="w-full max-w-sm min-w-[200px]">
+                <label className="block mb-2 text-sm text-slate-600">
+                  Category
+                </label>
+                <Select
+                  options={CATEGORY_OPTIONS}
+                  value={formData.category}
+                  onChange={handleFormChanges}
+                  name="category"
+                />
+              </div>
+
+              <div className="w-full max-w-sm min-w-[200px]">
+                <label className="block mb-2 text-sm text-slate-600">
+                  Type
+                </label>
+                <Select
+                  options={TYPE_OPTIONS}
+                  value={formData.type}
+                  onChange={handleFormChanges}
+                  name="type"
                 />
               </div>
             </form>
