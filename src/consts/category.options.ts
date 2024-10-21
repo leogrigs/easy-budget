@@ -3,7 +3,7 @@ import { InputOptions } from "../interfaces/InputOptions.interface";
 export const CATEGORY_OPTIONS: InputOptions[] = [
   {
     id: "category-1",
-    label: "salary",
+    label: "Salary",
     value: "salary",
   },
   {
