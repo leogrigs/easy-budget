@@ -1,4 +1,4 @@
 export enum BudgetTableTypeEnum {
-  INCOME = "Income",
-  EXPENSE = "Expense",
+  INCOME = "income",
+  EXPENSE = "expense",
 }
