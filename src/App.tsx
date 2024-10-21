@@ -4,6 +4,7 @@ import BudgetTable from "./components/BudgetTable";
 import { BUDGET_TABLE_DATA_MOCK } from "./mocks/mockData";
 import * as ApiService from "./services/apiService";
 import NewEntryModal from "./components/NewEntryModal";
+import { BudgetTableData } from "./interfaces/BudgetTable.interface";
 
 function App() {
   const [tableData, setTableData] = useState(BUDGET_TABLE_DATA_MOCK);
@@ -22,7 +23,7 @@ function App() {
   const expense = reduceTablePriceByType("Expense");
 
   const fetchData = async () => {
-    const data = await ApiService.getTableData(true);
+    const data = await ApiService.getTableData(false);
     console.log("Dados buscados: ", data);
     setTableData(data);
   };
@@ -35,6 +36,17 @@ function App() {
       hasSearch.current = true;
     }
   }, []);
+
+  const onNewEntry = async (entry: BudgetTableData) => {
+    const postData = await ApiService.postTableData({
+      ...entry,
+      id: tableData.length + 1,
+    });
+    console.log("Dados enviados: ", postData);
+    setTimeout(() => {
+      fetchData();
+    }, 2000);
+  };
 
   return (
     <>
@@ -50,7 +62,7 @@ function App() {
         <div>
           <label htmlFor="search">Search</label>
           <input id="search" type="text" />
-          <NewEntryModal onNewEntry={(e) => console.log(e)}></NewEntryModal>
+          <NewEntryModal onNewEntry={onNewEntry}></NewEntryModal>
         </div>
         <div className="my-4">
           <BudgetTable rows={tableData}></BudgetTable>

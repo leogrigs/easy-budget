@@ -3,7 +3,7 @@ import { BUDGET_TABLE_DATA_MOCK } from "../mocks/mockData";
 
 const API_URL = "https://api.sheetbest.com/sheets";
 const SHEET_ID = "8d805f34-cbcb-4373-b3b6-d11c05c9a129";
-const USE_MOCK = true;
+const USE_MOCK = false;
 
 export const getTableData = async (raw = false) => {
   if (USE_MOCK) {
@@ -11,7 +11,15 @@ export const getTableData = async (raw = false) => {
   }
   const response = await fetch(`${API_URL}/${SHEET_ID}${raw ? "?_raw=1" : ""}`);
   const data = await response.json();
-  return data;
+  return formatData(data);
+};
+
+const formatData = (data: BudgetTableData[]) => {
+  return data.map((item) => ({
+    ...item,
+    price: Number(item.price),
+    id: Number(item.id),
+  }));
 };
 
 export const postTableData = async (data: BudgetTableData) => {
