@@ -1,3 +1,15 @@
+# [0.6.0](https://github.com/leogrigs/easy-budget/compare/v0.5.0...v0.6.0) (2024-10-21)
+
+
+### Bug Fixes
+
+* category salary option label ([564909e](https://github.com/leogrigs/easy-budget/commit/564909e3be9fbca3728852e18e761b82306fb97d))
+
+
+### Features
+
+* **new-entry:** new entry POST API integration ([bc34884](https://github.com/leogrigs/easy-budget/commit/bc34884c8378068867a35fe3ffbe5a7284928b62))
+
 # [0.5.0](https://github.com/leogrigs/easy-budget/compare/v0.4.0...v0.5.0) (2024-10-20)
 
 
