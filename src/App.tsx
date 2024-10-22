@@ -54,7 +54,7 @@ function App() {
         <div className="border">
           <h1>Easy Budget</h1>
         </div>
-        <div className="mb-4">
+        <div className="my-4">
           <Totalizers
             income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
             expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
