@@ -1,3 +1,10 @@
+# [0.7.0](https://github.com/leogrigs/easy-budget/compare/v0.6.0...v0.7.0) (2024-10-22)
+
+
+### Features
+
+* **totalizers:** new component to show totalizers ([d6bf7fb](https://github.com/leogrigs/easy-budget/commit/d6bf7fbe7d5d280ed56585253c5d6935fa6c6976))
+
 # [0.6.0](https://github.com/leogrigs/easy-budget/compare/v0.5.0...v0.6.0) (2024-10-21)
 
 
