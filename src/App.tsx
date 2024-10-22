@@ -54,15 +54,11 @@ function App() {
         <div className="border">
           <h1>Easy Budget</h1>
         </div>
-        <div className="my-4">
+        <div className="flex justify-between my-4">
           <Totalizers
             income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
             expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
           />
-        </div>
-        <div>
-          <label htmlFor="search">Search</label>
-          <input id="search" type="text" />
           <NewEntryModal onNewEntry={onNewEntry}></NewEntryModal>
         </div>
         <div className="my-4">
