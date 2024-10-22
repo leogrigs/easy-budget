@@ -5,22 +5,22 @@ import { BUDGET_TABLE_DATA_MOCK } from "./mocks/mockData";
 import * as ApiService from "./services/apiService";
 import NewEntryModal from "./components/NewEntryModal";
 import { BudgetTableData } from "./interfaces/BudgetTable.interface";
+import { BudgetTableType } from "./types/BudgetTableType.type";
+import Totalizers from "./components/Totalizers";
+import { BudgetTableTypeEnum } from "./enums/BudgetTableType.enum";
 
 function App() {
   const [tableData, setTableData] = useState(BUDGET_TABLE_DATA_MOCK);
 
   const hasSearch = useRef(false);
 
-  const reduceTablePriceByType = (type: string) =>
+  const reduceTablePriceByType = (type: BudgetTableType) =>
     tableData.reduce((acc, curr) => {
       if (curr.type === type) {
         return acc + curr.price;
       }
       return acc;
     }, 0);
-
-  const income = reduceTablePriceByType("Income");
-  const expense = reduceTablePriceByType("Expense");
 
   const fetchData = async () => {
     const data = await ApiService.getTableData(false);
@@ -54,10 +54,11 @@ function App() {
         <div className="border">
           <h1>Easy Budget</h1>
         </div>
-        <div className="mb-4">
-          <div>Balance: {income - expense}</div>
-          <div>Income: {income}</div>
-          <div>Expenses: {expense}</div>
+        <div className="my-4">
+          <Totalizers
+            income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
+            expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
+          />
         </div>
         <div>
           <label htmlFor="search">Search</label>
