@@ -1,3 +1,11 @@
+# [0.8.0](https://github.com/leogrigs/easy-budget/compare/v0.7.0...v0.8.0) (2024-10-22)
+
+
+### Features
+
+* **paginator:** new paginator component ([fea7553](https://github.com/leogrigs/easy-budget/commit/fea7553e70e97f18563654599b1580dd78c761d2))
+* **search:** search by name ([d60fddd](https://github.com/leogrigs/easy-budget/commit/d60fddd78fee737fe7eeb789b8af963ecb2969de))
+
 # [0.7.0](https://github.com/leogrigs/easy-budget/compare/v0.6.0...v0.7.0) (2024-10-22)
 
 
