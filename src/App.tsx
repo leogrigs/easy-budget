@@ -61,7 +61,7 @@ function App() {
           />
           <NewEntryModal onNewEntry={onNewEntry}></NewEntryModal>
         </div>
-        <div className="my-4">
+        <div className="w-1/2 my-4">
           <BudgetTable rows={tableData} itemsPerPage={10}></BudgetTable>
         </div>
       </div>
