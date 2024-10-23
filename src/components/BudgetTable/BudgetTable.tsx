@@ -1,18 +1,30 @@
 import React, { useState } from "react";
 import Paginator from "../Paginator";
 import Input from "../Input";
+import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
 
 type BudgetTableProps = {
-  rows: Array<object>;
+  rows: BudgetTableData[];
   itemsPerPage: number;
 };
 
 const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
-  const headers = Object.keys(rows[0]);
+  const allHeaders: (keyof BudgetTableData)[] = [
+    "id",
+    "name",
+    "price",
+    "type",
+    "category",
+    "date",
+  ];
+  const headers: (keyof BudgetTableData)[] = allHeaders.filter(
+    (header) => header !== "id" && header !== "type"
+  );
+
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
 
-  const filteredTable = (): object[] => {
+  const filteredTable = (): BudgetTableData[] => {
     return rows.filter((row) =>
       Object.values(row).some((value) =>
         value.toString().toLowerCase().includes(search.toLowerCase())
@@ -20,7 +32,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
     );
   };
 
-  const paginateTable = () => {
+  const paginateTable = (): BudgetTableData[] => {
     return filteredTable().slice(
       (page - 1) * itemsPerPage,
       page * itemsPerPage
@@ -66,9 +78,9 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
           <tbody>
             {paginateTable().map((row, index) => (
               <tr className="hover:bg-slate-50" key={index}>
-                {Object.values(row).map((value, index) => (
-                  <td className="text-start border p-2" key={index}>
-                    {value}
+                {headers.map((header) => (
+                  <td className="text-start border p-2" key={header}>
+                    {row[header]}
                   </td>
                 ))}
               </tr>
