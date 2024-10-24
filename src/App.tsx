@@ -8,9 +8,13 @@ import { BudgetTableData } from "./interfaces/BudgetTable.interface";
 import { BudgetTableType } from "./types/BudgetTableType.type";
 import Totalizers from "./components/Totalizers";
 import { BudgetTableTypeEnum } from "./enums/BudgetTableType.enum";
+import GoogleSignIn from "./components/GoogleSignIn";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./services/firebase";
 
 function App() {
   const [tableData, setTableData] = useState(BUDGET_TABLE_DATA_MOCK);
+  const [user, setUser] = useState<any | null>(null);
 
   const hasSearch = useRef(false);
 
@@ -29,12 +33,21 @@ function App() {
   };
 
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        setUser(null);
+      }
+    });
+
     if (!hasSearch.current) {
       fetchData().catch((error) =>
         console.error("Erro ao buscar dados: ", error)
       );
       hasSearch.current = true;
     }
+    return () => unsubscribe();
   }, []);
 
   const onNewEntry = async (entry: BudgetTableData) => {
@@ -48,22 +61,34 @@ function App() {
     }, 2000);
   };
 
+  const handleLoginSuccess = (user: any) => {
+    setUser(user);
+  };
+
   return (
     <>
       <div className="w-screen h-screen p-4">
         <div className="border">
           <h1>Easy Budget</h1>
         </div>
-        <div className="flex justify-between my-4">
-          <Totalizers
-            income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
-            expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
-          />
-          <NewEntryModal onNewEntry={onNewEntry}></NewEntryModal>
-        </div>
-        <div className="w-1/2 my-4">
-          <BudgetTable rows={tableData} itemsPerPage={10}></BudgetTable>
-        </div>
+        {!user ? (
+          <div className="my-4">
+            <GoogleSignIn onUserLogin={handleLoginSuccess} />
+          </div>
+        ) : (
+          <>
+            <div className="flex justify-between my-4">
+              <Totalizers
+                income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
+                expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
+              />
+              <NewEntryModal onNewEntry={onNewEntry}></NewEntryModal>
+            </div>
+            <div className="w-1/2 my-4">
+              <BudgetTable rows={tableData} itemsPerPage={10}></BudgetTable>
+            </div>
+          </>
+        )}
       </div>
     </>
   );
