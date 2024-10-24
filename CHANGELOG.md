@@ -1,3 +1,17 @@
+# [0.10.0](https://github.com/leogrigs/easy-budget/compare/v0.9.0...v0.10.0) (2024-10-24)
+
+
+### Bug Fixes
+
+* **firebase:** remove comments and unused imports ([937b6af](https://github.com/leogrigs/easy-budget/commit/937b6af43bac019e6c9ba8d670cc828825ab20b3))
+* svg properties ([699b390](https://github.com/leogrigs/easy-budget/commit/699b390cfea4341f901fdd7bc9c2b30e969cc0d1))
+
+
+### Features
+
+* **firebase:** persistency strategy ([5bb07ed](https://github.com/leogrigs/easy-budget/commit/5bb07ed3a11ea8d55697a6923f3bc00d0c3e1fd5))
+* **firebase:** set up sign in google provider ([39b1b9e](https://github.com/leogrigs/easy-budget/commit/39b1b9e7fd92a1aedafe2542a1236be69c8dd9fd))
+
 # [0.9.0](https://github.com/leogrigs/easy-budget/compare/v0.8.0...v0.9.0) (2024-10-23)
 
 
