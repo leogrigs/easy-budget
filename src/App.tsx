@@ -9,6 +9,8 @@ import { BudgetTableType } from "./types/BudgetTableType.type";
 import Totalizers from "./components/Totalizers";
 import { BudgetTableTypeEnum } from "./enums/BudgetTableType.enum";
 import GoogleSignIn from "./components/GoogleSignIn";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./services/firebase";
 
 function App() {
   const [tableData, setTableData] = useState(BUDGET_TABLE_DATA_MOCK);
@@ -31,12 +33,21 @@ function App() {
   };
 
   useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      if (currentUser) {
+        setUser(currentUser);
+      } else {
+        setUser(null);
+      }
+    });
+
     if (!hasSearch.current) {
       fetchData().catch((error) =>
         console.error("Erro ao buscar dados: ", error)
       );
       hasSearch.current = true;
     }
+    return () => unsubscribe();
   }, []);
 
   const onNewEntry = async (entry: BudgetTableData) => {

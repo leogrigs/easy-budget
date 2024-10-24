@@ -1,6 +1,11 @@
 // src/components/GoogleSignIn.tsx
 import React from "react";
-import { signInWithPopup } from "firebase/auth";
+import {
+  browserLocalPersistence,
+  browserSessionPersistence,
+  setPersistence,
+  signInWithPopup,
+} from "firebase/auth";
 import { auth, googleProvider } from "../../services/firebase";
 import { User } from "../../interfaces/User.interface";
 
@@ -12,7 +17,6 @@ const GoogleSignIn: React.FC<GoogleSignInProps> = ({ onUserLogin }) => {
   const signInWithGoogle = async () => {
     try {
       const result = await signInWithPopup(auth, googleProvider);
-      console.log("result", result);
 
       const user = result.user;
 
@@ -24,7 +28,7 @@ const GoogleSignIn: React.FC<GoogleSignInProps> = ({ onUserLogin }) => {
         lastLogin: new Date(),
       };
 
-      onUserLogin(userData); // Pass user data to parent
+      onUserLogin(userData);
     } catch (error) {
       console.error("Google sign-in error", error);
     }
