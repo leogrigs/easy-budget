@@ -9,12 +9,12 @@ import { BudgetTableType } from "./types/BudgetTableType.type";
 import Totalizers from "./components/Totalizers";
 import { BudgetTableTypeEnum } from "./enums/BudgetTableType.enum";
 import GoogleSignIn from "./components/GoogleSignIn";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, User } from "firebase/auth";
 import { auth } from "./services/firebase";
 
 function App() {
   const [tableData, setTableData] = useState(BUDGET_TABLE_DATA_MOCK);
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   const hasSearch = useRef(false);
 
@@ -33,12 +33,9 @@ function App() {
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      if (currentUser) {
-        setUser(currentUser);
-      } else {
-        setUser(null);
-      }
+    const unsubscribe = onAuthStateChanged(auth, (currentUser: User | null) => {
+      console.log(currentUser);
+      setUser(currentUser);
     });
 
     if (!hasSearch.current) {
@@ -61,7 +58,7 @@ function App() {
     }, 2000);
   };
 
-  const handleLoginSuccess = (user: any) => {
+  const handleLoginSuccess = (user: User) => {
     setUser(user);
   };
 
