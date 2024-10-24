@@ -8,9 +8,11 @@ import { BudgetTableData } from "./interfaces/BudgetTable.interface";
 import { BudgetTableType } from "./types/BudgetTableType.type";
 import Totalizers from "./components/Totalizers";
 import { BudgetTableTypeEnum } from "./enums/BudgetTableType.enum";
+import GoogleSignIn from "./components/GoogleSignIn";
 
 function App() {
   const [tableData, setTableData] = useState(BUDGET_TABLE_DATA_MOCK);
+  const [user, setUser] = useState<any | null>(null);
 
   const hasSearch = useRef(false);
 
@@ -48,22 +50,38 @@ function App() {
     }, 2000);
   };
 
+  const handleLoginSuccess = (user: any) => {
+    console.log("User logged in: ", user);
+
+    setUser(user); // Store user data after login
+  };
+
   return (
     <>
       <div className="w-screen h-screen p-4">
         <div className="border">
           <h1>Easy Budget</h1>
         </div>
-        <div className="flex justify-between my-4">
-          <Totalizers
-            income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
-            expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
-          />
-          <NewEntryModal onNewEntry={onNewEntry}></NewEntryModal>
-        </div>
-        <div className="w-1/2 my-4">
-          <BudgetTable rows={tableData} itemsPerPage={10}></BudgetTable>
-        </div>
+
+        {/* Show Google Sign-In if user is not logged in */}
+        {!user ? (
+          <div className="my-4">
+            <GoogleSignIn onUserLogin={handleLoginSuccess} />
+          </div>
+        ) : (
+          <>
+            <div className="flex justify-between my-4">
+              <Totalizers
+                income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
+                expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
+              />
+              <NewEntryModal onNewEntry={onNewEntry}></NewEntryModal>
+            </div>
+            <div className="w-1/2 my-4">
+              <BudgetTable rows={tableData} itemsPerPage={10}></BudgetTable>
+            </div>
+          </>
+        )}
       </div>
     </>
   );
