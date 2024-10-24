@@ -62,9 +62,7 @@ function App() {
   };
 
   const handleLoginSuccess = (user: any) => {
-    console.log("User logged in: ", user);
-
-    setUser(user); // Store user data after login
+    setUser(user);
   };
 
   return (
@@ -73,8 +71,6 @@ function App() {
         <div className="border">
           <h1>Easy Budget</h1>
         </div>
-
-        {/* Show Google Sign-In if user is not logged in */}
         {!user ? (
           <div className="my-4">
             <GoogleSignIn onUserLogin={handleLoginSuccess} />

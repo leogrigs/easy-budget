@@ -1,11 +1,5 @@
-// src/components/GoogleSignIn.tsx
 import React from "react";
-import {
-  browserLocalPersistence,
-  browserSessionPersistence,
-  setPersistence,
-  signInWithPopup,
-} from "firebase/auth";
+import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../../services/firebase";
 import { User } from "../../interfaces/User.interface";
 
