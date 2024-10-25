@@ -84,11 +84,13 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
                     <div className="flex gap-4 items-center">
                       {header === "name" && (
                         <div
-                          className={`block size-3 rounded-full bg-${
-                            row.type === BudgetTableTypeEnum.INCOME
-                              ? "green"
-                              : "red"
-                          }-500`}
+                          style={{
+                            backgroundColor:
+                              row.type === BudgetTableTypeEnum.INCOME
+                                ? "green"
+                                : "red",
+                          }}
+                          className="block size-3 rounded-full"
                         ></div>
                       )}
                       {row[header]}
