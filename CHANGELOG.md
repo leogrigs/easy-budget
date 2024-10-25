@@ -1,3 +1,10 @@
+# [0.11.0](https://github.com/leogrigs/easy-budget/compare/v0.10.0...v0.11.0) (2024-10-25)
+
+
+### Features
+
+* **firebase:** entry creation integration ([576476e](https://github.com/leogrigs/easy-budget/commit/576476efffa80102fec25765c4e2548b2954d255))
+
 # [0.10.0](https://github.com/leogrigs/easy-budget/compare/v0.9.0...v0.10.0) (2024-10-24)
 
 
