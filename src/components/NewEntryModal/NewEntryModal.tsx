@@ -5,13 +5,14 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import React, { useState } from "react";
-import Input from "../Input";
-import Select from "../Select";
 import { CATEGORY_OPTIONS } from "../../consts/category.options";
 import { TYPE_OPTIONS } from "../../consts/type.options";
+import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
+import Input from "../Input";
+import Select from "../Select";
 
 type NewEntryModalProps = {
-  onNewEntry: (data: any) => void;
+  onNewEntry: (data: BudgetTableData) => void;
 };
 
 const NewEntryModal: React.FC<NewEntryModalProps> = ({ onNewEntry }) => {
@@ -22,10 +23,9 @@ const NewEntryModal: React.FC<NewEntryModalProps> = ({ onNewEntry }) => {
     date: "",
     category: "food",
     type: "expense",
-    bank: "itau",
   });
 
-  const handleFormChanges = (name: string, value: string) => {
+  const handleFormChanges = (name: string, value: string | number) => {
     setFormData({
       ...formData,
       [name]: value,
@@ -125,7 +125,7 @@ const NewEntryModal: React.FC<NewEntryModalProps> = ({ onNewEntry }) => {
               </button>
               <button
                 onClick={() => {
-                  onNewEntry(formData);
+                  onNewEntry(formData as BudgetTableData);
                   close();
                 }}
                 className="mt-4 w-full rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
