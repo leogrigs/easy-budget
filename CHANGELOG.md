@@ -1,3 +1,11 @@
+## [0.11.1](https://github.com/leogrigs/easy-budget/compare/v0.11.0...v0.11.1) (2024-10-25)
+
+
+### Bug Fixes
+
+* **new-entry:** entry creation data interface ([e214988](https://github.com/leogrigs/easy-budget/commit/e2149880c1b5333697efcc00f55a4fbff8677ef5))
+* type error ([87c74c0](https://github.com/leogrigs/easy-budget/commit/87c74c073a0573d94035d172969f86f31cf83365))
+
 # [0.11.0](https://github.com/leogrigs/easy-budget/compare/v0.10.0...v0.11.0) (2024-10-25)
 
 
