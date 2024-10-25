@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import Paginator from "../Paginator";
-import Input from "../Input";
-import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
 import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
+import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
+import Input from "../Input";
+import Paginator from "../Paginator";
 
 type BudgetTableProps = {
   rows: BudgetTableData[];
@@ -50,7 +50,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
           placeholder="Search by name"
           value={search}
           type="text"
-          onChange={(_, value) => setSearch(value)}
+          onChange={(_, value) => setSearch(value as string)}
         />
         <svg
           xmlns="http://www.w3.org/2000/svg"
