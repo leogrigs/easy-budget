@@ -1,22 +1,23 @@
-import { useEffect, useRef, useState } from "react";
+import { onAuthStateChanged, User } from "firebase/auth";
+import { useEffect, useState } from "react";
 import "./App.css";
 import BudgetTable from "./components/BudgetTable";
-import { BUDGET_TABLE_DATA_MOCK } from "./mocks/mockData";
-import * as ApiService from "./services/apiService";
+import GoogleSignIn from "./components/GoogleSignIn";
 import NewEntryModal from "./components/NewEntryModal";
-import { BudgetTableData } from "./interfaces/BudgetTable.interface";
-import { BudgetTableType } from "./types/BudgetTableType.type";
 import Totalizers from "./components/Totalizers";
 import { BudgetTableTypeEnum } from "./enums/BudgetTableType.enum";
-import GoogleSignIn from "./components/GoogleSignIn";
-import { onAuthStateChanged } from "firebase/auth";
+import { BudgetTableData } from "./interfaces/BudgetTable.interface";
 import { auth } from "./services/firebase";
+import {
+  addEntryToTable,
+  fetchUserTable,
+  initializeUserDocument,
+} from "./services/firestore";
+import { BudgetTableType } from "./types/BudgetTableType.type";
 
 function App() {
-  const [tableData, setTableData] = useState(BUDGET_TABLE_DATA_MOCK);
-  const [user, setUser] = useState<any | null>(null);
-
-  const hasSearch = useRef(false);
+  const [tableData, setTableData] = useState<BudgetTableData[]>([]);
+  const [user, setUser] = useState<User | null>(null);
 
   const reduceTablePriceByType = (type: BudgetTableType) =>
     tableData.reduce((acc, curr) => {
@@ -26,71 +27,64 @@ function App() {
       return acc;
     }, 0);
 
-  const fetchData = async () => {
-    const data = await ApiService.getTableData(false);
-    console.log("Dados buscados: ", data);
-    setTableData(data);
-  };
-
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
       if (currentUser) {
-        setUser(currentUser);
+        await initializeUserDocument(currentUser.uid);
+        updateTable(currentUser.uid);
       } else {
-        setUser(null);
+        setTableData([]);
       }
     });
-
-    if (!hasSearch.current) {
-      fetchData().catch((error) =>
-        console.error("Erro ao buscar dados: ", error)
-      );
-      hasSearch.current = true;
-    }
     return () => unsubscribe();
   }, []);
 
-  const onNewEntry = async (entry: BudgetTableData) => {
-    const postData = await ApiService.postTableData({
-      ...entry,
-      id: tableData.length + 1,
-    });
-    console.log("Dados enviados: ", postData);
-    setTimeout(() => {
-      fetchData();
-    }, 2000);
+  const updateTable = async (uid: string): Promise<void> => {
+    const table = await fetchUserTable(uid);
+    setTableData(table);
   };
 
-  const handleLoginSuccess = (user: any) => {
-    setUser(user);
+  const onNewEntry = async (entry: BudgetTableData) => {
+    if (user) {
+      console.log(entry);
+
+      await addEntryToTable(user.uid, entry);
+      await updateTable(user.uid);
+    }
+  };
+
+  const logout = async () => {
+    await auth.signOut();
+    setUser(null);
+    setTableData([]);
   };
 
   return (
-    <>
-      <div className="w-screen h-screen p-4">
-        <div className="border">
-          <h1>Easy Budget</h1>
-        </div>
-        {!user ? (
-          <div className="my-4">
-            <GoogleSignIn onUserLogin={handleLoginSuccess} />
-          </div>
-        ) : (
-          <>
-            <div className="flex justify-between my-4">
-              <Totalizers
-                income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
-                expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
-              />
-              <NewEntryModal onNewEntry={onNewEntry}></NewEntryModal>
-            </div>
-            <div className="w-1/2 my-4">
-              <BudgetTable rows={tableData} itemsPerPage={10}></BudgetTable>
-            </div>
-          </>
-        )}
+    <div className="w-screen h-screen p-4">
+      <div className="border">
+        <h1>Easy Budget</h1>
+        <button onClick={logout}>Logout</button>
       </div>
-    </>
+      {!user ? (
+        <div className="my-4">
+          <GoogleSignIn onUserLogin={(user) => setUser(user)} />
+        </div>
+      ) : (
+        <>
+          <div className="flex justify-between my-4">
+            <Totalizers
+              income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
+              expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
+            />
+            <NewEntryModal onNewEntry={onNewEntry} />
+          </div>
+          <div className="w-1/2 my-4">
+            <BudgetTable rows={tableData} itemsPerPage={10} />
+          </div>
+        </>
+      )}
+    </div>
   );
 }
 
