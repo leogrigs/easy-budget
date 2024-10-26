@@ -1,3 +1,17 @@
+# [0.12.0](https://github.com/leogrigs/easy-budget/compare/v0.11.1...v0.12.0) (2024-10-26)
+
+
+### Bug Fixes
+
+* **budget-table:** bullet colors ([7bc5a33](https://github.com/leogrigs/easy-budget/commit/7bc5a334fffa19d315f1a8136b11ee7199c01c82))
+* **budget-table:** return bullet color fix lost on merge ([ac6aa39](https://github.com/leogrigs/easy-budget/commit/ac6aa39b41cd02504b0896512bcaf6792f85c4d8))
+
+
+### Features
+
+* **budget-table:** initial no entries state ([8d4086c](https://github.com/leogrigs/easy-budget/commit/8d4086cd5e630d9f4f4b7959d64a574220fd158e))
+* **budget-table:** no results stylized component ([1b4bd74](https://github.com/leogrigs/easy-budget/commit/1b4bd74fc2cf14c049a3e0621e754438e2099362))
+
 ## [0.11.1](https://github.com/leogrigs/easy-budget/compare/v0.11.0...v0.11.1) (2024-10-25)
 
 
