@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
 import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
 import Input from "../Input";
+import NoResults from "../NoResults";
 import Paginator from "../Paginator";
 
 type BudgetTableProps = {
@@ -44,7 +45,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
 
   return (
     <>
-      <div className="relative max-w-xs my-4">
+      <div className="relative my-4">
         <Input
           name="search"
           placeholder="Search by name"
@@ -65,9 +66,11 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
           />
         </svg>
       </div>
-      {/* Handle empty state< */}
+      {/* Handle empty state */}
       {paginateTable().length == 0 ? (
-        <div className="text-center text-slate-400">No entries</div>
+        <div className="min-h-[452px] flex items-center">
+          <NoResults />
+        </div>
       ) : (
         <>
           {/* Table */}
