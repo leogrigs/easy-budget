@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { BUDGET_TABLE_HEADERS } from "../../consts/headers.options";
-import { BudgetTableHeaderEnum } from "../../enums/BudgetTableHeader.enum";
-import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
 import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
+import BudgetTableCell from "../BudgetTableCell";
 import Input from "../Input";
 import NoResults from "../NoResults";
 import Paginator from "../Paginator";
@@ -84,27 +83,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
                 {paginateTable().map((row, index) => (
                   <tr className="hover:bg-slate-50" key={index}>
                     {headers.map((header) => (
-                      <td className="text-start border p-2" key={header.key}>
-                        <div className="flex gap-4 items-center">
-                          {header.key === BudgetTableHeaderEnum.NAME && (
-                            <div
-                              style={{
-                                backgroundColor:
-                                  row.type === BudgetTableTypeEnum.INCOME
-                                    ? "#ef4444"
-                                    : "#22c55e",
-                                border: `3px solid ${
-                                  row.type === BudgetTableTypeEnum.INCOME
-                                    ? "#f87171"
-                                    : "#4ade80"
-                                }`,
-                              }}
-                              className="block size-3 rounded-full"
-                            ></div>
-                          )}
-                          {row[header.key as keyof BudgetTableData]}
-                        </div>
-                      </td>
+                      <BudgetTableCell header={header} row={row} />
                     ))}
                   </tr>
                 ))}

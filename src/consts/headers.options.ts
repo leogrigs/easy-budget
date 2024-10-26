@@ -18,10 +18,6 @@ export const BUDGET_TABLE_HEADERS = [
     label: "Date",
   },
   {
-    key: BudgetTableHeaderEnum.DATE,
-    label: "Date",
-  },
-  {
     key: BudgetTableHeaderEnum.ACTIONS,
     label: "Actions",
   },
