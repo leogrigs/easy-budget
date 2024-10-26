@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { BUDGET_TABLE_HEADERS } from "../../consts/headers.options";
+import { BudgetTableHeaderEnum } from "../../enums/BudgetTableHeader.enum";
 import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
 import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
 import Input from "../Input";
@@ -11,17 +13,7 @@ type BudgetTableProps = {
 };
 
 const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
-  const allHeaders: (keyof BudgetTableData)[] = [
-    "id",
-    "name",
-    "price",
-    "type",
-    "category",
-    "date",
-  ];
-  const headers: (keyof BudgetTableData)[] = allHeaders.filter(
-    (header) => header !== "id" && header !== "type"
-  );
+  const headers = BUDGET_TABLE_HEADERS;
 
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -81,9 +73,9 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
                   {headers.map((header) => (
                     <th
                       className="text-start border p-2 bg-slate-100"
-                      key={header}
+                      key={header.key}
                     >
-                      {header}
+                      {header.label}
                     </th>
                   ))}
                 </tr>
@@ -92,9 +84,9 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
                 {paginateTable().map((row, index) => (
                   <tr className="hover:bg-slate-50" key={index}>
                     {headers.map((header) => (
-                      <td className="text-start border p-2" key={header}>
+                      <td className="text-start border p-2" key={header.key}>
                         <div className="flex gap-4 items-center">
-                          {header === "name" && (
+                          {header.key === BudgetTableHeaderEnum.NAME && (
                             <div
                               style={{
                                 backgroundColor:
@@ -110,7 +102,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
                               className="block size-3 rounded-full"
                             ></div>
                           )}
-                          {row[header]}
+                          {row[header.key as keyof BudgetTableData]}
                         </div>
                       </td>
                     ))}

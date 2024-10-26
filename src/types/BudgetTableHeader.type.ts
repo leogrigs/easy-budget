@@ -6,4 +6,5 @@ export type BudgetTableHeaderType =
   | BudgetTableHeaderEnum.PRICE
   | BudgetTableHeaderEnum.DATE
   | BudgetTableHeaderEnum.CATEGORY
-  | BudgetTableHeaderEnum.TYPE;
+  | BudgetTableHeaderEnum.TYPE
+  | BudgetTableHeaderEnum.ACTIONS;
