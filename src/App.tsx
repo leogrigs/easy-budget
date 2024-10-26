@@ -72,7 +72,7 @@ function App() {
         </div>
       ) : (
         <>
-          <div className="flex justify-between my-4">
+          <div className="flex justify-between my-12">
             <Totalizers
               income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
               expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
