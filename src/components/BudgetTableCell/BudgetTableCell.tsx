@@ -25,11 +25,11 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
             <div
               style={{
                 backgroundColor:
-                  row.type === BudgetTableTypeEnum.INCOME
+                  row.type === BudgetTableTypeEnum.EXPENSE
                     ? "#ef4444"
                     : "#22c55e",
                 border: `3px solid ${
-                  row.type === BudgetTableTypeEnum.INCOME
+                  row.type === BudgetTableTypeEnum.EXPENSE
                     ? "#f87171"
                     : "#4ade80"
                 }`,
@@ -77,11 +77,7 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
     }
   };
 
-  return (
-    <td className="border p-2" key={header.key}>
-      {renderCell()}
-    </td>
-  );
+  return <td className="border p-2">{renderCell()}</td>;
 };
 
 export default BudgetTableCell;

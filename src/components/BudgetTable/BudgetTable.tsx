@@ -80,10 +80,11 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
                 </tr>
               </thead>
               <tbody>
-                {paginateTable().map((row, index) => (
-                  <tr className="hover:bg-slate-50" key={index}>
+                {paginateTable().map((row) => (
+                  <tr className="hover:bg-slate-50" key={row.id}>
                     {headers.map((header) => (
                       <BudgetTableCell
+                        key={`${row.id}-${header.key}`}
                         onClick={(action: string) =>
                           console.log("action", action)
                         }
