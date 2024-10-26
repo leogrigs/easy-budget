@@ -1,12 +1,10 @@
-// create react-ts modal component template
-
 import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import React from "react";
+import React, { useRef } from "react";
 
 interface ModalProps {
   isOpen: boolean;
@@ -23,8 +21,15 @@ const Modal: React.FC<ModalProps> = ({
   onCancel,
   children,
 }) => {
+  const cancelButtonRef = useRef<HTMLButtonElement>(null);
+
   return (
-    <Dialog open={isOpen} onClose={onCancel} className="relative z-50">
+    <Dialog
+      open={isOpen}
+      onClose={onCancel}
+      className="relative z-50"
+      initialFocus={cancelButtonRef} // Set initial focus
+    >
       <DialogBackdrop className="fixed inset-0 bg-black/30" />
 
       <div className="fixed inset-0 flex w-screen items-center justify-center rad p-4">
@@ -36,6 +41,7 @@ const Modal: React.FC<ModalProps> = ({
           {/* Actions */}
           <div className="flex gap-2 justify-between">
             <button
+              ref={cancelButtonRef} // Reference to set initial focus
               onClick={onCancel}
               className="mt-4 w-full rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="button"

@@ -2,8 +2,8 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import "./App.css";
 import BudgetTable from "./components/BudgetTable";
+import EntryModal from "./components/EntryModal";
 import GoogleSignIn from "./components/GoogleSignIn";
-import NewEntryModal from "./components/NewEntryModal";
 import Totalizers from "./components/Totalizers";
 import { BudgetTableTypeEnum } from "./enums/BudgetTableType.enum";
 import { BudgetTableData } from "./interfaces/BudgetTable.interface";
@@ -64,7 +64,7 @@ function App() {
   };
 
   return (
-    <div className="w-screen h-screen p-4">
+    <div className="p-4">
       <div className="border">
         <h1>Easy Budget</h1>
         <button onClick={logout}>Logout</button>
@@ -80,7 +80,7 @@ function App() {
               income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
               expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
             />
-            <NewEntryModal onNewEntry={onNewEntry} />
+            <EntryModal onNewEntry={onNewEntry} />
           </div>
           <div className="w-2/3 my-4">
             <BudgetTable rows={tableData} itemsPerPage={10} />

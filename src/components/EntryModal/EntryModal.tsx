@@ -4,11 +4,11 @@ import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
 import EntryForm from "../EntryForm";
 import Modal from "../Modal";
 
-type NewEntryModalProps = {
+type EntryModalProps = {
   onNewEntry: (data: BudgetTableData) => void;
 };
 
-const NewEntryModal: React.FC<NewEntryModalProps> = ({ onNewEntry }) => {
+const EntryModal: React.FC<EntryModalProps> = ({ onNewEntry }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     id: 0,
@@ -49,4 +49,4 @@ const NewEntryModal: React.FC<NewEntryModalProps> = ({ onNewEntry }) => {
   );
 };
 
-export default NewEntryModal;
+export default EntryModal;
