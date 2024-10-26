@@ -99,8 +99,13 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
                               style={{
                                 backgroundColor:
                                   row.type === BudgetTableTypeEnum.INCOME
-                                    ? "green"
-                                    : "red",
+                                    ? "#ef4444"
+                                    : "#22c55e",
+                                border: `3px solid ${
+                                  row.type === BudgetTableTypeEnum.INCOME
+                                    ? "#f87171"
+                                    : "#4ade80"
+                                }`,
                               }}
                               className="block size-3 rounded-full"
                             ></div>
