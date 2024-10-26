@@ -1,3 +1,17 @@
+# [0.13.0](https://github.com/leogrigs/easy-budget/compare/v0.12.0...v0.13.0) (2024-10-26)
+
+
+### Bug Fixes
+
+* **budget-table:** id on new entry ([2ab3116](https://github.com/leogrigs/easy-budget/commit/2ab311646a8ad9ce38f491d0e9305781b0a27bfd))
+* **budget-table:** inverted bullet colors ([98a4011](https://github.com/leogrigs/easy-budget/commit/98a4011df120416f6af12417d516d968f9092533))
+
+
+### Features
+
+* **budget-table:** actions column ([91a4a10](https://github.com/leogrigs/easy-budget/commit/91a4a10f9ba3ea27b6a1d846ae5ec5e824a3226e))
+* **budget-table:** budget table cell component ([70eaf4f](https://github.com/leogrigs/easy-budget/commit/70eaf4f347335a7533dcaf786c296e566aae3f0c))
+
 # [0.12.0](https://github.com/leogrigs/easy-budget/compare/v0.11.1...v0.12.0) (2024-10-26)
 
 
