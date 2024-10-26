@@ -1,13 +1,8 @@
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogPanel,
-  DialogTitle,
-} from "@headlessui/react";
 import React, { useState } from "react";
 import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
 import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
 import EntryForm from "../EntryForm";
+import Modal from "../Modal";
 
 type NewEntryModalProps = {
   onNewEntry: (data: BudgetTableData) => void;
@@ -31,49 +26,25 @@ const NewEntryModal: React.FC<NewEntryModalProps> = ({ onNewEntry }) => {
     });
   };
 
-  const open = () => setIsOpen(true);
-  const close = () => setIsOpen(false);
-
   return (
     <>
-      <button onClick={open}>New entry</button>
-      <Dialog
-        open={isOpen}
-        onClose={() => setIsOpen(false)}
-        className="relative z-50"
+      <button
+        className="mt-4 w-fit rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+        onClick={() => setIsOpen(true)}
       >
-        <DialogBackdrop className="fixed inset-0 bg-black/30" />
-
-        <div className="fixed inset-0 flex w-screen items-center justify-center rad p-4">
-          <DialogPanel className="w-1/2 max-w-lg space-y-4 border rounded bg-white p-4">
-            <DialogTitle>New entry</DialogTitle>
-
-            {/* Form */}
-            <EntryForm entry={formData} handleChanges={handleFormChanges} />
-
-            {/* Actions */}
-            <div className="flex gap-2 justify-between">
-              <button
-                onClick={close}
-                className="mt-4 w-full rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                type="button"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() => {
-                  onNewEntry(formData as BudgetTableData);
-                  close();
-                }}
-                className="mt-4 w-full rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                type="button"
-              >
-                Create
-              </button>
-            </div>
-          </DialogPanel>
-        </div>
-      </Dialog>
+        New Entry
+      </button>
+      <Modal
+        isOpen={isOpen}
+        title="New Entry"
+        onConfirm={() => {
+          setIsOpen(false);
+          onNewEntry(formData);
+        }}
+        onCancel={() => setIsOpen(false)}
+      >
+        <EntryForm entry={formData} handleChanges={handleFormChanges} />
+      </Modal>
     </>
   );
 };
