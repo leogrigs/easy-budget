@@ -5,11 +5,9 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import React, { useState } from "react";
-import { CATEGORY_OPTIONS } from "../../consts/category.options";
-import { TYPE_OPTIONS } from "../../consts/type.options";
+import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
 import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
-import Input from "../Input";
-import Select from "../Select";
+import EntryForm from "../EntryForm";
 
 type NewEntryModalProps = {
   onNewEntry: (data: BudgetTableData) => void;
@@ -18,11 +16,12 @@ type NewEntryModalProps = {
 const NewEntryModal: React.FC<NewEntryModalProps> = ({ onNewEntry }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
+    id: 0,
     name: "",
     price: 0,
     date: "",
     category: "food",
-    type: "expense",
+    type: BudgetTableTypeEnum.EXPENSE,
   });
 
   const handleFormChanges = (name: string, value: string | number) => {
@@ -50,69 +49,7 @@ const NewEntryModal: React.FC<NewEntryModalProps> = ({ onNewEntry }) => {
             <DialogTitle>New entry</DialogTitle>
 
             {/* Form */}
-            <form className="flex flex-col gap-4">
-              <div className="w-full max-w-sm min-w-[200px]">
-                <label className="block mb-2 text-sm text-slate-600">
-                  Name
-                </label>
-                <Input
-                  value={formData.name}
-                  placeholder="Entry name"
-                  onChange={handleFormChanges}
-                  name="name"
-                />
-              </div>
-
-              <div className="w-full max-w-sm min-w-[200px]">
-                <label className="block mb-2 text-sm text-slate-600">
-                  Price
-                </label>
-                <Input
-                  value={formData.price}
-                  type="number"
-                  placeholder="Entry price"
-                  onChange={handleFormChanges}
-                  name="price"
-                />
-              </div>
-
-              <div className="w-full max-w-sm min-w-[200px]">
-                <label className="block mb-2 text-sm text-slate-600">
-                  Date
-                </label>
-                <Input
-                  value={formData.date}
-                  type="text"
-                  placeholder="dd/mm/yyyy"
-                  onChange={handleFormChanges}
-                  name="date"
-                />
-              </div>
-
-              <div className="w-full max-w-sm min-w-[200px]">
-                <label className="block mb-2 text-sm text-slate-600">
-                  Category
-                </label>
-                <Select
-                  options={CATEGORY_OPTIONS}
-                  value={formData.category}
-                  onChange={handleFormChanges}
-                  name="category"
-                />
-              </div>
-
-              <div className="w-full max-w-sm min-w-[200px]">
-                <label className="block mb-2 text-sm text-slate-600">
-                  Type
-                </label>
-                <Select
-                  options={TYPE_OPTIONS}
-                  value={formData.type}
-                  onChange={handleFormChanges}
-                  name="type"
-                />
-              </div>
-            </form>
+            <EntryForm entry={formData} handleChanges={handleFormChanges} />
 
             {/* Actions */}
             <div className="flex gap-2 justify-between">
