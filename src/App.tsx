@@ -47,9 +47,12 @@ function App() {
 
   const onNewEntry = async (entry: BudgetTableData) => {
     if (user) {
-      console.log(entry);
+      const _newEntry = {
+        ...entry,
+        id: tableData.length + 1,
+      };
 
-      await addEntryToTable(user.uid, entry);
+      await addEntryToTable(user.uid, _newEntry);
       await updateTable(user.uid);
     }
   };
@@ -79,7 +82,7 @@ function App() {
             />
             <NewEntryModal onNewEntry={onNewEntry} />
           </div>
-          <div className="w-1/2 my-4">
+          <div className="w-2/3 my-4">
             <BudgetTable rows={tableData} itemsPerPage={10} />
           </div>
         </>

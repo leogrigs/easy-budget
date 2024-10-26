@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
+import { BUDGET_TABLE_HEADERS } from "../../consts/headers.options";
 import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
+import BudgetTableCell from "../BudgetTableCell";
 import Input from "../Input";
 import NoResults from "../NoResults";
 import Paginator from "../Paginator";
@@ -11,17 +12,7 @@ type BudgetTableProps = {
 };
 
 const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
-  const allHeaders: (keyof BudgetTableData)[] = [
-    "id",
-    "name",
-    "price",
-    "type",
-    "category",
-    "date",
-  ];
-  const headers: (keyof BudgetTableData)[] = allHeaders.filter(
-    (header) => header !== "id" && header !== "type"
-  );
+  const headers = BUDGET_TABLE_HEADERS;
 
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
@@ -81,38 +72,25 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
                   {headers.map((header) => (
                     <th
                       className="text-start border p-2 bg-slate-100"
-                      key={header}
+                      key={header.key}
                     >
-                      {header}
+                      {header.label}
                     </th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {paginateTable().map((row, index) => (
-                  <tr className="hover:bg-slate-50" key={index}>
+                {paginateTable().map((row) => (
+                  <tr className="hover:bg-slate-50" key={row.id}>
                     {headers.map((header) => (
-                      <td className="text-start border p-2" key={header}>
-                        <div className="flex gap-4 items-center">
-                          {header === "name" && (
-                            <div
-                              style={{
-                                backgroundColor:
-                                  row.type === BudgetTableTypeEnum.INCOME
-                                    ? "#ef4444"
-                                    : "#22c55e",
-                                border: `3px solid ${
-                                  row.type === BudgetTableTypeEnum.INCOME
-                                    ? "#f87171"
-                                    : "#4ade80"
-                                }`,
-                              }}
-                              className="block size-3 rounded-full"
-                            ></div>
-                          )}
-                          {row[header]}
-                        </div>
-                      </td>
+                      <BudgetTableCell
+                        key={`${row.id}-${header.key}`}
+                        onClick={(action: string) =>
+                          console.log("action", action)
+                        }
+                        header={header}
+                        row={row}
+                      />
                     ))}
                   </tr>
                 ))}
