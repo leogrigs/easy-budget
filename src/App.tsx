@@ -47,9 +47,12 @@ function App() {
 
   const onNewEntry = async (entry: BudgetTableData) => {
     if (user) {
-      console.log(entry);
+      const _newEntry = {
+        ...entry,
+        id: tableData.length + 1,
+      };
 
-      await addEntryToTable(user.uid, entry);
+      await addEntryToTable(user.uid, _newEntry);
       await updateTable(user.uid);
     }
   };
