@@ -65,50 +65,59 @@ const BudgetTable: React.FC<BudgetTableProps> = ({ rows, itemsPerPage }) => {
           />
         </svg>
       </div>
-      <div className="min-h-[452px]">
-        <table className="size-full border-collapse">
-          <thead>
-            <tr>
-              {headers.map((header) => (
-                <th className="text-start border p-2 bg-slate-100" key={header}>
-                  {header}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {paginateTable().map((row, index) => (
-              <tr className="hover:bg-slate-50" key={index}>
-                {headers.map((header) => (
-                  <td className="text-start border p-2" key={header}>
-                    <div className="flex gap-4 items-center">
-                      {header === "name" && (
-                        <div
-                          style={{
-                            backgroundColor:
-                              row.type === BudgetTableTypeEnum.INCOME
-                                ? "green"
-                                : "red",
-                          }}
-                          className="block size-3 rounded-full"
-                        ></div>
-                      )}
-                      {row[header]}
-                    </div>
-                  </td>
+      {/* Handle empty state< */}
+      {paginateTable().length == 0 ? (
+        <div className="text-center text-slate-400">No entries</div>
+      ) : (
+        <>
+          {/* Table */}
+          <div className="min-h-[452px]">
+            <table className="size-full border-collapse">
+              <thead>
+                <tr>
+                  {headers.map((header) => (
+                    <th
+                      className="text-start border p-2 bg-slate-100"
+                      key={header}
+                    >
+                      {header}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {paginateTable().map((row, index) => (
+                  <tr className="hover:bg-slate-50" key={index}>
+                    {headers.map((header) => (
+                      <td className="text-start border p-2" key={header}>
+                        <div className="flex gap-4 items-center">
+                          {header === "name" && (
+                            <div
+                              className={`block size-3 rounded-full bg-${
+                                row.type === BudgetTableTypeEnum.INCOME
+                                  ? "green"
+                                  : "red"
+                              }-500`}
+                            ></div>
+                          )}
+                          {row[header]}
+                        </div>
+                      </td>
+                    ))}
+                  </tr>
                 ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="flex justify-center my-4">
-        <Paginator
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={setPage}
-        />
-      </div>
+              </tbody>
+            </table>
+          </div>
+          <div className="flex justify-center my-4">
+            <Paginator
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={setPage}
+            />
+          </div>
+        </>
+      )}
     </>
   );
 };
