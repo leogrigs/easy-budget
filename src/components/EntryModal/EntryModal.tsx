@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
+import React, { useEffect, useState } from "react";
 import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
 import EntryForm from "../EntryForm";
 import Modal from "../Modal";
@@ -7,6 +6,7 @@ import Modal from "../Modal";
 type EntryModalProps = {
   isOpen: boolean;
   title: string;
+  entry: BudgetTableData;
   onConfirm: (data: BudgetTableData) => void;
   closeModal: () => void;
 };
@@ -14,17 +14,15 @@ type EntryModalProps = {
 const EntryModal: React.FC<EntryModalProps> = ({
   isOpen,
   title,
+  entry,
   onConfirm,
   closeModal,
 }) => {
-  const [formData, setFormData] = useState({
-    id: 0,
-    name: "",
-    price: 0,
-    date: "",
-    category: "food",
-    type: BudgetTableTypeEnum.EXPENSE,
-  });
+  const [formData, setFormData] = useState(entry);
+
+  useEffect(() => {
+    setFormData(entry);
+  }, [entry]);
 
   const handleFormChanges = (name: string, value: string | number) => {
     setFormData({

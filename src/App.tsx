@@ -13,6 +13,7 @@ import {
   addEntryToTable,
   fetchUserTable,
   initializeUserDocument,
+  updateEntryInTable,
 } from "./services/firestore";
 import { BudgetTableType } from "./types/BudgetTableType.type";
 
@@ -20,6 +21,15 @@ function App() {
   const [tableData, setTableData] = useState<BudgetTableData[]>([]);
   const [user, setUser] = useState<User | null>(null);
   const [isNewEntryModalOpen, setIsNewEntryModalOpen] = useState(false);
+  const [isEditEntryModalOpen, setIsEditEntryModalOpen] = useState(false);
+  const [currentEntry, setCurrentEntry] = useState({
+    id: 0,
+    name: "",
+    price: 0,
+    date: "",
+    category: "food",
+    type: BudgetTableTypeEnum.EXPENSE,
+  });
 
   const reduceTablePriceByType = (type: BudgetTableType) =>
     tableData.reduce((acc, curr) => {
@@ -53,8 +63,14 @@ function App() {
         ...entry,
         id: tableData.length + 1,
       };
-
       await addEntryToTable(user.uid, _newEntry);
+      await updateTable(user.uid);
+    }
+  };
+
+  const onEditEntry = async (entry: BudgetTableData) => {
+    if (user) {
+      await updateEntryInTable(user.uid, entry, tableData);
       await updateTable(user.uid);
     }
   };
@@ -71,13 +87,15 @@ function App() {
   ) => {
     switch (action) {
       case BudgetTableActionEnum.EDIT:
-        console.log("Edit", entry);
+        setCurrentEntry(entry!);
+        setIsEditEntryModalOpen(true);
         break;
       case BudgetTableActionEnum.DELETE:
         console.log("Delete", entry);
         break;
       case BudgetTableActionEnum.CREATE:
         setIsNewEntryModalOpen(true);
+
         break;
       default:
         break;
@@ -121,14 +139,16 @@ function App() {
         isOpen={isNewEntryModalOpen}
         title="New Entry"
         onConfirm={onNewEntry}
+        entry={currentEntry}
         closeModal={() => setIsNewEntryModalOpen(false)}
       />
 
       <EntryModal
-        isOpen={isNewEntryModalOpen}
-        title="New Entry"
-        onConfirm={onNewEntry}
-        closeModal={() => setIsNewEntryModalOpen(false)}
+        isOpen={isEditEntryModalOpen}
+        title="Edit Entry"
+        entry={currentEntry}
+        onConfirm={onEditEntry}
+        closeModal={() => setIsEditEntryModalOpen(false)}
       />
     </>
   );
