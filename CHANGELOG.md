@@ -1,3 +1,18 @@
+# [0.14.0](https://github.com/leogrigs/easy-budget/compare/v0.13.0...v0.14.0) (2024-10-27)
+
+
+### Bug Fixes
+
+* **entry:** new entry undefined ([10805ae](https://github.com/leogrigs/easy-budget/commit/10805ae0185191c4b6c2dbfe91a2cecbbf6f7c31))
+* remove old new entry button ([c5c14e6](https://github.com/leogrigs/easy-budget/commit/c5c14e617cbec2202da70b330f63aaaad1b8f839))
+
+
+### Features
+
+* **entry:** delete entry ([b66f348](https://github.com/leogrigs/easy-budget/commit/b66f348395a0aaf00209362c211d8923d0d5c79e))
+* **entry:** disable confirm form button while form isn't full filled ([7da36b3](https://github.com/leogrigs/easy-budget/commit/7da36b3883604f6cd0928742edcbcfca22f87925))
+* **entry:** edit entry ([ac4d40d](https://github.com/leogrigs/easy-budget/commit/ac4d40d381568d3947ef949f2ed7f2cf604e370a))
+
 # [0.13.0](https://github.com/leogrigs/easy-budget/compare/v0.12.0...v0.13.0) (2024-10-26)
 
 
