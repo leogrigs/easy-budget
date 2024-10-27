@@ -2,6 +2,7 @@ import { onAuthStateChanged, User } from "firebase/auth";
 import { useEffect, useState } from "react";
 import "./App.css";
 import BudgetTable from "./components/BudgetTable";
+import Chart from "./components/Chart";
 import EntryModal from "./components/EntryModal";
 import GoogleSignIn from "./components/GoogleSignIn";
 import Modal from "./components/Modal";
@@ -118,18 +119,23 @@ function App() {
           </div>
         ) : (
           <>
-            <div className="flex justify-between my-12">
+            <div className="flex justify-between mt-8">
               <Totalizers
                 income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
                 expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
               />
             </div>
-            <div className="w-2/3 my-4">
-              <BudgetTable
-                rows={tableData}
-                itemsPerPage={10}
-                onAction={handleTableAction}
-              />
+            <div className="flex gap-8 h-auto">
+              <div className="w-2/3 my-4">
+                <BudgetTable
+                  rows={tableData}
+                  itemsPerPage={10}
+                  onAction={handleTableAction}
+                />
+              </div>
+              <div className="w-1/3 h-[624px]">
+                <Chart tableData={tableData} />
+              </div>
             </div>
           </>
         )}
