@@ -1,3 +1,10 @@
+# [0.15.0](https://github.com/leogrigs/easy-budget/compare/v0.14.0...v0.15.0) (2024-10-27)
+
+
+### Features
+
+* **dashboard:** initial structure pie chart component ([4da6fd7](https://github.com/leogrigs/easy-budget/commit/4da6fd7ff285e61c088cc5b99a2984cbf42cc6ce))
+
 # [0.14.0](https://github.com/leogrigs/easy-budget/compare/v0.13.0...v0.14.0) (2024-10-27)
 
 
