@@ -30,7 +30,6 @@ const EntryModal: React.FC<EntryModalProps> = ({
       (value) => value !== "" && value !== 0
     );
     setIsFormValid(isValid);
-    console.log(formData);
   }, [formData]);
 
   const handleFormChanges = (name: string, value: string | number) => {
