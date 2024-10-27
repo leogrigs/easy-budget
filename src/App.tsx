@@ -6,6 +6,7 @@ import EntryModal from "./components/EntryModal";
 import GoogleSignIn from "./components/GoogleSignIn";
 import Modal from "./components/Modal";
 import Totalizers from "./components/Totalizers";
+import { NEW_ENTRY } from "./consts/entry.options";
 import { BudgetTableActionEnum } from "./enums/BudgetTableAction.enum";
 import { BudgetTableTypeEnum } from "./enums/BudgetTableType.enum";
 import { BudgetTableData } from "./interfaces/BudgetTable.interface";
@@ -25,14 +26,7 @@ function App() {
   const [isNewEntryModalOpen, setIsNewEntryModalOpen] = useState(false);
   const [isEditEntryModalOpen, setIsEditEntryModalOpen] = useState(false);
   const [isDeleteEntryModalOpen, setIsDeleteEntryModalOpen] = useState(false);
-  const [currentEntry, setCurrentEntry] = useState({
-    id: 0,
-    name: "",
-    price: 0,
-    date: "",
-    category: "food",
-    type: BudgetTableTypeEnum.EXPENSE,
-  });
+  const [currentEntry, setCurrentEntry] = useState(NEW_ENTRY);
 
   const reduceTablePriceByType = (type: BudgetTableType) =>
     tableData.reduce((acc, curr) => {
@@ -93,9 +87,9 @@ function App() {
 
   const handleTableAction = (
     action: BudgetTableActionEnum,
-    entry?: BudgetTableData
+    entry: BudgetTableData
   ) => {
-    setCurrentEntry(entry!);
+    setCurrentEntry(entry);
     switch (action) {
       case BudgetTableActionEnum.EDIT:
         setIsEditEntryModalOpen(true);

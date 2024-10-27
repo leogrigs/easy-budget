@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { NEW_ENTRY } from "../../consts/entry.options";
 import { BUDGET_TABLE_HEADERS } from "../../consts/headers.options";
 import { BudgetTableActionEnum } from "../../enums/BudgetTableAction.enum";
 import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
@@ -10,7 +11,7 @@ import Paginator from "../Paginator";
 type BudgetTableProps = {
   rows: BudgetTableData[];
   itemsPerPage: number;
-  onAction: (action: BudgetTableActionEnum, data?: BudgetTableData) => void;
+  onAction: (action: BudgetTableActionEnum, data: BudgetTableData) => void;
 };
 
 const BudgetTable: React.FC<BudgetTableProps> = ({
@@ -65,7 +66,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
           </svg>
         </div>
         <button
-          onClick={() => onAction(BudgetTableActionEnum.CREATE)}
+          onClick={() => onAction(BudgetTableActionEnum.CREATE, NEW_ENTRY)}
           className="whitespace-nowrap rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
           type="button"
         >
