@@ -129,9 +129,6 @@ function App() {
                 income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
                 expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
               />
-              <button onClick={() => setIsNewEntryModalOpen(true)}>
-                New Entry
-              </button>
             </div>
             <div className="w-2/3 my-4">
               <BudgetTable
