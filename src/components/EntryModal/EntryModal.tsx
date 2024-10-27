@@ -19,10 +19,19 @@ const EntryModal: React.FC<EntryModalProps> = ({
   closeModal,
 }) => {
   const [formData, setFormData] = useState(entry);
+  const [isFormValid, setIsFormValid] = useState(false);
 
   useEffect(() => {
     setFormData(entry);
   }, [entry]);
+
+  useEffect(() => {
+    const isValid = Object.values(formData).every(
+      (value) => value !== "" && value !== 0
+    );
+    setIsFormValid(isValid);
+    console.log(formData);
+  }, [formData]);
 
   const handleFormChanges = (name: string, value: string | number) => {
     setFormData({
@@ -40,6 +49,7 @@ const EntryModal: React.FC<EntryModalProps> = ({
         onConfirm(formData);
       }}
       onCancel={() => closeModal()}
+      isConfirmDisabled={!isFormValid}
     >
       <EntryForm entry={formData} handleChanges={handleFormChanges} />
     </Modal>

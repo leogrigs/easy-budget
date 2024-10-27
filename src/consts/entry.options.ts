@@ -2,10 +2,10 @@ import { BudgetTableTypeEnum } from "../enums/BudgetTableType.enum";
 import { BudgetTableData } from "../interfaces/BudgetTable.interface";
 
 export const NEW_ENTRY: BudgetTableData = {
-  id: 0,
+  id: -1,
   name: "",
   price: 0,
   date: "",
-  category: "",
+  category: "salary",
   type: BudgetTableTypeEnum.INCOME,
 };

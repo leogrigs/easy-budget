@@ -9,17 +9,19 @@ import React, { useRef } from "react";
 interface ModalProps {
   isOpen: boolean;
   title: string;
+  children: React.ReactNode;
+  isConfirmDisabled?: boolean;
   onConfirm: () => void;
   onCancel: () => void;
-  children: React.ReactNode;
 }
 
 const Modal: React.FC<ModalProps> = ({
   isOpen,
   title,
+  children,
+  isConfirmDisabled = false,
   onConfirm,
   onCancel,
-  children,
 }) => {
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -49,6 +51,7 @@ const Modal: React.FC<ModalProps> = ({
               Cancel
             </button>
             <button
+              disabled={isConfirmDisabled}
               onClick={onConfirm}
               className="mt-4 w-full rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="button"
