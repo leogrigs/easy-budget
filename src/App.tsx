@@ -4,6 +4,7 @@ import "./App.css";
 import BudgetTable from "./components/BudgetTable";
 import EntryModal from "./components/EntryModal";
 import GoogleSignIn from "./components/GoogleSignIn";
+import Modal from "./components/Modal";
 import Totalizers from "./components/Totalizers";
 import { BudgetTableActionEnum } from "./enums/BudgetTableAction.enum";
 import { BudgetTableTypeEnum } from "./enums/BudgetTableType.enum";
@@ -11,6 +12,7 @@ import { BudgetTableData } from "./interfaces/BudgetTable.interface";
 import { auth } from "./services/firebase";
 import {
   addEntryToTable,
+  deleteEntryFromTable,
   fetchUserTable,
   initializeUserDocument,
   updateEntryInTable,
@@ -22,6 +24,7 @@ function App() {
   const [user, setUser] = useState<User | null>(null);
   const [isNewEntryModalOpen, setIsNewEntryModalOpen] = useState(false);
   const [isEditEntryModalOpen, setIsEditEntryModalOpen] = useState(false);
+  const [isDeleteEntryModalOpen, setIsDeleteEntryModalOpen] = useState(false);
   const [currentEntry, setCurrentEntry] = useState({
     id: 0,
     name: "",
@@ -75,6 +78,13 @@ function App() {
     }
   };
 
+  const onDeleteEntry = async () => {
+    if (user) {
+      await deleteEntryFromTable(user.uid, currentEntry.id, tableData);
+      await updateTable(user.uid);
+    }
+  };
+
   const logout = async () => {
     await auth.signOut();
     setUser(null);
@@ -85,17 +95,16 @@ function App() {
     action: BudgetTableActionEnum,
     entry?: BudgetTableData
   ) => {
+    setCurrentEntry(entry!);
     switch (action) {
       case BudgetTableActionEnum.EDIT:
-        setCurrentEntry(entry!);
         setIsEditEntryModalOpen(true);
         break;
       case BudgetTableActionEnum.DELETE:
-        console.log("Delete", entry);
+        setIsDeleteEntryModalOpen(true);
         break;
       case BudgetTableActionEnum.CREATE:
         setIsNewEntryModalOpen(true);
-
         break;
       default:
         break;
@@ -134,6 +143,21 @@ function App() {
           </>
         )}
       </div>
+
+      <Modal
+        isOpen={isDeleteEntryModalOpen}
+        title="Delete Entry"
+        onConfirm={() => {
+          setIsDeleteEntryModalOpen(false);
+          onDeleteEntry();
+        }}
+        onCancel={() => setIsDeleteEntryModalOpen(false)}
+      >
+        <p>
+          Are you sure you want to delete this entry? This action cannot be
+          undone
+        </p>
+      </Modal>
 
       <EntryModal
         isOpen={isNewEntryModalOpen}
