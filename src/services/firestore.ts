@@ -37,11 +37,10 @@ export const addEntryToTable = async (uid: string, entry: BudgetTableData) => {
 
 export const updateEntryInTable = async (
   uid: string,
-  updatedEntry: BudgetTableData
+  updatedEntry: BudgetTableData,
+  table: BudgetTableData[]
 ) => {
-  const userTable = await fetchUserTable(uid);
-
-  const updatedTable = userTable.map((item) =>
+  const updatedTable = table.map((item) =>
     item.id === updatedEntry.id ? updatedEntry : item
   );
 
@@ -49,10 +48,12 @@ export const updateEntryInTable = async (
   await updateDoc(userDocRef, { table: updatedTable });
 };
 
-export const deleteEntryFromTable = async (uid: string, entryId: number) => {
-  const userTable = await fetchUserTable(uid);
-
-  const updatedTable = userTable.filter((item) => item.id !== entryId);
+export const deleteEntryFromTable = async (
+  uid: string,
+  entryId: number,
+  table: BudgetTableData[]
+) => {
+  const updatedTable = table.filter((item) => item.id !== entryId);
 
   const userDocRef = doc(db, "users", uid);
   await updateDoc(userDocRef, { table: updatedTable });
