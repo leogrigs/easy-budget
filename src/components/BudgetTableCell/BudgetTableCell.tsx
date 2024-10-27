@@ -1,4 +1,5 @@
 import React from "react";
+import { BudgetTableActionEnum } from "../../enums/BudgetTableAction.enum";
 import { BudgetTableHeaderEnum } from "../../enums/BudgetTableHeader.enum";
 import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
 import {
@@ -9,7 +10,7 @@ import {
 interface BudgetTableCellProps {
   header: BudgetTableHeader;
   row: BudgetTableData;
-  onClick: (action: "edit" | "delete") => void;
+  onClick: (action: BudgetTableActionEnum, entry: BudgetTableData) => void;
 }
 
 const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
@@ -56,13 +57,13 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
         return (
           <div className="flex justify-center items-center gap-2">
             <button
-              onClick={() => onClick("edit")}
+              onClick={() => onClick(BudgetTableActionEnum.EDIT, row)}
               className="rounded-full  group transition-all duration-500  flex item-center"
             >
               <img src="src/assets/edit.svg" alt="edit entry" />
             </button>
             <button
-              onClick={() => onClick("delete")}
+              onClick={() => onClick(BudgetTableActionEnum.DELETE, row)}
               className="rounded-full  group transition-all duration-500  flex item-center"
             >
               <img src="src/assets/delete.svg" alt="delete entry" />

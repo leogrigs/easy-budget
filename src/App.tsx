@@ -5,6 +5,7 @@ import BudgetTable from "./components/BudgetTable";
 import EntryModal from "./components/EntryModal";
 import GoogleSignIn from "./components/GoogleSignIn";
 import Totalizers from "./components/Totalizers";
+import { BudgetTableActionEnum } from "./enums/BudgetTableAction.enum";
 import { BudgetTableTypeEnum } from "./enums/BudgetTableType.enum";
 import { BudgetTableData } from "./interfaces/BudgetTable.interface";
 import { auth } from "./services/firebase";
@@ -64,6 +65,25 @@ function App() {
     setTableData([]);
   };
 
+  const handleTableAction = (
+    action: BudgetTableActionEnum,
+    entry?: BudgetTableData
+  ) => {
+    switch (action) {
+      case BudgetTableActionEnum.EDIT:
+        console.log("Edit", entry);
+        break;
+      case BudgetTableActionEnum.DELETE:
+        console.log("Delete", entry);
+        break;
+      case BudgetTableActionEnum.CREATE:
+        setIsNewEntryModalOpen(true);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <>
       <div className="p-4">
@@ -87,11 +107,22 @@ function App() {
               </button>
             </div>
             <div className="w-2/3 my-4">
-              <BudgetTable rows={tableData} itemsPerPage={10} />
+              <BudgetTable
+                rows={tableData}
+                itemsPerPage={10}
+                onAction={handleTableAction}
+              />
             </div>
           </>
         )}
       </div>
+
+      <EntryModal
+        isOpen={isNewEntryModalOpen}
+        title="New Entry"
+        onConfirm={onNewEntry}
+        closeModal={() => setIsNewEntryModalOpen(false)}
+      />
 
       <EntryModal
         isOpen={isNewEntryModalOpen}
