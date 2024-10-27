@@ -18,6 +18,7 @@ import { BudgetTableType } from "./types/BudgetTableType.type";
 function App() {
   const [tableData, setTableData] = useState<BudgetTableData[]>([]);
   const [user, setUser] = useState<User | null>(null);
+  const [isNewEntryModalOpen, setIsNewEntryModalOpen] = useState(false);
 
   const reduceTablePriceByType = (type: BudgetTableType) =>
     tableData.reduce((acc, curr) => {
@@ -64,30 +65,41 @@ function App() {
   };
 
   return (
-    <div className="p-4">
-      <div className="border">
-        <h1>Easy Budget</h1>
-        <button onClick={logout}>Logout</button>
-      </div>
-      {!user ? (
-        <div className="my-4">
-          <GoogleSignIn onUserLogin={(user) => setUser(user)} />
+    <>
+      <div className="p-4">
+        <div className="border">
+          <h1>Easy Budget</h1>
+          <button onClick={logout}>Logout</button>
         </div>
-      ) : (
-        <>
-          <div className="flex justify-between my-12">
-            <Totalizers
-              income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
-              expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
-            />
-            <EntryModal onNewEntry={onNewEntry} />
+        {!user ? (
+          <div className="my-4">
+            <GoogleSignIn onUserLogin={(user) => setUser(user)} />
           </div>
-          <div className="w-2/3 my-4">
-            <BudgetTable rows={tableData} itemsPerPage={10} />
-          </div>
-        </>
-      )}
-    </div>
+        ) : (
+          <>
+            <div className="flex justify-between my-12">
+              <Totalizers
+                income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
+                expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
+              />
+              <button onClick={() => setIsNewEntryModalOpen(true)}>
+                New Entry
+              </button>
+            </div>
+            <div className="w-2/3 my-4">
+              <BudgetTable rows={tableData} itemsPerPage={10} />
+            </div>
+          </>
+        )}
+      </div>
+
+      <EntryModal
+        isOpen={isNewEntryModalOpen}
+        title="New Entry"
+        onConfirm={onNewEntry}
+        closeModal={() => setIsNewEntryModalOpen(false)}
+      />
+    </>
   );
 }
 
