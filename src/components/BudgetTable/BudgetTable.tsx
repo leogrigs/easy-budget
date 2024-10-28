@@ -87,7 +87,9 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
                 <tr>
                   {headers.map((header) => (
                     <th
-                      className="text-start border p-2 bg-slate-100"
+                      className="border-b p-4"
+                      // @ts-expect-error I don't have access to TextAlign interface
+                      style={{ textAlign: header.align ?? "start" }}
                       key={header.key}
                     >
                       {header.label}

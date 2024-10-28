@@ -8,6 +8,7 @@ export const BUDGET_TABLE_HEADERS = [
   {
     key: BudgetTableHeaderEnum.PRICE,
     label: "Price",
+    align: "right",
   },
   {
     key: BudgetTableHeaderEnum.CATEGORY,
@@ -20,5 +21,6 @@ export const BUDGET_TABLE_HEADERS = [
   {
     key: BudgetTableHeaderEnum.ACTIONS,
     label: "Actions",
+    align: "right",
   },
 ];

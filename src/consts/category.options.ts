@@ -1,34 +1,35 @@
+import { BudgetTableCategoryEnum } from "../enums/BudgetTableCategory.enum";
 import { InputOptions } from "../interfaces/InputOptions.interface";
 
 export const CATEGORY_OPTIONS: InputOptions[] = [
   {
     id: "category-1",
     label: "Salary",
-    value: "salary",
+    value: BudgetTableCategoryEnum.SALARY,
   },
   {
     id: "category-2",
     label: "Food",
-    value: "food",
+    value: BudgetTableCategoryEnum.FOOD,
   },
   {
     id: "category-3",
     label: "Transport",
-    value: "transport",
+    value: BudgetTableCategoryEnum.TRANSPORT,
   },
   {
     id: "category-4",
     label: "Miscellaneous",
-    value: "miscellaneous",
+    value: BudgetTableCategoryEnum.MISCELLENEOUS,
   },
   {
     id: "category-5",
     label: "Entertainment",
-    value: "entertainment",
+    value: BudgetTableCategoryEnum.ENTERTAINMENT,
   },
   {
     id: "category-6",
     label: "Other",
-    value: "other",
+    value: BudgetTableCategoryEnum.OTHER,
   },
 ];

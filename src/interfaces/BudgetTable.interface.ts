@@ -13,4 +13,5 @@ export interface BudgetTableData {
 export interface BudgetTableHeader {
   key: BudgetTableHeaderType;
   label: string;
+  align?: string | "start" | "end" | "center";
 }

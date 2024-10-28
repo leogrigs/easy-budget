@@ -1,11 +1,15 @@
 import React from "react";
+import deleteImage from "../../assets/delete.svg";
+import editImage from "../../assets/edit.svg";
 import { BudgetTableActionEnum } from "../../enums/BudgetTableAction.enum";
+import { BudgetTableCategoryEnum } from "../../enums/BudgetTableCategory.enum";
 import { BudgetTableHeaderEnum } from "../../enums/BudgetTableHeader.enum";
 import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
 import {
   BudgetTableData,
   BudgetTableHeader,
 } from "../../interfaces/BudgetTable.interface";
+import CategoryChip from "../CategoryChip";
 
 interface BudgetTableCellProps {
   header: BudgetTableHeader;
@@ -24,18 +28,11 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
         return (
           <div className="flex gap-4 items-center">
             <div
-              style={{
-                backgroundColor:
-                  row.type === BudgetTableTypeEnum.EXPENSE
-                    ? "#ef4444"
-                    : "#22c55e",
-                border: `3px solid ${
-                  row.type === BudgetTableTypeEnum.EXPENSE
-                    ? "#f87171"
-                    : "#4ade80"
-                }`,
-              }}
-              className="block size-3 rounded-full"
+              className={`block size-3 border-2 rounded-full ${
+                row.type === BudgetTableTypeEnum.EXPENSE
+                  ? "bg-red-500 border-red-100"
+                  : "bg-green-500 border-green-100"
+              }`}
             ></div>
             <span>{row[header.key as keyof BudgetTableData]}</span>
           </div>
@@ -55,30 +52,37 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
 
       case BudgetTableHeaderEnum.ACTIONS:
         return (
-          <div className="flex justify-center items-center gap-2">
+          <div className="flex justify-end items-center gap-2">
             <button
               onClick={() => onClick(BudgetTableActionEnum.EDIT, row)}
               className="rounded-full  group transition-all duration-500  flex item-center"
             >
-              <img src="src/assets/edit.svg" alt="edit entry" />
+              <img src={editImage} alt="edit entry" />
             </button>
             <button
               onClick={() => onClick(BudgetTableActionEnum.DELETE, row)}
               className="rounded-full  group transition-all duration-500  flex item-center"
             >
-              <img src="src/assets/delete.svg" alt="delete entry" />
+              <img src={deleteImage} alt="delete entry" />
             </button>
           </div>
         );
 
-      case BudgetTableHeaderEnum.CATEGORY:
       case BudgetTableHeaderEnum.DATE:
+        return <span>{new Date(row.date).toLocaleDateString()}</span>;
+
+      case BudgetTableHeaderEnum.CATEGORY:
       default:
-        return <span>{row[header.key as keyof BudgetTableData]}</span>;
+        return (
+          <CategoryChip
+            label={row[header.key as keyof BudgetTableData] as string}
+            category={row.category as BudgetTableCategoryEnum}
+          />
+        );
     }
   };
 
-  return <td className="border p-2">{renderCell()}</td>;
+  return <td className="border-b p-4">{renderCell()}</td>;
 };
 
 export default BudgetTableCell;
