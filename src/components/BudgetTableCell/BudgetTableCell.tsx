@@ -1,4 +1,6 @@
 import React from "react";
+import deleteImage from "../../assets/delete.svg";
+import editImage from "../../assets/edit.svg";
 import { BudgetTableActionEnum } from "../../enums/BudgetTableAction.enum";
 import { BudgetTableHeaderEnum } from "../../enums/BudgetTableHeader.enum";
 import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
@@ -60,13 +62,13 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
               onClick={() => onClick(BudgetTableActionEnum.EDIT, row)}
               className="rounded-full  group transition-all duration-500  flex item-center"
             >
-              <img src="src/assets/edit.svg" alt="edit entry" />
+              <img src={editImage} alt="edit entry" />
             </button>
             <button
               onClick={() => onClick(BudgetTableActionEnum.DELETE, row)}
               className="rounded-full  group transition-all duration-500  flex item-center"
             >
-              <img src="src/assets/delete.svg" alt="delete entry" />
+              <img src={deleteImage} alt="delete entry" />
             </button>
           </div>
         );
