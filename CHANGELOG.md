@@ -1,3 +1,10 @@
+## [0.15.1](https://github.com/leogrigs/easy-budget/compare/v0.15.0...v0.15.1) (2024-10-28)
+
+
+### Bug Fixes
+
+* **chart:** reduced margin bottom ([17cb3fb](https://github.com/leogrigs/easy-budget/commit/17cb3fb867e126efae93455cfbb8533520f54240))
+
 # [0.15.0](https://github.com/leogrigs/easy-budget/compare/v0.14.0...v0.15.0) (2024-10-27)
 
 
