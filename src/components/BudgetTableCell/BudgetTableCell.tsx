@@ -57,7 +57,7 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
 
       case BudgetTableHeaderEnum.ACTIONS:
         return (
-          <div className="flex justify-center items-center gap-2">
+          <div className="flex justify-end items-center gap-2">
             <button
               onClick={() => onClick(BudgetTableActionEnum.EDIT, row)}
               className="rounded-full  group transition-all duration-500  flex item-center"
@@ -82,7 +82,7 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
     }
   };
 
-  return <td className="border p-2">{renderCell()}</td>;
+  return <td className="border-b p-4">{renderCell()}</td>;
 };
 
 export default BudgetTableCell;
