@@ -71,8 +71,10 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
           </div>
         );
 
-      case BudgetTableHeaderEnum.CATEGORY:
       case BudgetTableHeaderEnum.DATE:
+        return <span>{new Date(row.date).toLocaleDateString()}</span>;
+
+      case BudgetTableHeaderEnum.CATEGORY:
       default:
         return <span>{row[header.key as keyof BudgetTableData]}</span>;
     }
