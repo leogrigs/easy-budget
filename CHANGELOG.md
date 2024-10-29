@@ -1,3 +1,16 @@
+# [0.16.0](https://github.com/leogrigs/easy-budget/compare/v0.15.1...v0.16.0) (2024-10-28)
+
+
+### Bug Fixes
+
+* **budget-table:** directly image import ([047024d](https://github.com/leogrigs/easy-budget/commit/047024d1e1550b55d7cd5945d2775906e993dad5))
+
+
+### Features
+
+* **budget-table:** improve date visualization ([d7a48ea](https://github.com/leogrigs/easy-budget/commit/d7a48ea24e1e7e6c29d16ad443fa855b9412dd8b))
+* **budget-table:** stylized dynamic category component ([ce732f4](https://github.com/leogrigs/easy-budget/commit/ce732f43aa25629210f5113fc3f8182ffa91f0ac))
+
 ## [0.15.1](https://github.com/leogrigs/easy-budget/compare/v0.15.0...v0.15.1) (2024-10-28)
 
 
