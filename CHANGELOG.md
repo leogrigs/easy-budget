@@ -1,3 +1,15 @@
+# [0.17.0](https://github.com/leogrigs/easy-budget/compare/v0.16.0...v0.17.0) (2024-10-29)
+
+
+### Bug Fixes
+
+* **budget-table:** reindexing ids on entry delete ([a8ab9f7](https://github.com/leogrigs/easy-budget/commit/a8ab9f76acb647b432c7079a07857960fc14cdf3))
+
+
+### Features
+
+* **budget-table:** month and year filter ([b6ba2b4](https://github.com/leogrigs/easy-budget/commit/b6ba2b4a772e0dd1ecc959b55e17ad97d8d024de))
+
 # [0.16.0](https://github.com/leogrigs/easy-budget/compare/v0.15.1...v0.16.0) (2024-10-28)
 
 
