@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { NEW_ENTRY } from "../../consts/entry.options";
 import { BUDGET_TABLE_HEADERS } from "../../consts/headers.options";
+import { MONTH_OPTIONS } from "../../consts/month.options";
 import { BudgetTableActionEnum } from "../../enums/BudgetTableAction.enum";
 import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
+import { InputOptions } from "../../interfaces/InputOptions.interface";
 import BudgetTableCell from "../BudgetTableCell";
 import Input from "../Input";
 import NoResults from "../NoResults";
 import Paginator from "../Paginator";
+import Select from "../Select";
 
 type BudgetTableProps = {
   rows: BudgetTableData[];
@@ -20,16 +23,39 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
   onAction,
 }) => {
   const headers = BUDGET_TABLE_HEADERS;
-
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
+  const [year, setYear] = useState("");
+  const [month, setMonth] = useState("");
+  const years = rows.reduce(
+    (acc, row) => {
+      const year = new Date(row.date).getFullYear();
+      if (!acc.some((item) => item.value === year))
+        acc.push({
+          id: year.toString(),
+          value: year,
+          label: year.toString(),
+        });
+      return acc;
+    },
+    [{ id: "all_years", value: "", label: "All" }] as InputOptions[]
+  );
 
   const filteredTable = (): BudgetTableData[] => {
-    return rows.filter((row) =>
-      Object.values(row).some((value) =>
+    return rows.filter((row) => {
+      const rowDate = new Date(row.date);
+      const rowMonth = rowDate.getMonth() + 1;
+      const rowYear = rowDate.getFullYear();
+
+      const matchesSearch = Object.values(row).some((value) =>
         value.toString().toLowerCase().includes(search.toLowerCase())
-      )
-    );
+      );
+
+      const matchesMonth = month === "" || rowMonth === +month;
+      const matchesYear = year === "" || rowYear === +year;
+
+      return matchesSearch && matchesMonth && matchesYear;
+    });
   };
 
   const paginateTable = (): BudgetTableData[] => {
@@ -44,7 +70,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
   return (
     <>
       <div className="my-4 flex items-center gap-4">
-        <div className="relative w-full">
+        <div className="relative w-3/5">
           <Input
             name="search"
             placeholder="Search by name"
@@ -64,6 +90,22 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
               clipRule="evenodd"
             />
           </svg>
+        </div>
+        <div className="w-48">
+          <Select
+            options={MONTH_OPTIONS}
+            name="month_filter"
+            value={month}
+            onChange={(_, value) => setMonth(value)}
+          />
+        </div>
+        <div className="w-36">
+          <Select
+            options={years}
+            name="year_filter"
+            value={year}
+            onChange={(_, value) => setYear(value)}
+          />
         </div>
         <button
           onClick={() => onAction(BudgetTableActionEnum.CREATE, NEW_ENTRY)}

@@ -52,8 +52,10 @@ export const deleteEntryFromTable = async (
   uid: string,
   entryId: number,
   table: BudgetTableData[]
-) => {
-  const updatedTable = table.filter((item) => item.id !== entryId);
+): Promise<void> => {
+  const updatedTable = table
+    .filter((item) => item.id !== entryId)
+    .map((item, index) => ({ ...item, id: index + 1 }));
 
   const userDocRef = doc(db, "users", uid);
   await updateDoc(userDocRef, { table: updatedTable });
