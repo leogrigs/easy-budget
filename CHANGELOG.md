@@ -1,3 +1,10 @@
+## [0.18.1](https://github.com/leogrigs/easy-budget/compare/v0.18.0...v0.18.1) (2024-10-30)
+
+
+### Bug Fixes
+
+* **budget-table:** category chip color ([6e48344](https://github.com/leogrigs/easy-budget/commit/6e48344e147f4de46458146007e0724cb0bfa062))
+
 # [0.18.0](https://github.com/leogrigs/easy-budget/compare/v0.17.0...v0.18.0) (2024-10-30)
 
 
