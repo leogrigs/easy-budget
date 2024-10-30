@@ -20,7 +20,6 @@ const CategoryChip: React.FC<CategoryChipProps> = ({ category, label }) => {
         return "bg-purple-100 text-purple-800";
       case BudgetTableCategoryEnum.MISCELLENEOUS:
         return "bg-indigo-100 text-indigo-800";
-
       case BudgetTableCategoryEnum.OTHER:
       default:
         return "bg-gray-200 text-gray-800";
@@ -30,7 +29,7 @@ const CategoryChip: React.FC<CategoryChipProps> = ({ category, label }) => {
   return (
     <div className="flex justify-start items-center space-x-3">
       <span
-        className={`py-1 px-2.5 border-none rounded-full bg-gray-200 text-gray-800 font-medium ${getColorClasses()}`}
+        className={`py-1 px-2.5 border-none rounded-full font-medium ${getColorClasses()}`}
       >
         {label}
       </span>
