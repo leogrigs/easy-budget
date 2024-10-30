@@ -5,6 +5,7 @@ import BudgetTable from "./components/BudgetTable";
 import Chart from "./components/Chart";
 import EntryModal from "./components/EntryModal";
 import GoogleSignIn from "./components/GoogleSignIn";
+import Loader from "./components/Loader";
 import Modal from "./components/Modal";
 import Totalizers from "./components/Totalizers";
 import { NEW_ENTRY } from "./consts/entry.options";
@@ -28,6 +29,7 @@ function App() {
   const [isEditEntryModalOpen, setIsEditEntryModalOpen] = useState(false);
   const [isDeleteEntryModalOpen, setIsDeleteEntryModalOpen] = useState(false);
   const [currentEntry, setCurrentEntry] = useState(NEW_ENTRY);
+  const [isLoading, setIsLoading] = useState(false);
 
   const reduceTablePriceByType = (type: BudgetTableType) =>
     tableData.reduce((acc, curr) => {
@@ -38,52 +40,62 @@ function App() {
     }, 0);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
-        await initializeUserDocument(currentUser.uid);
-        updateTable(currentUser.uid);
-      } else {
-        setTableData([]);
-      }
+    asyncFunctionWrapper(async () => {
+      const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+        setUser(currentUser);
+        if (currentUser) {
+          await initializeUserDocument(currentUser.uid);
+          const table = await fetchUserTable(currentUser.uid);
+          setTableData(table);
+        } else {
+          setTableData([]);
+        }
+      });
+      return () => unsubscribe();
     });
-    return () => unsubscribe();
   }, []);
 
-  const updateTable = async (uid: string): Promise<void> => {
-    const table = await fetchUserTable(uid);
-    setTableData(table);
-  };
-
   const onNewEntry = async (entry: BudgetTableData) => {
-    if (user) {
-      const _newEntry = {
-        ...entry,
-        id: tableData.length + 1,
-      };
-      await addEntryToTable(user.uid, _newEntry);
-      await updateTable(user.uid);
-    }
+    asyncFunctionWrapper(async () => {
+      if (user) {
+        const _newEntry = {
+          ...entry,
+          id: tableData.length + 1,
+        };
+        const table = await addEntryToTable(user.uid, _newEntry);
+        setTableData(table);
+      }
+    });
   };
 
   const onEditEntry = async (entry: BudgetTableData) => {
-    if (user) {
-      await updateEntryInTable(user.uid, entry, tableData);
-      await updateTable(user.uid);
-    }
+    asyncFunctionWrapper(async () => {
+      if (user) {
+        const table = await updateEntryInTable(user.uid, entry, tableData);
+        setTableData(table);
+      }
+    });
   };
 
   const onDeleteEntry = async () => {
-    if (user) {
-      await deleteEntryFromTable(user.uid, currentEntry.id, tableData);
-      await updateTable(user.uid);
-    }
+    asyncFunctionWrapper(async () => {
+      if (user) {
+        const table = await deleteEntryFromTable(
+          user.uid,
+          currentEntry.id,
+          tableData
+        );
+        setTableData(table);
+      }
+    });
   };
 
   const logout = async () => {
-    await auth.signOut();
-    setUser(null);
-    setTableData([]);
+    asyncFunctionWrapper(async () => {
+      await auth.signOut();
+      setUser(null);
+      setTableData([]);
+    });
   };
 
   const handleTableAction = (
@@ -104,6 +116,14 @@ function App() {
       default:
         break;
     }
+  };
+
+  const asyncFunctionWrapper = async (func: () => Promise<unknown>) => {
+    setIsLoading(true);
+    await func();
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 200);
   };
 
   return (
@@ -171,6 +191,8 @@ function App() {
         onConfirm={onEditEntry}
         closeModal={() => setIsEditEntryModalOpen(false)}
       />
+
+      {isLoading && <Loader />}
     </>
   );
 }
