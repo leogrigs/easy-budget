@@ -1,3 +1,10 @@
+# [0.18.0](https://github.com/leogrigs/easy-budget/compare/v0.17.0...v0.18.0) (2024-10-30)
+
+
+### Features
+
+* **loader:** component creation ([1ffbc0b](https://github.com/leogrigs/easy-budget/commit/1ffbc0bff6d55cb5f093d6ace77b700ebc0f6e08))
+
 # [0.17.0](https://github.com/leogrigs/easy-budget/compare/v0.16.0...v0.17.0) (2024-10-29)
 
 
