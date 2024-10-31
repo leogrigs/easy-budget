@@ -7,6 +7,7 @@ import EntryModal from "../../components/EntryModal";
 import Modal from "../../components/Modal";
 import Totalizers from "../../components/Totalizers";
 import { NEW_ENTRY } from "../../consts/entry.options";
+import { useLoading } from "../../contexts/LoadingContext";
 import { BudgetTableActionEnum } from "../../enums/BudgetTableAction.enum";
 import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
 import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
@@ -27,6 +28,7 @@ const System: React.FC<SsytemProps> = ({ user }) => {
   const [tableData, setTableData] = useState<BudgetTableData[]>([]);
   const [currentEntry, setCurrentEntry] = useState(NEW_ENTRY);
   const [isEntryModalOpen, setIsEntryModalOpen] = useState("");
+  const { setLoading } = useLoading();
 
   useEffect(() => {
     asyncFunctionWrapper(async () => {
@@ -92,7 +94,11 @@ const System: React.FC<SsytemProps> = ({ user }) => {
   };
 
   const asyncFunctionWrapper = async (func: () => Promise<unknown>) => {
+    setLoading(true);
     await func();
+    setTimeout(() => {
+      setLoading(false);
+    }, 200);
   };
 
   return (
