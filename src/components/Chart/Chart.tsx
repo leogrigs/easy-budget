@@ -88,9 +88,9 @@ const Chart: React.FC<ChartProps> = ({ tableData }) => {
               }).format(
                 tableData.reduce(
                   (acc, curr) =>
-                    acc + curr.type !== BudgetTableTypeEnum.INCOME
-                      ? curr.price
-                      : 0,
+                    curr.type === BudgetTableTypeEnum.EXPENSE
+                      ? (acc = acc + curr.price)
+                      : acc,
                   0
                 )
               )}
