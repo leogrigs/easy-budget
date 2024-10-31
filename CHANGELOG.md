@@ -1,3 +1,10 @@
+## [0.18.2](https://github.com/leogrigs/easy-budget/compare/v0.18.1...v0.18.2) (2024-10-31)
+
+
+### Bug Fixes
+
+* **chart:** total expenses inside chart calculation ([ac0b126](https://github.com/leogrigs/easy-budget/commit/ac0b126b8265092ae01cbacd5ac3bdd9fbb92219))
+
 ## [0.18.1](https://github.com/leogrigs/easy-budget/compare/v0.18.0...v0.18.1) (2024-10-30)
 
 
