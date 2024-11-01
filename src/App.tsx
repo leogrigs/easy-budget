@@ -1,7 +1,7 @@
-// App.tsx
 import { User } from "firebase/auth";
 import { useState } from "react";
 import "./App.css";
+import logo from "./assets/logo.png";
 import Loader from "./components/Loader";
 import { useLoading } from "./contexts/LoadingContext";
 import Auth from "./pages/Auth";
@@ -21,12 +21,28 @@ function App() {
 
   return (
     <>
-      <div className="p-4">
-        <div className="border">
-          <h1>Easy Budget</h1>
-          <button onClick={logout}>Logout</button>
+      <div className="h-screen flex flex-col bg-gradient-to-b from-white to-slate-50">
+        {/* Header */}
+        <header className="flex justify-between items-center border-b border-slate-200 py-4 px-8 shadow-md">
+          <div className="flex items-center space-x-2">
+            <img src={logo} alt="Easy Budget Logo" className="h-12" />
+            <h1 className="text-2xl font-bold text-slate-800">Easy Budget</h1>
+          </div>
+          {user && (
+            <button
+              className="px-4 py-2 text-sm font-medium text-white bg-teal-600 rounded-md hover:bg-teal-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-400"
+              onClick={logout}
+            >
+              Logout
+            </button>
+          )}
+        </header>
+
+        {/* Main Content */}
+        <div className="flex-grow flex px-8">
+          {/* Check if user is authenticated */}
+          {!user ? <Auth onUserLogin={setUser} /> : <System user={user} />}
         </div>
-        {!user ? <Auth onUserLogin={setUser} /> : <System user={user} />}
       </div>
 
       {isLoading && <Loader />}
