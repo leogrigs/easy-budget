@@ -103,55 +103,57 @@ const System: React.FC<SsytemProps> = ({ user }) => {
 
   return (
     <>
-      <div className="flex justify-between mt-8">
-        <Totalizers
-          income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
-          expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
-        />
-      </div>
-      <div className="flex gap-8 h-auto">
-        <div className="w-2/3 my-4">
-          <BudgetTable
-            rows={tableData}
-            itemsPerPage={10}
-            onAction={handleTableAction}
+      <div className="flex-grow">
+        <div className="flex justify-between mt-8">
+          <Totalizers
+            income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
+            expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
           />
         </div>
-        <div className="w-1/3 h-[624px]">
-          <Chart tableData={tableData} />
+        <div className="flex gap-8 h-auto">
+          <div className="w-2/3 my-4">
+            <BudgetTable
+              rows={tableData}
+              itemsPerPage={10}
+              onAction={handleTableAction}
+            />
+          </div>
+          <div className="w-1/3 h-[624px]">
+            <Chart tableData={tableData} />
+          </div>
         </div>
+
+        <Modal
+          isOpen={isEntryModalOpen === BudgetTableActionEnum.DELETE}
+          title="Delete Entry"
+          onConfirm={() => {
+            setIsEntryModalOpen(BudgetTableActionEnum.NONE);
+            onDeleteEntry();
+          }}
+          onCancel={() => setIsEntryModalOpen(BudgetTableActionEnum.NONE)}
+        >
+          <p>
+            Are you sure you want to delete this entry? This action cannot be
+            undone
+          </p>
+        </Modal>
+
+        <EntryModal
+          isOpen={isEntryModalOpen === BudgetTableActionEnum.CREATE}
+          title="New Entry"
+          onConfirm={onNewEntry}
+          entry={currentEntry}
+          closeModal={() => setIsEntryModalOpen(BudgetTableActionEnum.NONE)}
+        />
+
+        <EntryModal
+          isOpen={isEntryModalOpen === BudgetTableActionEnum.EDIT}
+          title="Edit Entry"
+          entry={currentEntry}
+          onConfirm={onEditEntry}
+          closeModal={() => setIsEntryModalOpen(BudgetTableActionEnum.NONE)}
+        />
       </div>
-
-      <Modal
-        isOpen={isEntryModalOpen === BudgetTableActionEnum.DELETE}
-        title="Delete Entry"
-        onConfirm={() => {
-          setIsEntryModalOpen(BudgetTableActionEnum.NONE);
-          onDeleteEntry();
-        }}
-        onCancel={() => setIsEntryModalOpen(BudgetTableActionEnum.NONE)}
-      >
-        <p>
-          Are you sure you want to delete this entry? This action cannot be
-          undone
-        </p>
-      </Modal>
-
-      <EntryModal
-        isOpen={isEntryModalOpen === BudgetTableActionEnum.CREATE}
-        title="New Entry"
-        onConfirm={onNewEntry}
-        entry={currentEntry}
-        closeModal={() => setIsEntryModalOpen(BudgetTableActionEnum.NONE)}
-      />
-
-      <EntryModal
-        isOpen={isEntryModalOpen === BudgetTableActionEnum.EDIT}
-        title="Edit Entry"
-        entry={currentEntry}
-        onConfirm={onEditEntry}
-        closeModal={() => setIsEntryModalOpen(BudgetTableActionEnum.NONE)}
-      />
     </>
   );
 };

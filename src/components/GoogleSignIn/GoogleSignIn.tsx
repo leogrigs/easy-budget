@@ -1,5 +1,6 @@
-import React from "react";
 import { signInWithPopup, User } from "firebase/auth";
+import React from "react";
+import googleImage from "../../assets/google.svg";
 import { auth, googleProvider } from "../../services/firebase";
 
 interface GoogleSignInProps {
@@ -19,9 +20,10 @@ const GoogleSignIn: React.FC<GoogleSignInProps> = ({ onUserLogin }) => {
   return (
     <button
       onClick={signInWithGoogle}
-      className="bg-blue-500 text-white px-4 py-2 rounded-md"
+      className="flex items-center bg-white border rounded-lg shadow-md px-6 py-2 text-sm font-medium text-slate-800 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500"
     >
-      Sign in with Google
+      <img className="h-6 w-6 mr-2" src={googleImage} />
+      <span>Continue with Google</span>
     </button>
   );
 };
