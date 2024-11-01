@@ -19,8 +19,8 @@ const Auth: React.FC<AuthProps> = ({ onUserLogin }) => {
         onUserLogin(currentUser);
         await initializeUserDocument(currentUser.uid);
       }
+      setLoading(false);
     });
-    setLoading(false);
     return () => unsubscribe();
   }, []);
 
