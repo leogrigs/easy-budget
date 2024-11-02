@@ -1,3 +1,10 @@
+## [0.18.3](https://github.com/leogrigs/easy-budget/compare/v0.18.2...v0.18.3) (2024-11-01)
+
+
+### Bug Fixes
+
+* **loader:** stop loader on Auth page ([a95f093](https://github.com/leogrigs/easy-budget/commit/a95f093f8654de26cec2b96b4f554e11b4c15692))
+
 ## [0.18.2](https://github.com/leogrigs/easy-budget/compare/v0.18.1...v0.18.2) (2024-10-31)
 
 
