@@ -1,3 +1,20 @@
+# [0.19.0](https://github.com/leogrigs/easy-budget/compare/v0.18.3...v0.19.0) (2024-11-02)
+
+
+### Features
+
+* **theme:** dark mode auth component ([e665623](https://github.com/leogrigs/easy-budget/commit/e665623ba623cbb022bfe1cac457adfeb488b029))
+* **theme:** dark mode budget table cell component ([894da57](https://github.com/leogrigs/easy-budget/commit/894da57d9851334605b066b028708e6d1d0efb5c))
+* **theme:** dark mode budget table component ([c2a4d17](https://github.com/leogrigs/easy-budget/commit/c2a4d171de8c4fae1f05b178427dfcfd6e67fdd5))
+* **theme:** dark mode category chip component ([286b711](https://github.com/leogrigs/easy-budget/commit/286b7110ff97aab6e9ad950cf8f2dd08b99a637e))
+* **theme:** dark mode entry form component ([3b1b16d](https://github.com/leogrigs/easy-budget/commit/3b1b16df407405561ab32afcfadab930e5ed3a8f))
+* **theme:** dark mode input component ([aa0435c](https://github.com/leogrigs/easy-budget/commit/aa0435c0e792d0e2d7249e2268fbce23b1e4bf25))
+* **theme:** dark mode modal component ([0166d28](https://github.com/leogrigs/easy-budget/commit/0166d28e98668b62f5f11d6ed5d3f13d1521391b))
+* **theme:** dark mode paginator component ([b6b5045](https://github.com/leogrigs/easy-budget/commit/b6b50450feba919f55f4e03055a299ae534011d7))
+* **theme:** dark mode select component ([220826d](https://github.com/leogrigs/easy-budget/commit/220826debbe3e8c37d6ae2760ad42cd9a2bcd636))
+* **theme:** dark mode totalizers component ([8cfa545](https://github.com/leogrigs/easy-budget/commit/8cfa54505e2720b854b6d13fcb398b140cd5647e))
+* **theme:** dark-mode set up ([c4cb1e6](https://github.com/leogrigs/easy-budget/commit/c4cb1e6968431a67ce1060537b2f8a9a42b501a1))
+
 ## [0.18.3](https://github.com/leogrigs/easy-budget/compare/v0.18.2...v0.18.3) (2024-11-01)
 
 
