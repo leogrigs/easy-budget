@@ -13,7 +13,9 @@ const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
   return (
     <form className="flex flex-col gap-4">
       <div className="w-full max-w-sm min-w-[200px]">
-        <label className="block mb-2 text-sm text-slate-600">Name</label>
+        <label className="block mb-2 text-sm text-slate-600 dark:text-slate-300">
+          Name
+        </label>
         <Input
           value={entry.name}
           placeholder="Entry name"
@@ -23,7 +25,9 @@ const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
       </div>
 
       <div className="w-full max-w-sm min-w-[200px]">
-        <label className="block mb-2 text-sm text-slate-600">Price</label>
+        <label className="block mb-2 text-sm text-slate-600 dark:text-slate-300">
+          Price
+        </label>
         <Input
           value={entry.price}
           type="number"
@@ -34,18 +38,21 @@ const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
       </div>
 
       <div className="w-full max-w-sm min-w-[200px]">
-        <label className="block mb-2 text-sm text-slate-600">Date</label>
+        <label className="block mb-2 text-sm text-slate-600 dark:text-slate-300">
+          Date
+        </label>
         <Input
           value={entry.date}
           type="date"
-          placeholder="dd/mm/yyyy"
           onChange={handleChanges}
           name="date"
         />
       </div>
 
       <div className="w-full max-w-sm min-w-[200px]">
-        <label className="block mb-2 text-sm text-slate-600">Category</label>
+        <label className="block mb-2 text-sm text-slate-600 dark:text-slate-300">
+          Category
+        </label>
         <Select
           options={CATEGORY_OPTIONS}
           value={entry.category}
@@ -55,7 +62,9 @@ const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
       </div>
 
       <div className="w-full max-w-sm min-w-[200px]">
-        <label className="block mb-2 text-sm text-slate-600">Type</label>
+        <label className="block mb-2 text-sm text-slate-600 dark:text-slate-300">
+          Type
+        </label>
         <Select
           options={TYPE_OPTIONS}
           value={entry.type}
