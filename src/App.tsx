@@ -22,7 +22,7 @@ function App() {
 
   return (
     <>
-      <div className="h-screen flex flex-col bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-gray-800">
+      <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-gray-800">
         {/* Header */}
         <header className="flex justify-between items-center border-b border-slate-200 dark:border-slate-700 py-4 px-8 shadow-md">
           <div className="flex items-center space-x-2">
