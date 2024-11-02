@@ -28,20 +28,22 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
         return (
           <div className="flex gap-4 items-center">
             <div
-              className={`block size-3 border-2 rounded-full ${
+              className={`w-3 h-3 border-2 rounded-full ${
                 row.type === BudgetTableTypeEnum.EXPENSE
-                  ? "bg-red-500 border-red-100"
-                  : "bg-green-500 border-green-100"
+                  ? "bg-red-500 border-red-300 dark:border-red-700"
+                  : "bg-green-500 border-green-300 dark:border-green-700"
               }`}
             ></div>
-            <span>{row[header.key as keyof BudgetTableData]}</span>
+            <span className="text-slate-800 dark:text-slate-200">
+              {row[header.key as keyof BudgetTableData]}
+            </span>
           </div>
         );
 
       case BudgetTableHeaderEnum.PRICE:
         return (
           <div className="text-right">
-            <span>
+            <span className="text-slate-800 dark:text-slate-200 font-medium">
               {Intl.NumberFormat("pt-BR", {
                 style: "currency",
                 currency: "BRL",
@@ -53,23 +55,30 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
       case BudgetTableHeaderEnum.ACTIONS:
         return (
           <div className="flex justify-end items-center gap-2">
+            {/* Edit Button */}
             <button
               onClick={() => onClick(BudgetTableActionEnum.EDIT, row)}
-              className="rounded-full  group transition-all duration-500  flex item-center"
+              className="p-2 rounded-full group duration-300 flex items-center bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600"
             >
-              <img src={editImage} alt="edit entry" />
+              <img src={editImage} alt="edit entry" className="w-5 h-5" />
             </button>
+
+            {/* Delete Button */}
             <button
               onClick={() => onClick(BudgetTableActionEnum.DELETE, row)}
-              className="rounded-full  group transition-all duration-500  flex item-center"
+              className="p-2 rounded-full group duration-300 flex items-center bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600"
             >
-              <img src={deleteImage} alt="delete entry" />
+              <img src={deleteImage} alt="delete entry" className="w-5 h-5" />
             </button>
           </div>
         );
 
       case BudgetTableHeaderEnum.DATE:
-        return <span>{new Date(row.date).toLocaleDateString()}</span>;
+        return (
+          <span className="text-slate-700 dark:text-slate-300">
+            {new Date(row.date).toLocaleDateString()}
+          </span>
+        );
 
       case BudgetTableHeaderEnum.CATEGORY:
       default:
@@ -82,7 +91,7 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
     }
   };
 
-  return <td className="border-b p-4">{renderCell()}</td>;
+  return <td className="p-4">{renderCell()}</td>;
 };
 
 export default BudgetTableCell;
