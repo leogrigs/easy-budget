@@ -4,4 +4,13 @@
 
 * {
   font-family: "Inter";
+  @apply transition-colors duration-300;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0);
+}
+
+html.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
 }

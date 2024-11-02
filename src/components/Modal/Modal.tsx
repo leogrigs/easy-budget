@@ -34,18 +34,20 @@ const Modal: React.FC<ModalProps> = ({
     >
       <DialogBackdrop className="fixed inset-0 bg-black/30" />
 
-      <div className="fixed inset-0 flex w-screen items-center justify-center rad p-4">
-        <DialogPanel className="w-1/2 max-w-lg space-y-4 border rounded bg-white p-4">
-          <DialogTitle>{title}</DialogTitle>
+      <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
+        <DialogPanel className="w-full max-w-lg space-y-4 border rounded bg-white p-4 shadow-lg dark:bg-gray-800 dark:border-gray-700">
+          <DialogTitle className="text-lg font-semibold text-gray-900 dark:text-gray-200">
+            {title}
+          </DialogTitle>
 
-          <div>{children}</div>
+          <div className="text-gray-700 dark:text-gray-300">{children}</div>
 
           {/* Actions */}
           <div className="flex gap-2 justify-between">
             <button
               ref={cancelButtonRef} // Reference to set initial focus
               onClick={onCancel}
-              className="mt-4 w-full rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              className="mt-4 w-full rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="button"
             >
               Cancel
@@ -53,7 +55,7 @@ const Modal: React.FC<ModalProps> = ({
             <button
               disabled={isConfirmDisabled}
               onClick={onConfirm}
-              className="mt-4 w-full rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white transition-all shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              className="mt-4 w-full rounded-md bg-slate-800 py-2 px-4 border border-transparent text-center text-sm text-white shadow-md hover:shadow-lg focus:bg-slate-700 focus:shadow-none active:bg-slate-700 hover:bg-slate-700 active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="button"
             >
               Confirm

@@ -25,17 +25,19 @@ const Auth: React.FC<AuthProps> = ({ onUserLogin }) => {
   }, []);
 
   return (
-    <main className="flex-grow px-8 flex items-center justify-center">
+    <main className="flex-grow px-8 flex items-center justify-center bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-gray-800">
       {/* Hero Section */}
       <section className="max-w-4xl flex flex-col gap-8 justify-center mx-auto text-center">
-        <h2 className="font-extrabold text-slate-800 lg:text-7xl md:text-6xl leading-tight">
+        <h2 className="font-extrabold text-slate-800 dark:text-slate-100 lg:text-7xl md:text-6xl leading-tight">
           Want to start managing your budget?
           <span className="block lg:text-5xl mt-4">
-            <span className="text-teal-600">Easy Budget </span>
+            <span className="text-teal-600 dark:text-teal-400">
+              Easy Budget{" "}
+            </span>
             is the app for you!
           </span>
         </h2>
-        <h3 className="text-slate-500 lg:text-xl max-w-3xl mx-auto font-medium">
+        <h3 className="text-slate-500 dark:text-slate-400 lg:text-xl max-w-3xl mx-auto font-medium">
           Track your income and expenses, view all transactions, and understand
           how your spending is divided.
         </h3>
