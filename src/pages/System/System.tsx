@@ -1,4 +1,3 @@
-// react-ts component template
 import { User } from "firebase/auth";
 import React, { useEffect, useState } from "react";
 import BudgetTable from "../../components/BudgetTable";
@@ -20,11 +19,11 @@ import {
 } from "../../services/firestore";
 import { BudgetTableType } from "../../types/BudgetTableType.type";
 
-interface SsytemProps {
+interface SystemProps {
   user: User | null;
 }
 
-const System: React.FC<SsytemProps> = ({ user }) => {
+const System: React.FC<SystemProps> = ({ user }) => {
   const [tableData, setTableData] = useState<BudgetTableData[]>([]);
   const [currentEntry, setCurrentEntry] = useState(NEW_ENTRY);
   const [isEntryModalOpen, setIsEntryModalOpen] = useState("");
@@ -102,59 +101,58 @@ const System: React.FC<SsytemProps> = ({ user }) => {
   };
 
   return (
-    <>
-      <div className="flex-grow">
-        <div className="flex justify-between mt-8">
-          <Totalizers
-            income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
-            expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
-          />
-        </div>
-        <div className="flex gap-8 h-auto">
-          <div className="w-2/3 my-4">
-            <BudgetTable
-              rows={tableData}
-              itemsPerPage={10}
-              onAction={handleTableAction}
-            />
-          </div>
-          <div className="w-1/3 h-[624px]">
-            <Chart tableData={tableData} />
-          </div>
-        </div>
-
-        <Modal
-          isOpen={isEntryModalOpen === BudgetTableActionEnum.DELETE}
-          title="Delete Entry"
-          onConfirm={() => {
-            setIsEntryModalOpen(BudgetTableActionEnum.NONE);
-            onDeleteEntry();
-          }}
-          onCancel={() => setIsEntryModalOpen(BudgetTableActionEnum.NONE)}
-        >
-          <p>
-            Are you sure you want to delete this entry? This action cannot be
-            undone
-          </p>
-        </Modal>
-
-        <EntryModal
-          isOpen={isEntryModalOpen === BudgetTableActionEnum.CREATE}
-          title="New Entry"
-          onConfirm={onNewEntry}
-          entry={currentEntry}
-          closeModal={() => setIsEntryModalOpen(BudgetTableActionEnum.NONE)}
-        />
-
-        <EntryModal
-          isOpen={isEntryModalOpen === BudgetTableActionEnum.EDIT}
-          title="Edit Entry"
-          entry={currentEntry}
-          onConfirm={onEditEntry}
-          closeModal={() => setIsEntryModalOpen(BudgetTableActionEnum.NONE)}
+    <main className="flex-grow px-4 sm:px-8 md:py-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between mt-2 mb-10 sm:mt-8 gap-4 sm:gap-0">
+        <Totalizers
+          income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
+          expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
         />
       </div>
-    </>
+
+      <div className="flex flex-col-reverse xl:flex-row gap-8 mt-0 xl:mt-8">
+        <div className="w-full xl:w-2/3 my-4">
+          <BudgetTable
+            rows={tableData}
+            itemsPerPage={10}
+            onAction={handleTableAction}
+          />
+        </div>
+        <div className="w-full xl:w-1/3 h-72 xl:h-[624px]">
+          <Chart tableData={tableData} />
+        </div>
+      </div>
+
+      <Modal
+        isOpen={isEntryModalOpen === BudgetTableActionEnum.DELETE}
+        title="Delete Entry"
+        onConfirm={() => {
+          setIsEntryModalOpen(BudgetTableActionEnum.NONE);
+          onDeleteEntry();
+        }}
+        onCancel={() => setIsEntryModalOpen(BudgetTableActionEnum.NONE)}
+      >
+        <p>
+          Are you sure you want to delete this entry? This action cannot be
+          undone.
+        </p>
+      </Modal>
+
+      <EntryModal
+        isOpen={isEntryModalOpen === BudgetTableActionEnum.CREATE}
+        title="New Entry"
+        onConfirm={onNewEntry}
+        entry={currentEntry}
+        closeModal={() => setIsEntryModalOpen(BudgetTableActionEnum.NONE)}
+      />
+
+      <EntryModal
+        isOpen={isEntryModalOpen === BudgetTableActionEnum.EDIT}
+        title="Edit Entry"
+        entry={currentEntry}
+        onConfirm={onEditEntry}
+        closeModal={() => setIsEntryModalOpen(BudgetTableActionEnum.NONE)}
+      />
+    </main>
   );
 };
 
