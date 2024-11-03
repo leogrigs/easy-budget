@@ -22,8 +22,7 @@ const Select: React.FC<OptionProps> = ({ name, value, onChange, options }) => {
       hover:border-slate-400 
       shadow-sm focus:shadow-md appearance-none cursor-pointer 
       dark:text-slate-300 dark:placeholder:text-slate-500 
-      dark:border-slate-600 dark:focus:border-teal-500 dark:hover:border-teal-500 
-      dark:bg-slate-800`}
+      dark:border-slate-600 dark:focus:border-teal-500 dark:hover:border-teal-500`}
       >
         {options.map((option) => (
           <option key={option.id} value={option.value}>

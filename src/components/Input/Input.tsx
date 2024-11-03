@@ -20,8 +20,8 @@ const Input: React.FC<{
   border shadow-sm 
   ${value ? "text-slate-700" : "text-slate-400"} 
   border-slate-300 focus:border-teal-500 hover:border-slate-400 
-  dark:text-slate-300 dark:placeholder:text-slate-500 
-  dark:border-slate-600 dark:focus:border-teal-500 dark:hover:border-teal-500 dark:bg-slate-800 appearance-none`}
+  dark:text-slate-300 dark:placeholder:text-slate-400 
+  dark:border-slate-600 dark:focus:border-teal-500 dark:hover:border-teal-500 appearance-none`}
       value={value}
       onChange={(e) => onChange(e.target.name, getInputValue(e.target.value))}
       placeholder={placeholder}
