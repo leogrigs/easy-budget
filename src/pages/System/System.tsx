@@ -101,7 +101,7 @@ const System: React.FC<SystemProps> = ({ user }) => {
   };
 
   return (
-    <main className="flex-grow px-4 sm:px-8 md:py-6">
+    <main className="w-full flex-grow px-4 sm:px-8 md:py-6">
       <div className="flex flex-col sm:flex-row sm:justify-between mt-2 mb-10 sm:mt-8 gap-4 sm:gap-0">
         <Totalizers
           income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}

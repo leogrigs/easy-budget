@@ -31,7 +31,7 @@ const Totalizers: React.FC<TotalizersProps> = ({ income, expense }) => {
     }).format(value);
 
   return (
-    <div className="flex flex-wrap gap-4 sm:gap-8 md:py-4">
+    <div className="flex flex-wrap justify-evenly md:justify-normal gap-4 sm:gap-8 md:py-4">
       {data.map((item, index) => (
         <div
           className={`${
