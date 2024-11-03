@@ -1,3 +1,10 @@
+## [0.21.1](https://github.com/leogrigs/easy-budget/compare/v0.21.0...v0.21.1) (2024-11-03)
+
+
+### Bug Fixes
+
+* **no-results:** add png image and dark / light mode handling ([3db77d0](https://github.com/leogrigs/easy-budget/commit/3db77d08946e724474cc74c0b538d67132e4eebb))
+
 # [0.21.0](https://github.com/leogrigs/easy-budget/compare/v0.20.0...v0.21.0) (2024-11-03)
 
 
