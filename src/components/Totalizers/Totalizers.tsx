@@ -31,9 +31,14 @@ const Totalizers: React.FC<TotalizersProps> = ({ income, expense }) => {
     }).format(value);
 
   return (
-    <div className="flex gap-8 justify-around py-4">
-      {data.map((item) => (
-        <div className="flex flex-col" key={item.label}>
+    <div className="flex flex-wrap justify-evenly md:justify-normal gap-4 sm:gap-8 md:py-4">
+      {data.map((item, index) => (
+        <div
+          className={`${
+            index === 0 ? "w-full sm:w-auto" : "w-auto"
+          } flex flex-col items-center sm:items-start text-center sm:text-left`}
+          key={item.label}
+        >
           <span className="text-base font-light text-slate-600 dark:text-slate-300">
             {item.label}
           </span>
