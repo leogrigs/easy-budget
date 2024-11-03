@@ -51,7 +51,7 @@ const Chart: React.FC<ChartProps> = ({ tableData }) => {
   const renderPie = () => (
     <ResponsivePie
       data={data}
-      margin={{ top: 0, right: 40, bottom: 120, left: 24 }}
+      margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
       innerRadius={0.3}
       activeOuterRadiusOffset={4}
       enableArcLabels={true}
