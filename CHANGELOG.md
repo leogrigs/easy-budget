@@ -1,3 +1,10 @@
+# [0.21.0](https://github.com/leogrigs/easy-budget/compare/v0.20.0...v0.21.0) (2024-11-03)
+
+
+### Features
+
+* **button:** button component creation ([3c0a389](https://github.com/leogrigs/easy-budget/commit/3c0a38976f64031431a3b87e58569df28518c4a1))
+
 # [0.20.0](https://github.com/leogrigs/easy-budget/compare/v0.19.0...v0.20.0) (2024-11-03)
 
 
