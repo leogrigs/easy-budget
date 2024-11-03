@@ -1,3 +1,21 @@
+# [0.20.0](https://github.com/leogrigs/easy-budget/compare/v0.19.0...v0.20.0) (2024-11-03)
+
+
+### Bug Fixes
+
+* **responsivity:** lost adjusts ([d84a76c](https://github.com/leogrigs/easy-budget/commit/d84a76c55881d227e040ca3f83842106dfc59235))
+
+
+### Features
+
+* **responsivity:** app component ([6f9ae15](https://github.com/leogrigs/easy-budget/commit/6f9ae150c76bb6ce4777dfe9d881e9581091e3e6))
+* **responsivity:** auth component ([90681da](https://github.com/leogrigs/easy-budget/commit/90681dac310f9d891dfb1f5f5197d1b3505e9546))
+* **responsivity:** budget table component ([f2200d3](https://github.com/leogrigs/easy-budget/commit/f2200d364aa2f36bea37b40fb5b426e147b814c8))
+* **responsivity:** chart component ([a69e313](https://github.com/leogrigs/easy-budget/commit/a69e31315235a8eb2b3ebefe2b56ffccf79cc6d1))
+* **responsivity:** minor spacing details ([306b102](https://github.com/leogrigs/easy-budget/commit/306b10212d6bfa716bc976288043876d1383017c))
+* **responsivity:** system component adjusts ([8c5537a](https://github.com/leogrigs/easy-budget/commit/8c5537a566dec7a0fa30759ff49f99bc79b07211))
+* **responsivity:** totalizers component ([02bde58](https://github.com/leogrigs/easy-budget/commit/02bde58452fc8dc778e12e304869aa27178174aa))
+
 # [0.19.0](https://github.com/leogrigs/easy-budget/compare/v0.18.3...v0.19.0) (2024-11-02)
 
 
