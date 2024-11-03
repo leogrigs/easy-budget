@@ -2,17 +2,17 @@ import React from "react";
 
 const NoResults: React.FC = () => {
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-2">
+    <div className="flex flex-col justify-center items-center w-full p-4 space-y-4">
       <img
-        className="size-1/2 mb-2"
-        src="https://img.freepik.com/free-vector/no-data-concept-illustration_114360-2506.jpg"
+        className="w-48 max-w-xs mb-4 bg-slate-100 dark:bg-slate-800 p-4 rounded-full"
+        src="https://cdn-icons-png.flaticon.com/512/7409/7409366.png"
         alt="no results"
       />
-      <h3 className="leading-snug tracking-normal text-center text-slate-600 mx-auto w-full text-xl max-w-lg lg:max-w-2xl lg:text-3xl">
-        No records!
+      <h3 className="text-center text-slate-800 dark:text-slate-200 text-xl lg:text-3xl font-semibold leading-snug">
+        No Records Found!
       </h3>
-      <p className="font-normal leading-relaxed mx-auto text-slate-500 lg:text-lg text-base max-w-3xl">
-        Please try to change your search criteria or add a new record.
+      <p className="text-center text-slate-600 dark:text-slate-400 text-base lg:text-lg max-w-3xl">
+        Please adjust your search criteria or add a new record to get started.
       </p>
     </div>
   );
