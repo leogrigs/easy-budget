@@ -42,7 +42,9 @@ const Auth: React.FC<AuthProps> = ({ onUserLogin }) => {
           how your spending is divided.
         </h3>
         <div className="mt-6 flex justify-center">
-          <GoogleSignIn onUserLogin={onUserLogin} />
+          <div>
+            <GoogleSignIn onUserLogin={onUserLogin} />
+          </div>
         </div>
       </section>
     </main>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const ThemeToggle: React.FC = () => {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
 
   useEffect(() => {
     const storedTheme = localStorage.getItem("theme") as
