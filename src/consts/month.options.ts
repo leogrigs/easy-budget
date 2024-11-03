@@ -4,7 +4,7 @@ export const MONTH_OPTIONS: InputOptions[] = [
   {
     id: "all_months",
     value: "",
-    label: "All",
+    label: "All months",
   },
   {
     id: "month-1",
