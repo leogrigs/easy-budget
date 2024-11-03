@@ -101,15 +101,15 @@ const System: React.FC<SystemProps> = ({ user }) => {
   };
 
   return (
-    <main className="w-full flex-grow px-4 sm:px-8 md:py-6">
-      <div className="flex flex-col sm:flex-row sm:justify-between mt-2 mb-10 sm:mt-8 gap-4 sm:gap-0">
+    <main className="w-full flex-grow">
+      <div className="flex flex-col sm:flex-row sm:justify-between mt-8 mb-12 md:my-2">
         <Totalizers
           income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
           expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
         />
       </div>
 
-      <div className="flex flex-col-reverse xl:flex-row gap-8 mt-0 xl:mt-8">
+      <div className="flex flex-col-reverse xl:flex-row gap-8">
         <div className="w-full xl:w-2/3 my-4">
           <BudgetTable
             rows={tableData}

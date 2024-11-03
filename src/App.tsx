@@ -45,7 +45,7 @@ function App() {
         </header>
 
         {/* Main Content */}
-        <div className="flex-grow flex px-4 py-6 md:px-8 md:py-12 justify-center">
+        <div className="flex-grow flex px-4 py-6 sm:px-8 justify-center">
           {/* Check if user is authenticated */}
           {!user ? <Auth onUserLogin={setUser} /> : <System user={user} />}
         </div>

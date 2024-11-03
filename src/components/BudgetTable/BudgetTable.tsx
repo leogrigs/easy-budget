@@ -38,7 +38,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
         });
       return acc;
     },
-    [{ id: "all_years", value: "", label: "All" }] as InputOptions[]
+    [{ id: "all_years", value: "", label: "All years" }] as InputOptions[]
   );
 
   const filteredTable = (): BudgetTableData[] => {
@@ -69,7 +69,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
 
   return (
     <>
-      <div className="my-4 flex flex-col gap-4 sm:flex-row sm:items-center">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         {/* Search Input with Icon */}
         <div className="relative w-full sm:w-1/2 lg:w-3/5">
           <Input
