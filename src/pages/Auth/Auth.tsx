@@ -25,12 +25,12 @@ const Auth: React.FC<AuthProps> = ({ onUserLogin }) => {
   }, []);
 
   return (
-    <main className="flex-grow px-8 flex items-center justify-center bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-gray-800">
+    <main className="flex-grow px-8 flex items-center justify-center">
       {/* Hero Section */}
       <section className="max-w-4xl flex flex-col gap-8 justify-center mx-auto text-center">
         <h2 className="font-extrabold text-slate-800 dark:text-slate-100 lg:text-7xl md:text-6xl leading-tight">
           Want to start managing your budget?
-          <span className="block lg:text-5xl mt-4">
+          <span className="block lg:text-5xl mt-4 text-slate-800 dark:text-slate-100">
             <span className="text-teal-600 dark:text-teal-400">
               Easy Budget{" "}
             </span>
