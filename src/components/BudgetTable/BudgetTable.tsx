@@ -69,9 +69,9 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
 
   return (
     <>
-      <div className="my-4 flex items-center gap-4">
+      <div className="my-4 flex flex-col gap-4 sm:flex-row sm:items-center">
         {/* Search Input with Icon */}
-        <div className="relative w-3/5">
+        <div className="relative w-full sm:w-1/2 lg:w-3/5">
           <Input
             name="search"
             placeholder="Search by name"
@@ -83,7 +83,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
-            className="absolute w-8 h-8 top-2 right-0 text-slate-400 dark:text-slate-500"
+            className="absolute w-6 h-6 top-2 right-2 text-slate-400 dark:text-slate-500"
           >
             <path
               fillRule="evenodd"
@@ -94,7 +94,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
         </div>
 
         {/* Month Select */}
-        <div className="w-48">
+        <div className="w-full sm:w-32 lg:w-48">
           <Select
             options={MONTH_OPTIONS}
             name="month_filter"
@@ -104,7 +104,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
         </div>
 
         {/* Year Select */}
-        <div className="w-36">
+        <div className="w-full sm:w-28 lg:w-36">
           <Select
             options={years}
             name="year_filter"
@@ -116,7 +116,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
         {/* New Entry Button */}
         <button
           onClick={() => onAction(BudgetTableActionEnum.CREATE, NEW_ENTRY)}
-          className="whitespace-nowrap rounded-md bg-slate-800 dark:bg-teal-600 py-2 px-4 text-sm text-white shadow-md hover:bg-slate-700 dark:hover:bg-teal-500 focus:bg-slate-700 dark:focus:bg-teal-500 active:bg-slate-700 disabled:pointer-events-none disabled:opacity-50"
+          className="w-full sm:w-auto rounded-md bg-slate-800 dark:bg-teal-600 py-2 px-4 text-sm text-white shadow-md hover:bg-slate-700 dark:hover:bg-teal-500 focus:bg-slate-700 dark:focus:bg-teal-500 active:bg-slate-700 disabled:pointer-events-none disabled:opacity-50"
           type="button"
         >
           New Entry
@@ -124,20 +124,20 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
       </div>
 
       {/* Handle empty state */}
-      {paginateTable().length == 0 ? (
-        <div className="min-h-[452px] flex items-center bg-white dark:bg-slate-900">
+      {paginateTable().length === 0 ? (
+        <div className="min-h-[452px] flex items-center justify-center bg-white dark:bg-slate-900">
           <NoResults />
         </div>
       ) : (
         <>
           {/* Table */}
-          <div className="min-h-[452px]">
+          <div className="min-h-[452px] overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
                 <tr>
                   {headers.map((header) => (
                     <th
-                      className="border-b p-4 dark:border-slate-700 dark:text-slate-300"
+                      className="border-b p-4 dark:border-slate-700 dark:text-slate-300 text-left"
                       // @ts-expect-error I don't have access to TextAlign interface
                       style={{ textAlign: header.align ?? "start" }}
                       key={header.key}
