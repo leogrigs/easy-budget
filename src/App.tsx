@@ -2,6 +2,7 @@ import { User } from "firebase/auth";
 import { useState } from "react";
 import "./App.css";
 import logo from "./assets/logo.png";
+import Button from "./components/Button";
 import Loader from "./components/Loader";
 import ThemeToggle from "./components/ThemeToggle";
 import { useLoading } from "./contexts/LoadingContext";
@@ -33,14 +34,7 @@ function App() {
           </div>
           <div className="flex items-center gap-2 mt-2 md:mt-0">
             <ThemeToggle />
-            {user && (
-              <button
-                className="px-3 md:px-4 py-1 md:py-2 text-xs md:text-sm font-medium text-white bg-teal-600 dark:bg-teal-500 rounded-md hover:bg-teal-500 dark:hover:bg-teal-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-400 dark:focus:ring-offset-gray-800"
-                onClick={logout}
-              >
-                Logout
-              </button>
-            )}
+            {user && <Button label="Logout" onClick={logout} />}
           </div>
         </header>
 

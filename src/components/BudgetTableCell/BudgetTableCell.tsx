@@ -9,6 +9,7 @@ import {
   BudgetTableData,
   BudgetTableHeader,
 } from "../../interfaces/BudgetTable.interface";
+import Button from "../Button";
 import CategoryChip from "../CategoryChip";
 
 interface BudgetTableCellProps {
@@ -56,28 +57,24 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
         return (
           <div className="flex justify-end items-center gap-1 sm:gap-2">
             {/* Edit Button */}
-            <button
+            <Button
+              label=""
               onClick={() => onClick(BudgetTableActionEnum.EDIT, row)}
-              className="p-2 rounded-full group duration-300 flex items-center bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600"
-            >
-              <img
-                src={editImage}
-                alt="edit entry"
-                className="w-4 h-4 sm:w-5 sm:h-5"
-              />
-            </button>
+              icon={<img src={editImage} alt="edit entry" />}
+            />
 
             {/* Delete Button */}
-            <button
-              onClick={() => onClick(BudgetTableActionEnum.DELETE, row)}
-              className="p-2 rounded-full group duration-300 flex items-center bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600"
-            >
-              <img
-                src={deleteImage}
-                alt="delete entry"
-                className="w-4 h-4 sm:w-5 sm:h-5"
-              />
-            </button>
+            <Button
+              label=""
+              onClick={() => onClick(BudgetTableActionEnum.EDIT, row)}
+              icon={
+                <img
+                  src={deleteImage}
+                  alt="delete entry"
+                  className="w-4 h-4 sm:w-5 sm:h-5"
+                />
+              }
+            />
           </div>
         );
 

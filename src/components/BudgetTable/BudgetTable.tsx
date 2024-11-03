@@ -6,6 +6,7 @@ import { BudgetTableActionEnum } from "../../enums/BudgetTableAction.enum";
 import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
 import { InputOptions } from "../../interfaces/InputOptions.interface";
 import BudgetTableCell from "../BudgetTableCell";
+import Button from "../Button";
 import Input from "../Input";
 import NoResults from "../NoResults";
 import Paginator from "../Paginator";
@@ -114,13 +115,12 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
         </div>
 
         {/* New Entry Button */}
-        <button
-          onClick={() => onAction(BudgetTableActionEnum.CREATE, NEW_ENTRY)}
-          className="w-full sm:w-auto rounded-md bg-slate-800 dark:bg-teal-600 py-2 px-4 text-sm text-white shadow-md hover:bg-slate-700 dark:hover:bg-teal-500 focus:bg-slate-700 dark:focus:bg-teal-500 active:bg-slate-700 disabled:pointer-events-none disabled:opacity-50"
-          type="button"
-        >
-          New Entry
-        </button>
+        <div>
+          <Button
+            label="New Entry"
+            onClick={() => onAction(BudgetTableActionEnum.CREATE, NEW_ENTRY)}
+          />
+        </div>
       </div>
 
       {/* Handle empty state */}
