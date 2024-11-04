@@ -71,7 +71,6 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
   return (
     <>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-        {/* Search Input with Icon */}
         <div className="relative w-full sm:w-1/2 lg:w-3/5">
           <Input
             name="search"
@@ -94,7 +93,6 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
           </svg>
         </div>
 
-        {/* Month Select */}
         <div className="w-full sm:w-32 lg:w-48">
           <Select
             options={MONTH_OPTIONS}
@@ -104,7 +102,6 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
           />
         </div>
 
-        {/* Year Select */}
         <div className="w-full sm:w-28 lg:w-36">
           <Select
             options={years}
@@ -114,7 +111,6 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
           />
         </div>
 
-        {/* New Entry Button */}
         <div>
           <Button
             label="New Entry"
@@ -123,14 +119,12 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
         </div>
       </div>
 
-      {/* Handle empty state */}
       {paginateTable().length === 0 ? (
         <div className="min-h-[452px] flex items-center justify-center mt-12">
           <NoResults />
         </div>
       ) : (
         <>
-          {/* Table */}
           <div className="min-h-[452px] overflow-x-auto">
             <table className="w-full border-collapse">
               <thead>
@@ -167,7 +161,6 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
             </table>
           </div>
 
-          {/* Pagination */}
           <div className="flex justify-center my-4">
             <Paginator
               currentPage={page}

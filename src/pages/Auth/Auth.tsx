@@ -26,7 +26,6 @@ const Auth: React.FC<AuthProps> = ({ onUserLogin }) => {
 
   return (
     <main className="flex-grow flex items-baseline md:items-center justify-center px-4 sm:px-6 md:px-8">
-      {/* Hero Section */}
       <section className="max-w-3xl md:max-w-4xl lg:max-w-5xl flex flex-col gap-6 md:gap-12 justify-center mx-auto text-center">
         <h2 className="font-extrabold text-slate-800 dark:text-slate-100 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight">
           Want to start managing your budget?

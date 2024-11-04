@@ -1,3 +1,4 @@
+import { BudgetTableCategoryEnum } from "../enums/BudgetTableCategory.enum";
 import { BudgetTableHeaderType } from "../types/BudgetTableHeader.type";
 import { BudgetTableType } from "../types/BudgetTableType.type";
 
@@ -6,7 +7,7 @@ export interface BudgetTableData {
   name: string;
   price: number;
   date: string;
-  category: string; // TODO: transform into a type or enum
+  category: BudgetTableCategoryEnum;
   type: BudgetTableType;
 }
 
