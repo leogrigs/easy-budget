@@ -1,3 +1,4 @@
+import { BudgetTableCategoryEnum } from "../enums/BudgetTableCategory.enum";
 import { BudgetTableTypeEnum } from "../enums/BudgetTableType.enum";
 import { BudgetTableData } from "../interfaces/BudgetTable.interface";
 
@@ -6,6 +7,6 @@ export const NEW_ENTRY: BudgetTableData = {
   name: "",
   price: 0,
   date: "",
-  category: "salary",
+  category: BudgetTableCategoryEnum.SALARY,
   type: BudgetTableTypeEnum.INCOME,
 };
