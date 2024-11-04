@@ -12,7 +12,6 @@ type EntryFormProps = {
 const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
   return (
     <form className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-      {/* Name Field */}
       <div className="flex flex-col min-w-[200px]">
         <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
           Name
@@ -25,7 +24,6 @@ const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
         />
       </div>
 
-      {/* Price Field */}
       <div className="flex flex-col min-w-[200px]">
         <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
           Price
@@ -39,7 +37,6 @@ const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
         />
       </div>
 
-      {/* Date Field */}
       <div className="flex flex-col min-w-[200px]">
         <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
           Date
@@ -52,7 +49,6 @@ const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
         />
       </div>
 
-      {/* Category Field */}
       <div className="flex flex-col min-w-[200px]">
         <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
           Category
@@ -65,7 +61,6 @@ const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
         />
       </div>
 
-      {/* Type Field */}
       <div className="flex flex-col min-w-[200px]">
         <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
           Type

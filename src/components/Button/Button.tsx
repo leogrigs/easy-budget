@@ -1,10 +1,10 @@
 import React from "react";
 
 interface ButtonProps {
-  label?: string; // Optional label for text buttons
-  onClick: () => void; // Click handler
-  icon?: React.ReactNode; // Optional icon for icon-only buttons
-  disabled?: boolean; // Disabled state
+  label?: string;
+  onClick: () => void;
+  icon?: React.ReactNode;
+  disabled?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -15,7 +15,7 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
   return (
     <button
-      onClick={disabled ? undefined : onClick} // Disable click if disabled
+      onClick={disabled ? undefined : onClick}
       className={`flex items-center justify-center transition duration-300 ease-in-out 
         bg-transparent border text-slate-700 dark:text-slate-300 
         border-slate-300 dark:border-slate-600 shadow-sm focus:outline-none 

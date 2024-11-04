@@ -56,17 +56,15 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
       case BudgetTableHeaderEnum.ACTIONS:
         return (
           <div className="flex justify-end items-center gap-1 sm:gap-2">
-            {/* Edit Button */}
             <Button
               label=""
               onClick={() => onClick(BudgetTableActionEnum.EDIT, row)}
               icon={<img src={editImage} alt="edit entry" />}
             />
 
-            {/* Delete Button */}
             <Button
               label=""
-              onClick={() => onClick(BudgetTableActionEnum.EDIT, row)}
+              onClick={() => onClick(BudgetTableActionEnum.DELETE, row)}
               icon={
                 <img
                   src={deleteImage}

@@ -36,7 +36,6 @@ const Modal: React.FC<ModalProps> = ({
 
           <div className="text-gray-700 dark:text-gray-300">{children}</div>
 
-          {/* Actions */}
           <div className="flex gap-2 justify-between">
             <Button label="Cancel" onClick={onCancel} />
             <Button

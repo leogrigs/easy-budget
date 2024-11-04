@@ -24,7 +24,6 @@ function App() {
   return (
     <>
       <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-gray-800">
-        {/* Header */}
         <header className="flex flex-col md:flex-row justify-between items-center border-b border-slate-200 dark:border-slate-700 py-4 px-4 md:px-8 shadow-md">
           <div className="flex items-center space-x-2">
             <img src={logo} alt="Easy Budget Logo" className="h-10 md:h-12" />
@@ -38,9 +37,7 @@ function App() {
           </div>
         </header>
 
-        {/* Main Content */}
         <div className="flex-grow flex px-4 py-6 sm:px-8 justify-center">
-          {/* Check if user is authenticated */}
           {!user ? <Auth onUserLogin={setUser} /> : <System user={user} />}
         </div>
       </div>
