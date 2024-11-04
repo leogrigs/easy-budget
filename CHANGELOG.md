@@ -1,3 +1,12 @@
+## [0.21.2](https://github.com/leogrigs/easy-budget/compare/v0.21.1...v0.21.2) (2024-11-04)
+
+
+### Bug Fixes
+
+* **budget-table:** delete action ([ec6137e](https://github.com/leogrigs/easy-budget/commit/ec6137e0bcea7592e50c47c08531b4e90e7aa353))
+* build problems ([ce7a225](https://github.com/leogrigs/easy-budget/commit/ce7a225d268e5a3943b76ffcd98439d8dc1f7d73))
+* import font on index.css ([ff804d6](https://github.com/leogrigs/easy-budget/commit/ff804d668533127b04257e26d2774ddffd53bd05))
+
 ## [0.21.1](https://github.com/leogrigs/easy-budget/compare/v0.21.0...v0.21.1) (2024-11-03)
 
 
