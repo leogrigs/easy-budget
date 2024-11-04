@@ -64,7 +64,7 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
 
             <Button
               label=""
-              onClick={() => onClick(BudgetTableActionEnum.EDIT, row)}
+              onClick={() => onClick(BudgetTableActionEnum.DELETE, row)}
               icon={
                 <img
                   src={deleteImage}
