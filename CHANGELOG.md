@@ -1,3 +1,11 @@
+## [1.0.1](https://github.com/leogrigs/easy-budget/compare/v1.0.0...v1.0.1) (2024-11-05)
+
+
+### Bug Fixes
+
+* add missing dependency jsdom ([255c8c8](https://github.com/leogrigs/easy-budget/commit/255c8c8cacad6e93a7a4eb8c8c2e27aac9f1fd3d))
+* exclude tests from build ([3318fbe](https://github.com/leogrigs/easy-budget/commit/3318fbe4b95cefedcf2197c1e8941dbae7dedcec))
+
 ## [0.21.2](https://github.com/leogrigs/easy-budget/compare/v0.21.1...v0.21.2) (2024-11-04)
 
 
