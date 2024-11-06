@@ -1,3 +1,13 @@
+## [1.0.2](https://github.com/leogrigs/easy-budget/compare/v1.0.1...v1.0.2) (2024-11-06)
+
+
+### Bug Fixes
+
+* Input component unit test ([6aca646](https://github.com/leogrigs/easy-budget/commit/6aca646955d1a0e336ec41263a78ea3912e13f9b))
+* tsconfig test configuration ([0312405](https://github.com/leogrigs/easy-budget/commit/0312405f9750044b3108c980014bb558264458be))
+* tsconfig test file configuration ([2a55d52](https://github.com/leogrigs/easy-budget/commit/2a55d5208219bc5f90bfafa7edefbbaabb03f036))
+* vitest extension setup ([863d00b](https://github.com/leogrigs/easy-budget/commit/863d00b364a1442b0d19b76d6c0afc4f39ab1d20))
+
 ## [1.0.1](https://github.com/leogrigs/easy-budget/compare/v1.0.0...v1.0.1) (2024-11-05)
 
 
