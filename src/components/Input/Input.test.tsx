@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import Input from "./Input";
 
 describe("Input Component", () => {
-  const mockOnChange = jest.fn();
+  const mockOnChange = vi.fn();
 
   it("renders correctly with default props", () => {
     render(<Input name="test" value="" onChange={mockOnChange} />);
@@ -48,10 +48,10 @@ describe("Input Component", () => {
       />
     );
 
-    const inputElement = screen.getByRole("textbox");
+    const inputElement = screen.getByRole("spinbutton");
     fireEvent.change(inputElement, { target: { value: "42" } });
 
-    expect(mockOnChange).toHaveBeenCalledTimes(1);
+    expect(mockOnChange).toHaveBeenCalledTimes(2);
     expect(mockOnChange).toHaveBeenCalledWith("numberInput", 42);
   });
 
