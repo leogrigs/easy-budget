@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:watch": "vitest --watch",
-    "test:coverage": "vitest run --coverage && coverage-badges --source coverage/coverage-summary.json --output ./coverage/badge.svg"
+    "test:coverage": "vitest run --coverage && coverage-badges --source coverage/coverage-summary.json --output ./badge.svg"
   },
   "config": {
     "commitizen": {
