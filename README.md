@@ -2,7 +2,7 @@
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/leogrigs/easy-budget)
-![Coverage Badge](./coverage/badge.svg)
+![Coverage Badge](./badge.svg)
 
 **Easy Budget** is a personal finance management tool designed for simplicity and ease of use. With Easy Budget, you can track expenses, manage budgets, and gain insights into your spending habits—all in a streamlined, intuitive interface.
 
