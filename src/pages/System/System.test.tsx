@@ -39,9 +39,9 @@ describe("System component", () => {
   const mockTableData = BUDGET_TABLE_DATA_MOCK;
 
   beforeEach(() => {
-    (useLoading as vi.Mock).mockReturnValue({ setLoading: mockSetLoading });
-    (fetchUserTable as vi.Mock).mockResolvedValue(mockTableData);
-    (initializeUserDocument as vi.Mock).mockResolvedValue({});
+    (useLoading as jest.Mock).mockReturnValue({ setLoading: mockSetLoading });
+    (fetchUserTable as jest.Mock).mockResolvedValue(mockTableData);
+    (initializeUserDocument as jest.Mock).mockResolvedValue({});
   });
 
   afterEach(() => {
@@ -65,7 +65,7 @@ describe("System component", () => {
   });
 
   it("updates an entry when editing", async () => {
-    (updateEntryInTable as vi.Mock).mockResolvedValue(mockTableData);
+    (updateEntryInTable as jest.Mock).mockResolvedValue(mockTableData);
     render(<System user={mockUser} />);
 
     await waitFor(() => {
@@ -76,7 +76,7 @@ describe("System component", () => {
   });
 
   it("deletes an entry when confirmed in delete modal", async () => {
-    (deleteEntryFromTable as vi.Mock).mockResolvedValue(
+    (deleteEntryFromTable as jest.Mock).mockResolvedValue(
       mockTableData.filter((entry) => entry.id !== 1)
     );
 
