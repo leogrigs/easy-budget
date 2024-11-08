@@ -1,3 +1,12 @@
+## [1.0.3](https://github.com/leogrigs/easy-budget/compare/v1.0.2...v1.0.3) (2024-11-07)
+
+
+### Bug Fixes
+
+* badge path ([e650a72](https://github.com/leogrigs/easy-budget/commit/e650a72f0524c91f20817c01bec76fb41673fced))
+* badge path ([e15827b](https://github.com/leogrigs/easy-budget/commit/e15827b506cbeb1b8a1e1e3e9a850d8b4141c390))
+* build problem ([8b47313](https://github.com/leogrigs/easy-budget/commit/8b473136e0a46a62ba35820423ca269061cd1ef6))
+
 ## [1.0.2](https://github.com/leogrigs/easy-budget/compare/v1.0.1...v1.0.2) (2024-11-06)
 
 
