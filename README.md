@@ -8,13 +8,13 @@
 
 ## Description
 
-Easy Budget was created to fill a gap in the personal finance space. After searching for a free and effective tool to organize my finances, I realized there wasn't a suitable option that met my needs. Easy Budget is built to be a flexible, user-friendly solution for anyone looking to gain better control over their finances without complicated features or hidden fees.
+Easy Budget was created to address a gap in personal finance tools. After seeking a free and efficient way to organize my finances, I found that no existing tool fully met my needs. Easy Budget is built as a flexible, user-friendly solution for those looking to take control of their finances without complex features or hidden costs.
 
 ## Motivation
 
-**"I need to organize my finances, but I haven't found a good and free website for that yet..."**
+> **"I need to organize my finances, but I haven't found a good, free solution for that yet..."**
 
-The goal of Easy Budget is to provide a straightforward, visually engaging solution for personal finance management, helping users monitor their expenses, set budgets, and make informed financial decisions.
+Easy Budget aims to deliver a straightforward, visually engaging platform for personal finance management. It enables users to monitor expenses, set budgets, and make informed financial decisions—all without unnecessary features or fees.
 
 ## Technologies
 
@@ -26,7 +26,7 @@ The goal of Easy Budget is to provide a straightforward, visually engaging solut
 
 ## Preview
 
-![image](https://github.com/user-attachments/assets/73b6a93a-f32f-4343-a549-946c8ad4cbb5)
+![Preview of Easy Budget Interface](https://github.com/user-attachments/assets/73b6a93a-f32f-4343-a549-946c8ad4cbb5)
 
 ## Author
 
@@ -34,3 +34,5 @@ The goal of Easy Budget is to provide a straightforward, visually engaging solut
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?logo=linkedin&logoColor=white&style=flat)](https://www.linkedin.com/in/leonardo-grigorio-ferreira/)  
 [![Email](https://img.shields.io/badge/Email-D14836?logo=gmail&logoColor=white&style=flat)](mailto:leo.grigorio16@gmail.com)
+
+Thank you for exploring Easy Budget!
