@@ -1,4 +1,4 @@
-# 💰 Easy Budget
+# Easy Budget
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/leogrigs/easy-budget)
