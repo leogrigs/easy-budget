@@ -1,3 +1,5 @@
+import React from "react";
+
 type PaginatorProps = {
   currentPage: number;
   totalPages: number;
@@ -19,7 +21,7 @@ const Paginator: React.FC<PaginatorProps> = ({
     <div className="flex items-center gap-8">
       <button
         disabled={currentPage === 1}
-        className="rounded-md border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+        className="rounded-md border border-slate-300 dark:border-gray-700 p-2.5 text-center text-sm shadow-sm hover:shadow-lg text-slate-600 dark:text-slate-300 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
         type="button"
         onClick={() => handlePageChange(currentPage - 1)}
       >
@@ -37,14 +39,20 @@ const Paginator: React.FC<PaginatorProps> = ({
         </svg>
       </button>
 
-      <p className="text-slate-600">
-        Page <strong className="text-slate-800">{currentPage}</strong> of&nbsp;
-        <strong className="text-slate-800">{totalPages}</strong>
+      <p className="text-slate-600 dark:text-slate-300">
+        Page{" "}
+        <strong className="text-slate-800 dark:text-slate-200">
+          {currentPage}
+        </strong>{" "}
+        of&nbsp;
+        <strong className="text-slate-800 dark:text-slate-200">
+          {totalPages}
+        </strong>
       </p>
 
       <button
         disabled={currentPage === totalPages}
-        className="rounded-md border border-slate-300 p-2.5 text-center text-sm transition-all shadow-sm hover:shadow-lg text-slate-600 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+        className="rounded-md border border-slate-300 dark:border-gray-700 p-2.5 text-center text-sm shadow-sm hover:shadow-lg text-slate-600 dark:text-slate-300 hover:text-white hover:bg-slate-800 hover:border-slate-800 focus:text-white focus:bg-slate-800 focus:border-slate-800 active:border-slate-800 active:text-white active:bg-slate-800 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
         type="button"
         onClick={() => handlePageChange(currentPage + 1)}
       >

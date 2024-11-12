@@ -1,7 +1,6 @@
 import { ResponsivePie } from "@nivo/pie";
 import React from "react";
 import { BudgetTableCategoryEnum } from "../../enums/BudgetTableCategory.enum";
-import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
 import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
 
 interface ChartProps {
@@ -52,52 +51,15 @@ const Chart: React.FC<ChartProps> = ({ tableData }) => {
   const renderPie = () => (
     <ResponsivePie
       data={data}
-      margin={{ top: 0, right: 12, bottom: 120, left: 24 }}
-      innerRadius={0.6}
+      margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+      innerRadius={0.3}
       activeOuterRadiusOffset={4}
+      enableArcLabels={true}
+      arcLabelsTextColor={"#fff"}
       enableArcLinkLabels={false}
-      enableArcLabels={false}
       colors={{ datum: "data.color" }}
-      layers={[
-        "arcs",
-        "legends",
-        ({ centerX, centerY }) => (
-          <text
-            x={centerX}
-            y={centerY}
-            textAnchor="middle"
-            dominantBaseline="central"
-            style={{
-              fontSize: "24px",
-              fontWeight: "regular",
-              fill: "#1e293b",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <tspan x={centerX} dy="-1rem">
-              Expenses
-            </tspan>
-            <tspan x={centerX} dy="1.5em" style={{ fill: "#991b1b" }}>
-              {Intl.NumberFormat("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-                maximumFractionDigits: 2,
-              }).format(
-                tableData.reduce(
-                  (acc, curr) =>
-                    curr.type === BudgetTableTypeEnum.EXPENSE
-                      ? (acc = acc + curr.price)
-                      : acc,
-                  0
-                )
-              )}
-            </tspan>
-          </text>
-        ),
-      ]}
+      padAngle={0.5}
+      cornerRadius={5}
     />
   );
 

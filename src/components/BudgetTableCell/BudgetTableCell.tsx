@@ -9,6 +9,7 @@ import {
   BudgetTableData,
   BudgetTableHeader,
 } from "../../interfaces/BudgetTable.interface";
+import Button from "../Button";
 import CategoryChip from "../CategoryChip";
 
 interface BudgetTableCellProps {
@@ -26,22 +27,24 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
     switch (header.key) {
       case BudgetTableHeaderEnum.NAME:
         return (
-          <div className="flex gap-4 items-center">
+          <div className="flex items-center gap-2 sm:gap-4">
             <div
-              className={`block size-3 border-2 rounded-full ${
+              className={`w-3 h-3 border-2 rounded-full ${
                 row.type === BudgetTableTypeEnum.EXPENSE
-                  ? "bg-red-500 border-red-100"
-                  : "bg-green-500 border-green-100"
+                  ? "bg-red-500 border-red-300 dark:border-red-700"
+                  : "bg-green-500 border-green-300 dark:border-green-700"
               }`}
             ></div>
-            <span>{row[header.key as keyof BudgetTableData]}</span>
+            <span className="text-slate-800 dark:text-slate-200 text-sm sm:text-base truncate">
+              {row[header.key as keyof BudgetTableData]}
+            </span>
           </div>
         );
 
       case BudgetTableHeaderEnum.PRICE:
         return (
           <div className="text-right">
-            <span>
+            <span className="text-slate-800 dark:text-slate-200 font-medium text-sm sm:text-base">
               {Intl.NumberFormat("pt-BR", {
                 style: "currency",
                 currency: "BRL",
@@ -52,24 +55,33 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
 
       case BudgetTableHeaderEnum.ACTIONS:
         return (
-          <div className="flex justify-end items-center gap-2">
-            <button
+          <div className="flex justify-end items-center gap-1 sm:gap-2">
+            <Button
+              label=""
               onClick={() => onClick(BudgetTableActionEnum.EDIT, row)}
-              className="rounded-full  group transition-all duration-500  flex item-center"
-            >
-              <img src={editImage} alt="edit entry" />
-            </button>
-            <button
+              icon={<img src={editImage} alt="edit entry" />}
+            />
+
+            <Button
+              label=""
               onClick={() => onClick(BudgetTableActionEnum.DELETE, row)}
-              className="rounded-full  group transition-all duration-500  flex item-center"
-            >
-              <img src={deleteImage} alt="delete entry" />
-            </button>
+              icon={
+                <img
+                  src={deleteImage}
+                  alt="delete entry"
+                  className="w-4 h-4 sm:w-5 sm:h-5"
+                />
+              }
+            />
           </div>
         );
 
       case BudgetTableHeaderEnum.DATE:
-        return <span>{new Date(row.date).toLocaleDateString()}</span>;
+        return (
+          <span className="text-slate-700 dark:text-slate-300 text-sm sm:text-base">
+            {new Date(row.date).toLocaleDateString()}
+          </span>
+        );
 
       case BudgetTableHeaderEnum.CATEGORY:
       default:
@@ -82,7 +94,11 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
     }
   };
 
-  return <td className="border-b p-4">{renderCell()}</td>;
+  return (
+    <td className="p-2 sm:p-4 text-xs sm:text-sm md:text-base">
+      {renderCell()}
+    </td>
+  );
 };
 
 export default BudgetTableCell;

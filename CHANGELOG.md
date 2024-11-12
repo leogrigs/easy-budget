@@ -1,3 +1,102 @@
+## [1.0.3](https://github.com/leogrigs/easy-budget/compare/v1.0.2...v1.0.3) (2024-11-07)
+
+
+### Bug Fixes
+
+* badge path ([e650a72](https://github.com/leogrigs/easy-budget/commit/e650a72f0524c91f20817c01bec76fb41673fced))
+* badge path ([e15827b](https://github.com/leogrigs/easy-budget/commit/e15827b506cbeb1b8a1e1e3e9a850d8b4141c390))
+* build problem ([8b47313](https://github.com/leogrigs/easy-budget/commit/8b473136e0a46a62ba35820423ca269061cd1ef6))
+
+## [1.0.2](https://github.com/leogrigs/easy-budget/compare/v1.0.1...v1.0.2) (2024-11-06)
+
+
+### Bug Fixes
+
+* Input component unit test ([6aca646](https://github.com/leogrigs/easy-budget/commit/6aca646955d1a0e336ec41263a78ea3912e13f9b))
+* tsconfig test configuration ([0312405](https://github.com/leogrigs/easy-budget/commit/0312405f9750044b3108c980014bb558264458be))
+* tsconfig test file configuration ([2a55d52](https://github.com/leogrigs/easy-budget/commit/2a55d5208219bc5f90bfafa7edefbbaabb03f036))
+* vitest extension setup ([863d00b](https://github.com/leogrigs/easy-budget/commit/863d00b364a1442b0d19b76d6c0afc4f39ab1d20))
+
+## [1.0.1](https://github.com/leogrigs/easy-budget/compare/v1.0.0...v1.0.1) (2024-11-05)
+
+
+### Bug Fixes
+
+* add missing dependency jsdom ([255c8c8](https://github.com/leogrigs/easy-budget/commit/255c8c8cacad6e93a7a4eb8c8c2e27aac9f1fd3d))
+* exclude tests from build ([3318fbe](https://github.com/leogrigs/easy-budget/commit/3318fbe4b95cefedcf2197c1e8941dbae7dedcec))
+
+## [0.21.2](https://github.com/leogrigs/easy-budget/compare/v0.21.1...v0.21.2) (2024-11-04)
+
+
+### Bug Fixes
+
+* **budget-table:** delete action ([ec6137e](https://github.com/leogrigs/easy-budget/commit/ec6137e0bcea7592e50c47c08531b4e90e7aa353))
+* build problems ([ce7a225](https://github.com/leogrigs/easy-budget/commit/ce7a225d268e5a3943b76ffcd98439d8dc1f7d73))
+* import font on index.css ([ff804d6](https://github.com/leogrigs/easy-budget/commit/ff804d668533127b04257e26d2774ddffd53bd05))
+
+## [0.21.1](https://github.com/leogrigs/easy-budget/compare/v0.21.0...v0.21.1) (2024-11-03)
+
+
+### Bug Fixes
+
+* **no-results:** add png image and dark / light mode handling ([3db77d0](https://github.com/leogrigs/easy-budget/commit/3db77d08946e724474cc74c0b538d67132e4eebb))
+
+# [0.21.0](https://github.com/leogrigs/easy-budget/compare/v0.20.0...v0.21.0) (2024-11-03)
+
+
+### Features
+
+* **button:** button component creation ([3c0a389](https://github.com/leogrigs/easy-budget/commit/3c0a38976f64031431a3b87e58569df28518c4a1))
+
+# [0.20.0](https://github.com/leogrigs/easy-budget/compare/v0.19.0...v0.20.0) (2024-11-03)
+
+
+### Bug Fixes
+
+* **responsivity:** lost adjusts ([d84a76c](https://github.com/leogrigs/easy-budget/commit/d84a76c55881d227e040ca3f83842106dfc59235))
+
+
+### Features
+
+* **responsivity:** app component ([6f9ae15](https://github.com/leogrigs/easy-budget/commit/6f9ae150c76bb6ce4777dfe9d881e9581091e3e6))
+* **responsivity:** auth component ([90681da](https://github.com/leogrigs/easy-budget/commit/90681dac310f9d891dfb1f5f5197d1b3505e9546))
+* **responsivity:** budget table component ([f2200d3](https://github.com/leogrigs/easy-budget/commit/f2200d364aa2f36bea37b40fb5b426e147b814c8))
+* **responsivity:** chart component ([a69e313](https://github.com/leogrigs/easy-budget/commit/a69e31315235a8eb2b3ebefe2b56ffccf79cc6d1))
+* **responsivity:** minor spacing details ([306b102](https://github.com/leogrigs/easy-budget/commit/306b10212d6bfa716bc976288043876d1383017c))
+* **responsivity:** system component adjusts ([8c5537a](https://github.com/leogrigs/easy-budget/commit/8c5537a566dec7a0fa30759ff49f99bc79b07211))
+* **responsivity:** totalizers component ([02bde58](https://github.com/leogrigs/easy-budget/commit/02bde58452fc8dc778e12e304869aa27178174aa))
+
+# [0.19.0](https://github.com/leogrigs/easy-budget/compare/v0.18.3...v0.19.0) (2024-11-02)
+
+
+### Features
+
+* **theme:** dark mode auth component ([e665623](https://github.com/leogrigs/easy-budget/commit/e665623ba623cbb022bfe1cac457adfeb488b029))
+* **theme:** dark mode budget table cell component ([894da57](https://github.com/leogrigs/easy-budget/commit/894da57d9851334605b066b028708e6d1d0efb5c))
+* **theme:** dark mode budget table component ([c2a4d17](https://github.com/leogrigs/easy-budget/commit/c2a4d171de8c4fae1f05b178427dfcfd6e67fdd5))
+* **theme:** dark mode category chip component ([286b711](https://github.com/leogrigs/easy-budget/commit/286b7110ff97aab6e9ad950cf8f2dd08b99a637e))
+* **theme:** dark mode entry form component ([3b1b16d](https://github.com/leogrigs/easy-budget/commit/3b1b16df407405561ab32afcfadab930e5ed3a8f))
+* **theme:** dark mode input component ([aa0435c](https://github.com/leogrigs/easy-budget/commit/aa0435c0e792d0e2d7249e2268fbce23b1e4bf25))
+* **theme:** dark mode modal component ([0166d28](https://github.com/leogrigs/easy-budget/commit/0166d28e98668b62f5f11d6ed5d3f13d1521391b))
+* **theme:** dark mode paginator component ([b6b5045](https://github.com/leogrigs/easy-budget/commit/b6b50450feba919f55f4e03055a299ae534011d7))
+* **theme:** dark mode select component ([220826d](https://github.com/leogrigs/easy-budget/commit/220826debbe3e8c37d6ae2760ad42cd9a2bcd636))
+* **theme:** dark mode totalizers component ([8cfa545](https://github.com/leogrigs/easy-budget/commit/8cfa54505e2720b854b6d13fcb398b140cd5647e))
+* **theme:** dark-mode set up ([c4cb1e6](https://github.com/leogrigs/easy-budget/commit/c4cb1e6968431a67ce1060537b2f8a9a42b501a1))
+
+## [0.18.3](https://github.com/leogrigs/easy-budget/compare/v0.18.2...v0.18.3) (2024-11-01)
+
+
+### Bug Fixes
+
+* **loader:** stop loader on Auth page ([a95f093](https://github.com/leogrigs/easy-budget/commit/a95f093f8654de26cec2b96b4f554e11b4c15692))
+
+## [0.18.2](https://github.com/leogrigs/easy-budget/compare/v0.18.1...v0.18.2) (2024-10-31)
+
+
+### Bug Fixes
+
+* **chart:** total expenses inside chart calculation ([ac0b126](https://github.com/leogrigs/easy-budget/commit/ac0b126b8265092ae01cbacd5ac3bdd9fbb92219))
+
 ## [0.18.1](https://github.com/leogrigs/easy-budget/compare/v0.18.0...v0.18.1) (2024-10-30)
 
 

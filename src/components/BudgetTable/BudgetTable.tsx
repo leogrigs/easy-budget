@@ -34,14 +34,13 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
         </div>
       ) : (
         <>
-          {/* Table */}
-          <div className="min-h-[452px]">
-            <table className="size-full border-collapse">
+          <div className="min-h-[452px] overflow-x-auto">
+            <table className="w-full border-collapse">
               <thead>
                 <tr>
                   {headers.map((header) => (
                     <th
-                      className="border-b p-4"
+                      className="border-b p-4 dark:border-slate-700 dark:text-slate-300 text-left"
                       // @ts-expect-error I don't have access to TextAlign interface
                       style={{ textAlign: header.align ?? "start" }}
                       key={header.key}
@@ -53,7 +52,10 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
               </thead>
               <tbody>
                 {paginateTable().map((row) => (
-                  <tr className="hover:bg-slate-50" key={row.id}>
+                  <tr
+                    className="hover:bg-slate-50 dark:hover:bg-slate-800"
+                    key={row.id}
+                  >
                     {headers.map((header) => (
                       <BudgetTableCell
                         key={`${row.id}-${header.key}`}
@@ -67,6 +69,7 @@ const BudgetTable: React.FC<BudgetTableProps> = ({
               </tbody>
             </table>
           </div>
+
           <div className="flex justify-center my-4">
             <Paginator
               currentPage={page}

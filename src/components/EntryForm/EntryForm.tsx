@@ -11,9 +11,11 @@ type EntryFormProps = {
 
 const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
   return (
-    <form className="flex flex-col gap-4">
-      <div className="w-full max-w-sm min-w-[200px]">
-        <label className="block mb-2 text-sm text-slate-600">Name</label>
+    <form className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+      <div className="flex flex-col min-w-[200px]">
+        <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Name
+        </label>
         <Input
           value={entry.name}
           placeholder="Entry name"
@@ -22,8 +24,10 @@ const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
         />
       </div>
 
-      <div className="w-full max-w-sm min-w-[200px]">
-        <label className="block mb-2 text-sm text-slate-600">Price</label>
+      <div className="flex flex-col min-w-[200px]">
+        <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Price
+        </label>
         <Input
           value={entry.price}
           type="number"
@@ -33,19 +37,22 @@ const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
         />
       </div>
 
-      <div className="w-full max-w-sm min-w-[200px]">
-        <label className="block mb-2 text-sm text-slate-600">Date</label>
+      <div className="flex flex-col min-w-[200px]">
+        <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Date
+        </label>
         <Input
           value={entry.date}
           type="date"
-          placeholder="dd/mm/yyyy"
           onChange={handleChanges}
           name="date"
         />
       </div>
 
-      <div className="w-full max-w-sm min-w-[200px]">
-        <label className="block mb-2 text-sm text-slate-600">Category</label>
+      <div className="flex flex-col min-w-[200px]">
+        <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Category
+        </label>
         <Select
           options={CATEGORY_OPTIONS}
           value={entry.category}
@@ -54,8 +61,10 @@ const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
         />
       </div>
 
-      <div className="w-full max-w-sm min-w-[200px]">
-        <label className="block mb-2 text-sm text-slate-600">Type</label>
+      <div className="flex flex-col min-w-[200px]">
+        <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
+          Type
+        </label>
         <Select
           options={TYPE_OPTIONS}
           value={entry.type}
