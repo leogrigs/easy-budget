@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/leogrigs/easy-budget/compare/v1.0.3...v1.0.4) (2024-11-12)
+
+
+### Bug Fixes
+
+* **budget-table:** unit tests ([1f0396a](https://github.com/leogrigs/easy-budget/commit/1f0396a68397ef42a1762218cfc0e9aa0d0a8e61))
+
 ## [1.0.3](https://github.com/leogrigs/easy-budget/compare/v1.0.2...v1.0.3) (2024-11-07)
 
 
