@@ -20,26 +20,68 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import type { Category } from "../types/expense";
+import { Switch } from "./ui/switch";
+import type { Category, RecurringFrequency } from "../types/expense";
 
-const schema = z.object({
-  name: z.string().trim().min(1, "Name is required").max(120),
-  amount: z
-    .number({ error: "Amount is required" })
-    .positive("Amount must be greater than zero"),
-  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Pick a date"),
-  categoryId: z.string().min(1, "Pick a category"),
-});
+const schema = z
+  .object({
+    name: z.string().trim().min(1, "Name is required").max(120),
+    amount: z
+      .number({ error: "Amount is required" })
+      .positive("Amount must be greater than zero"),
+    date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Pick a date"),
+    categoryId: z.string().min(1, "Pick a category"),
+    recurring: z.boolean(),
+    frequency: z.enum(["weekly", "monthly"]).optional(),
+    endDate: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/)
+      .optional()
+      .or(z.literal("")),
+  })
+  .superRefine((v, ctx) => {
+    if (v.recurring && !v.frequency) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["frequency"],
+        message: "Pick a frequency",
+      });
+    }
+    if (v.recurring && v.endDate && v.endDate < v.date) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["endDate"],
+        message: "End date must be after the start date",
+      });
+    }
+  });
 
 export type ExpenseFormValues = z.infer<typeof schema>;
+
+export interface ExpenseFormResult {
+  name: string;
+  amount: number;
+  date: string;
+  categoryId: string;
+  recurring?: {
+    frequency: RecurringFrequency;
+    endDate?: string;
+  };
+}
 
 interface ExpenseFormProps {
   open: boolean;
   title: string;
   submitLabel: string;
   categories: Category[];
-  initialValue?: Partial<ExpenseFormValues>;
-  onSubmit: (values: ExpenseFormValues) => Promise<void> | void;
+  initialValue?: {
+    name: string;
+    amount: number;
+    date: string;
+    categoryId: string;
+  };
+  allowRecurring?: boolean;
+  onSubmit: (values: ExpenseFormResult) => Promise<void> | void;
   onOpenChange: (open: boolean) => void;
 }
 
@@ -57,6 +99,7 @@ const ExpenseForm = ({
   submitLabel,
   categories,
   initialValue,
+  allowRecurring = true,
   onSubmit,
   onOpenChange,
 }: ExpenseFormProps) => {
@@ -65,6 +108,9 @@ const ExpenseForm = ({
     amount: 0,
     date: today(),
     categoryId: categories[0]?.id ?? "",
+    recurring: false,
+    frequency: "monthly",
+    endDate: "",
   };
 
   const form = useForm<ExpenseFormValues>({
@@ -80,9 +126,22 @@ const ExpenseForm = ({
   }, [open, initialValue, categories]);
 
   const categoryId = form.watch("categoryId");
+  const recurring = form.watch("recurring");
 
   const handleSubmit = form.handleSubmit(async (values) => {
-    await onSubmit(values);
+    const result: ExpenseFormResult = {
+      name: values.name,
+      amount: values.amount,
+      date: values.date,
+      categoryId: values.categoryId,
+    };
+    if (values.recurring && values.frequency) {
+      result.recurring = {
+        frequency: values.frequency,
+        endDate: values.endDate || undefined,
+      };
+    }
+    await onSubmit(result);
     onOpenChange(false);
   });
 
@@ -166,6 +225,65 @@ const ExpenseForm = ({
               </p>
             )}
           </div>
+
+          {allowRecurring && (
+            <div className="rounded-md border border-border p-3 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label htmlFor="expense-recurring">Recurring</Label>
+                  <p className="text-xs text-muted-foreground">
+                    Repeat this expense on a schedule. The first occurrence is
+                    created now.
+                  </p>
+                </div>
+                <Switch
+                  id="expense-recurring"
+                  checked={recurring}
+                  onCheckedChange={(v) =>
+                    form.setValue("recurring", v, { shouldValidate: true })
+                  }
+                />
+              </div>
+              {recurring && (
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <Label>Frequency</Label>
+                    <Select
+                      value={form.watch("frequency") ?? "monthly"}
+                      onValueChange={(v) =>
+                        form.setValue(
+                          "frequency",
+                          v as RecurringFrequency,
+                          { shouldValidate: true }
+                        )
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="weekly">Weekly</SelectItem>
+                        <SelectItem value="monthly">Monthly</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="expense-end">End date (optional)</Label>
+                    <Input
+                      id="expense-end"
+                      type="date"
+                      {...form.register("endDate")}
+                    />
+                    {form.formState.errors.endDate && (
+                      <p className="text-xs text-destructive">
+                        {form.formState.errors.endDate.message}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </form>
         <DialogFooter>
           <Button

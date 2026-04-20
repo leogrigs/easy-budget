@@ -14,7 +14,7 @@ import ExpenseFilters, {
   ExpenseFiltersState,
 } from "../../components/ExpenseFilters";
 import ExpenseForm, {
-  ExpenseFormValues,
+  ExpenseFormResult,
 } from "../../components/ExpenseForm";
 import Totalizers from "../../components/Totalizers/Totalizers";
 import {
@@ -46,6 +46,7 @@ import {
   deleteExpense,
   updateExpense,
 } from "../../services/expenses";
+import { addRecurring } from "../../services/recurring";
 import type { Expense } from "../../types/expense";
 
 interface ExpensesProps {
@@ -244,14 +245,43 @@ const Expenses = ({ uid }: ExpensesProps) => {
     [byId]
   );
 
-  const handleCreate = async (values: ExpenseFormValues) => {
-    await addExpense(uid, values);
+  const handleCreate = async (values: ExpenseFormResult) => {
+    if (values.recurring) {
+      const recurringId = await addRecurring(uid, {
+        name: values.name,
+        amount: values.amount,
+        categoryId: values.categoryId,
+        frequency: values.recurring.frequency,
+        startDate: values.date,
+        endDate: values.recurring.endDate,
+      });
+      await addExpense(uid, {
+        name: values.name,
+        amount: values.amount,
+        date: values.date,
+        categoryId: values.categoryId,
+        recurringId,
+      });
+      toast.success(`Added recurring "${values.name}"`);
+      return;
+    }
+    await addExpense(uid, {
+      name: values.name,
+      amount: values.amount,
+      date: values.date,
+      categoryId: values.categoryId,
+    });
     toast.success(`Added "${values.name}"`);
   };
 
-  const handleUpdate = async (values: ExpenseFormValues) => {
+  const handleUpdate = async (values: ExpenseFormResult) => {
     if (!editing) return;
-    await updateExpense(uid, editing.id, values);
+    await updateExpense(uid, editing.id, {
+      name: values.name,
+      amount: values.amount,
+      date: values.date,
+      categoryId: values.categoryId,
+    });
     toast.success(`Updated "${values.name}"`);
     setEditing(null);
   };
@@ -366,6 +396,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
         title={editing ? "Edit expense" : "New expense"}
         submitLabel={editing ? "Save" : "Add"}
         categories={categories}
+        allowRecurring={!editing}
         initialValue={
           editing
             ? {
