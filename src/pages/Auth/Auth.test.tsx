@@ -40,13 +40,15 @@ describe("Auth Component", () => {
     });
   });
 
-  test("renders main title and GoogleSignIn component", () => {
+  test("renders main hero headline and GoogleSignIn component", () => {
     render(<Auth onUserLogin={mockOnUserLogin} />);
 
     expect(
-      screen.getByRole("heading", { name: "Easy Budget" })
+      screen.getByRole("heading", { name: /know exactly/i })
     ).toBeInTheDocument();
-    expect(screen.getByText("Sign In with Google")).toBeInTheDocument();
+    expect(screen.getAllByText("Sign In with Google").length).toBeGreaterThan(
+      0
+    );
   });
 
   test("calls onAuthStateChanged with the correct parameters", () => {
