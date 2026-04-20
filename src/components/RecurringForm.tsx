@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import type { Category, RecurringFrequency } from "../types/expense";
+import CurrencyInput from "./CurrencyInput";
 import DatePicker from "./DatePicker";
 import { Button } from "./ui/button";
 import {
@@ -119,11 +120,8 @@ const RecurringForm = ({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="recurring-amount">Amount</Label>
-              <Input
+              <CurrencyInput
                 id="recurring-amount"
-                type="number"
-                step="0.01"
-                min="0"
                 {...form.register("amount", { valueAsNumber: true })}
               />
               {form.formState.errors.amount && (
