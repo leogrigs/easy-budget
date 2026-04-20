@@ -7,8 +7,10 @@ import Loader from "./components/Loader";
 import { Toaster } from "./components/ui/sonner";
 import { useLoading } from "./contexts/LoadingContext";
 import Auth from "./pages/Auth";
+import Categories from "./pages/Categories";
 import System from "./pages/System";
 import { auth } from "./services/firebase";
+import { migrateUserIfNeeded } from "./services/migration";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -16,8 +18,15 @@ function App() {
   const { isLoading, setLoading } = useLoading();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
+      if (currentUser) {
+        try {
+          await migrateUserIfNeeded(currentUser.uid);
+        } catch (err) {
+          console.error("migration failed", err);
+        }
+      }
       setAuthReady(true);
     });
     return () => unsubscribe();
@@ -41,10 +50,7 @@ function App() {
           <Route element={<AppShell user={user} onLogout={logout} />}>
             <Route index element={<Navigate to="/expenses" replace />} />
             <Route path="/expenses" element={<System user={user} />} />
-            <Route
-              path="/categories"
-              element={<div className="p-4">Categories (coming soon)</div>}
-            />
+            <Route path="/categories" element={<Categories uid={user.uid} />} />
             <Route
               path="/settings"
               element={<div className="p-4">Settings (coming soon)</div>}
