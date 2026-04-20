@@ -4,6 +4,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import AppShell from "./components/AppShell";
 import Loader from "./components/Loader";
+import { Toaster } from "./components/ui/sonner";
 import { useLoading } from "./contexts/LoadingContext";
 import Auth from "./pages/Auth";
 import System from "./pages/System";
@@ -56,6 +57,7 @@ function App() {
       )}
 
       {isLoading && <Loader />}
+      <Toaster />
     </>
   );
 }
