@@ -72,9 +72,6 @@ npm run build
 
 Firebase credentials live in [`src/services/firebase.ts`](./src/services/firebase.ts). To point the app at your own Firebase project, replace the config and deploy [`firestore.rules`](./firestore.rules) to match.
 
-## Preview
-
-![Preview of Easy Budget Interface](https://github.com/user-attachments/assets/73b6a93a-f32f-4343-a549-946c8ad4cbb5)
 
 ## Author
 
