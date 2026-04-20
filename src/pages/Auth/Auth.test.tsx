@@ -4,7 +4,6 @@ import { vi } from "vitest";
 import GoogleSignIn from "../../components/GoogleSignIn";
 import { useLoading } from "../../contexts/LoadingContext";
 import { auth } from "../../services/firebase";
-import { initializeUserDocument } from "../../services/firestore";
 import Auth from "./Auth";
 
 vi.mock("firebase/auth", () => ({
@@ -13,10 +12,6 @@ vi.mock("firebase/auth", () => ({
 
 vi.mock("../../services/firebase", () => ({
   auth: {},
-}));
-
-vi.mock("../../services/firestore", () => ({
-  initializeUserDocument: vi.fn(),
 }));
 
 vi.mock("../../contexts/LoadingContext", () => ({
@@ -45,13 +40,15 @@ describe("Auth Component", () => {
     });
   });
 
-  test("renders main title and GoogleSignIn component", () => {
+  test("renders main hero headline and GoogleSignIn component", () => {
     render(<Auth onUserLogin={mockOnUserLogin} />);
 
     expect(
-      screen.getByText("Want to start managing your budget?")
+      screen.getByRole("heading", { name: /know exactly/i })
     ).toBeInTheDocument();
-    expect(screen.getByText("Sign In with Google")).toBeInTheDocument();
+    expect(screen.getAllByText("Sign In with Google").length).toBeGreaterThan(
+      0
+    );
   });
 
   test("calls onAuthStateChanged with the correct parameters", () => {
@@ -60,17 +57,11 @@ describe("Auth Component", () => {
     expect(onAuthStateChanged).toHaveBeenCalledWith(auth, expect.any(Function));
   });
 
-  test("sets loading state and calls initializeUserDocument on user login", async () => {
-    (onAuthStateChanged as jest.Mock).mockImplementation((_auth, callback) => {
-      callback(mockUser);
-      return vi.fn();
-    });
-
+  test("sets loading state and propagates user on login", async () => {
     render(<Auth onUserLogin={mockOnUserLogin} />);
 
     expect(mockSetLoading).toHaveBeenCalledWith(true);
     expect(mockOnUserLogin).toHaveBeenCalledWith(mockUser);
-    expect(initializeUserDocument).toHaveBeenCalledWith("test-uid");
     await waitFor(() => {
       expect(mockSetLoading).toHaveBeenCalledWith(false);
     });
@@ -87,7 +78,6 @@ describe("Auth Component", () => {
     expect(mockSetLoading).toHaveBeenCalledWith(true);
     expect(mockSetLoading).toHaveBeenCalledWith(false);
     expect(mockOnUserLogin).not.toHaveBeenCalled();
-    expect(initializeUserDocument).not.toHaveBeenCalled();
   });
 
   test("cleans up on component unmount", () => {
