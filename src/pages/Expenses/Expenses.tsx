@@ -4,7 +4,15 @@ import {
   SortingFn,
   Table as TanstackTable,
 } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal, Pencil, Plus, Trash2 } from "lucide-react";
+import {
+  ArrowUpDown,
+  Download,
+  MoreHorizontal,
+  Pencil,
+  Plus,
+  Trash2,
+  Upload,
+} from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import BulkChangeCategoryDialog from "../../components/BulkChangeCategoryDialog";
@@ -41,6 +49,7 @@ import { useCategories } from "../../hooks/useCategories";
 import { useExpenses } from "../../hooks/useExpenses";
 import {
   addExpense,
+  bulkAddExpenses,
   bulkDeleteExpenses,
   bulkUpdateCategory,
   deleteExpense,
@@ -48,6 +57,8 @@ import {
 } from "../../services/expenses";
 import { addRecurring } from "../../services/recurring";
 import type { Expense } from "../../types/expense";
+import { downloadExpenseCsv } from "../../features/export/exportCsv";
+import ImportDialog from "../../features/import/ImportDialog";
 
 interface ExpensesProps {
   uid: string;
@@ -81,6 +92,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
   const [deleting, setDeleting] = useState<Expense | null>(null);
   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
   const [bulkCategoryOpen, setBulkCategoryOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
   const filtered = useMemo(() => {
@@ -309,6 +321,30 @@ const Expenses = ({ uid }: ExpensesProps) => {
     setRowSelection({});
   };
 
+  const handleExport = () => {
+    const source =
+      selectedIds.length > 0
+        ? filtered.filter((e) => selectedIds.includes(e.id))
+        : filtered;
+    if (source.length === 0) {
+      toast.info("No expenses to export");
+      return;
+    }
+    downloadExpenseCsv(source, byId);
+  };
+
+  const handleImport = async (
+    imports: Array<{
+      name: string;
+      amount: number;
+      date: string;
+      categoryId: string;
+    }>
+  ) => {
+    if (imports.length === 0) return;
+    await bulkAddExpenses(uid, imports);
+  };
+
   const renderToolbar = (_table: TanstackTable<Expense>) => (
     <div className="space-y-3">
       <ExpenseFilters
@@ -350,22 +386,34 @@ const Expenses = ({ uid }: ExpensesProps) => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center justify-between gap-2 flex-wrap">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Expenses</h1>
           <p className="text-sm text-muted-foreground">
             Track, filter, and manage your expenses.
           </p>
         </div>
-        <Button
-          onClick={() => {
-            setEditing(null);
-            setFormOpen(true);
-          }}
-          disabled={categories.length === 0}
-        >
-          <Plus className="h-4 w-4" /> New expense
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={handleExport}>
+            <Download className="h-4 w-4" /> Export CSV
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => setImportOpen(true)}
+            disabled={categories.length === 0}
+          >
+            <Upload className="h-4 w-4" /> Import
+          </Button>
+          <Button
+            onClick={() => {
+              setEditing(null);
+              setFormOpen(true);
+            }}
+            disabled={categories.length === 0}
+          >
+            <Plus className="h-4 w-4" /> New expense
+          </Button>
+        </div>
       </div>
 
       <Totalizers total={totals.total} count={totals.count} />
@@ -466,6 +514,13 @@ const Expenses = ({ uid }: ExpensesProps) => {
         categories={categories}
         onOpenChange={setBulkCategoryOpen}
         onConfirm={handleBulkChangeCategory}
+      />
+
+      <ImportDialog
+        open={importOpen}
+        categories={categories}
+        onOpenChange={setImportOpen}
+        onImport={handleImport}
       />
     </div>
   );
