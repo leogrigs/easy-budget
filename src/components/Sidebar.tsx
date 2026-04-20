@@ -9,9 +9,18 @@ const NAV = [
   { to: "/settings", label: "Settings", icon: Settings },
 ];
 
-const Sidebar = () => {
+interface SidebarProps {
+  variant?: "rail" | "sheet";
+}
+
+const Sidebar = ({ variant = "rail" }: SidebarProps) => {
+  const containerClass =
+    variant === "rail"
+      ? "hidden md:flex md:w-60 shrink-0 flex-col border-r border-border bg-card"
+      : "flex w-full h-full flex-col";
+
   return (
-    <aside className="hidden md:flex md:w-60 shrink-0 flex-col border-r border-border bg-card">
+    <aside className={containerClass}>
       <div className="flex items-center gap-2 h-16 px-6 border-b border-border">
         <img src={logo} alt="Easy Budget" className="h-8 w-8" />
         <span className="font-semibold tracking-tight">Easy Budget</span>
