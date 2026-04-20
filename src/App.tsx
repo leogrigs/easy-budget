@@ -8,7 +8,7 @@ import { Toaster } from "./components/ui/sonner";
 import { useLoading } from "./contexts/LoadingContext";
 import Auth from "./pages/Auth";
 import Categories from "./pages/Categories";
-import System from "./pages/System";
+import Expenses from "./pages/Expenses";
 import { auth } from "./services/firebase";
 import { migrateUserIfNeeded } from "./services/migration";
 
@@ -49,7 +49,7 @@ function App() {
         <Routes>
           <Route element={<AppShell user={user} onLogout={logout} />}>
             <Route index element={<Navigate to="/expenses" replace />} />
-            <Route path="/expenses" element={<System user={user} />} />
+            <Route path="/expenses" element={<Expenses uid={user.uid} />} />
             <Route path="/categories" element={<Categories uid={user.uid} />} />
             <Route
               path="/settings"
