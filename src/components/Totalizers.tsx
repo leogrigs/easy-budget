@@ -1,10 +1,9 @@
 import { Hash, Sigma, Wallet } from "lucide-react";
-import React from "react";
 
-type TotalizersProps = {
+interface TotalizersProps {
   total: number;
   count: number;
-};
+}
 
 const formatCurrency = (value: number) =>
   new Intl.NumberFormat("pt-BR", {
@@ -12,25 +11,13 @@ const formatCurrency = (value: number) =>
     currency: "BRL",
   }).format(value);
 
-const Totalizers: React.FC<TotalizersProps> = ({ total, count }) => {
+const Totalizers = ({ total, count }: TotalizersProps) => {
   const average = count > 0 ? total / count : 0;
 
   const cards = [
-    {
-      label: "Total spent",
-      value: formatCurrency(total),
-      Icon: Wallet,
-    },
-    {
-      label: "Entries",
-      value: String(count),
-      Icon: Hash,
-    },
-    {
-      label: "Avg per entry",
-      value: formatCurrency(average),
-      Icon: Sigma,
-    },
+    { label: "Total spent", value: formatCurrency(total), Icon: Wallet },
+    { label: "Entries", value: String(count), Icon: Hash },
+    { label: "Avg per entry", value: formatCurrency(average), Icon: Sigma },
   ];
 
   return (

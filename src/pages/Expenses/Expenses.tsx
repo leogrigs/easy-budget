@@ -2,7 +2,6 @@ import {
   ColumnDef,
   RowSelectionState,
   SortingFn,
-  Table as TanstackTable,
 } from "@tanstack/react-table";
 import {
   ArrowUpDown,
@@ -24,7 +23,7 @@ import ExpenseFilters, {
 import ExpenseForm, {
   ExpenseFormResult,
 } from "../../components/ExpenseForm";
-import Totalizers from "../../components/Totalizers/Totalizers";
+import Totalizers from "../../components/Totalizers";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -345,7 +344,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
     await bulkAddExpenses(uid, imports);
   };
 
-  const renderToolbar = (_table: TanstackTable<Expense>) => (
+  const renderToolbar = () => (
     <div className="space-y-3">
       <ExpenseFilters
         categories={categories}

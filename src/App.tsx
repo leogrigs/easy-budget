@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./App.css";
 import AppShell from "./components/AppShell";
-import Loader from "./components/Loader";
+import FullScreenLoader from "./components/FullScreenLoader";
 import { Toaster } from "./components/ui/sonner";
 import { useLoading } from "./contexts/LoadingContext";
 import Auth from "./pages/Auth";
@@ -43,7 +43,7 @@ function App() {
   };
 
   if (!authReady) {
-    return <Loader />;
+    return <FullScreenLoader />;
   }
 
   return (
@@ -62,7 +62,7 @@ function App() {
         <Auth onUserLogin={setUser} />
       )}
 
-      {isLoading && <Loader />}
+      {isLoading && <FullScreenLoader />}
       <Toaster />
     </>
   );
