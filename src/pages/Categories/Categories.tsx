@@ -104,10 +104,14 @@ const Categories = ({ uid }: CategoriesProps) => {
         </Card>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {categories.map((category) => {
+          {categories.map((category, i) => {
             const count = expenseCountByCategory.get(category.id) ?? 0;
             return (
-              <Card key={category.id}>
+              <Card
+                key={category.id}
+                className="transition-all hover:border-primary/40 hover:shadow-sm animate-in fade-in-0 slide-in-from-bottom-2 duration-300 fill-mode-both"
+                style={{ animationDelay: `${i * 40}ms` }}
+              >
                 <CardContent className="p-4 flex items-center gap-4">
                   <div
                     className="h-12 w-12 shrink-0 rounded-lg flex items-center justify-center"

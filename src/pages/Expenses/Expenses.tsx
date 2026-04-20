@@ -11,12 +11,14 @@ import {
   Plus,
   Trash2,
   Upload,
+  X,
 } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import BulkChangeCategoryDialog from "../../components/BulkChangeCategoryDialog";
 import CategoryBadge from "../../components/CategoryBadge";
 import { DataTable } from "../../components/DataTable";
+import SelectionActionBar from "../../components/SelectionActionBar";
 import ExpenseFilters, {
   ExpenseFiltersState,
 } from "../../components/ExpenseFilters";
@@ -345,42 +347,11 @@ const Expenses = ({ uid }: ExpensesProps) => {
   };
 
   const renderToolbar = () => (
-    <div className="space-y-3">
-      <ExpenseFilters
-        categories={categories}
-        value={filters}
-        onChange={setFilters}
-      />
-      {selectedIds.length > 0 && (
-        <div className="flex items-center gap-2 rounded-md border border-primary/30 bg-primary/5 px-3 py-2 text-sm">
-          <span>
-            {selectedIds.length} selected
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setBulkCategoryOpen(true)}
-          >
-            Change category
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => setBulkDeleteOpen(true)}
-          >
-            <Trash2 className="h-4 w-4" /> Delete
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setRowSelection({})}
-            className="ml-auto"
-          >
-            Clear selection
-          </Button>
-        </div>
-      )}
-    </div>
+    <ExpenseFilters
+      categories={categories}
+      value={filters}
+      onChange={setFilters}
+    />
   );
 
   return (
@@ -521,6 +492,39 @@ const Expenses = ({ uid }: ExpensesProps) => {
         onOpenChange={setImportOpen}
         onImport={handleImport}
       />
+
+      <SelectionActionBar visible={selectedIds.length > 0}>
+        <span className="px-3 text-sm font-medium">
+          {selectedIds.length} selected
+        </span>
+        <span className="h-6 w-px bg-border" aria-hidden />
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setBulkCategoryOpen(true)}
+          className="rounded-full"
+        >
+          Change category
+        </Button>
+        <Button
+          variant="destructive"
+          size="sm"
+          onClick={() => setBulkDeleteOpen(true)}
+          className="rounded-full"
+        >
+          <Trash2 className="h-4 w-4" /> Delete
+        </Button>
+        <span className="h-6 w-px bg-border" aria-hidden />
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setRowSelection({})}
+          className="rounded-full text-muted-foreground"
+          aria-label="Clear selection"
+        >
+          <X className="h-4 w-4" />
+        </Button>
+      </SelectionActionBar>
     </div>
   );
 };

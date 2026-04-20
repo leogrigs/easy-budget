@@ -81,7 +81,7 @@ const Auth: React.FC<AuthProps> = ({ onUserLogin }) => {
       <main className="relative z-10">
         <section className="mx-auto max-w-6xl px-6 lg:px-12 pt-10 pb-20 lg:pt-20 lg:pb-28">
           <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
-            <div className="space-y-6">
+            <div className="space-y-6 animate-in fade-in-0 slide-in-from-bottom-4 duration-700 fill-mode-both">
               <span className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
                 <Sparkles className="h-3.5 w-3.5 text-primary" />
                 The expense tracker that respects your time
@@ -120,7 +120,9 @@ const Auth: React.FC<AuthProps> = ({ onUserLogin }) => {
               </ul>
             </div>
 
-            <DashboardPreview />
+            <div className="animate-in fade-in-0 slide-in-from-bottom-4 duration-700 delay-150 fill-mode-both">
+              <DashboardPreview />
+            </div>
           </div>
         </section>
 
@@ -136,10 +138,11 @@ const Auth: React.FC<AuthProps> = ({ onUserLogin }) => {
               </p>
             </div>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {FEATURES.map(({ Icon, title, body }) => (
+              {FEATURES.map(({ Icon, title, body }, i) => (
                 <div
                   key={title}
-                  className="rounded-xl border border-border bg-card p-6 hover:border-primary/40 transition-colors"
+                  className="rounded-xl border border-border bg-card p-6 transition-all hover:border-primary/40 hover:-translate-y-0.5 hover:shadow-md animate-in fade-in-0 slide-in-from-bottom-3 duration-500 fill-mode-both"
+                  style={{ animationDelay: `${i * 60}ms` }}
                 >
                   <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center mb-4">
                     <Icon className="h-5 w-5" />

@@ -22,14 +22,15 @@ const Totalizers = ({ total, count }: TotalizersProps) => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
-      {cards.map(({ label, value, Icon }) => (
+      {cards.map(({ label, value, Icon }, i) => (
         <div
           key={label}
-          className="rounded-lg border border-border bg-card text-card-foreground p-5 flex items-start justify-between"
+          className="rounded-lg border border-border bg-card text-card-foreground p-5 flex items-start justify-between transition-colors hover:border-primary/30 animate-in fade-in-0 slide-in-from-bottom-2 duration-300 fill-mode-both"
+          style={{ animationDelay: `${i * 60}ms` }}
         >
           <div className="flex flex-col">
             <span className="text-sm text-muted-foreground">{label}</span>
-            <span className="mt-1 text-2xl font-semibold tracking-tight">
+            <span className="mt-1 text-2xl font-semibold tracking-tight tabular-nums">
               {value}
             </span>
           </div>
