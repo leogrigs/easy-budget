@@ -468,15 +468,24 @@ const Expenses = ({ uid }: ExpensesProps) => {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={handleExport}>
-            <Download className="h-4 w-4" /> Export CSV
+          <Button
+            variant="outline"
+            onClick={handleExport}
+            className="h-9 w-9 p-0 sm:w-auto sm:px-3"
+            aria-label="Export CSV"
+          >
+            <Download className="h-4 w-4" />
+            <span className="hidden sm:inline ml-2">Export CSV</span>
           </Button>
           <Button
             variant="outline"
             onClick={() => setImportOpen(true)}
             disabled={categories.length === 0}
+            className="h-9 w-9 p-0 sm:w-auto sm:px-3"
+            aria-label="Import"
           >
-            <Upload className="h-4 w-4" /> Import
+            <Upload className="h-4 w-4" />
+            <span className="hidden sm:inline ml-2">Import</span>
           </Button>
           <Button
             onClick={() => {
@@ -485,7 +494,9 @@ const Expenses = ({ uid }: ExpensesProps) => {
             }}
             disabled={categories.length === 0}
           >
-            <Plus className="h-4 w-4" /> New expense
+            <Plus className="h-4 w-4" />
+            <span className="sm:hidden ml-1">New</span>
+            <span className="hidden sm:inline ml-1">New expense</span>
           </Button>
         </div>
       </div>
