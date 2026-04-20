@@ -1,50 +1,54 @@
+import { Hash, Sigma, Wallet } from "lucide-react";
 import React from "react";
 
 type TotalizersProps = {
-  income: number;
-  expense: number;
+  total: number;
+  count: number;
 };
 
-const Totalizers: React.FC<TotalizersProps> = ({ income, expense }) => {
-  const data = [
+const formatCurrency = (value: number) =>
+  new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(value);
+
+const Totalizers: React.FC<TotalizersProps> = ({ total, count }) => {
+  const average = count > 0 ? total / count : 0;
+
+  const cards = [
     {
-      label: "Balance",
-      value: income - expense,
-      colorClass: "text-slate-800 dark:text-slate-400",
+      label: "Total spent",
+      value: formatCurrency(total),
+      Icon: Wallet,
     },
     {
-      label: "Income",
-      value: income,
-      colorClass: "text-green-800 dark:text-green-400",
+      label: "Entries",
+      value: String(count),
+      Icon: Hash,
     },
     {
-      label: "Expense",
-      value: expense,
-      colorClass: "text-red-800 dark:text-red-400",
+      label: "Avg per entry",
+      value: formatCurrency(average),
+      Icon: Sigma,
     },
   ];
 
-  const formatNumber = (value: number) =>
-    new Intl.NumberFormat("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    }).format(value);
-
   return (
-    <div className="flex flex-wrap justify-evenly md:justify-normal gap-4 sm:gap-8 md:py-4">
-      {data.map((item, index) => (
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+      {cards.map(({ label, value, Icon }) => (
         <div
-          className={`${
-            index === 0 ? "w-full sm:w-auto" : "w-auto"
-          } flex flex-col items-center sm:items-start text-center sm:text-left`}
-          key={item.label}
+          key={label}
+          className="rounded-lg border border-border bg-card text-card-foreground p-5 flex items-start justify-between"
         >
-          <span className="text-base font-light text-slate-600 dark:text-slate-300">
-            {item.label}
-          </span>
-          <span className={`text-2xl ${item.colorClass}`}>
-            {formatNumber(item.value)}
-          </span>
+          <div className="flex flex-col">
+            <span className="text-sm text-muted-foreground">{label}</span>
+            <span className="mt-1 text-2xl font-semibold tracking-tight">
+              {value}
+            </span>
+          </div>
+          <div className="rounded-md bg-primary/10 text-primary p-2">
+            <Icon className="h-4 w-4" />
+          </div>
         </div>
       ))}
     </div>

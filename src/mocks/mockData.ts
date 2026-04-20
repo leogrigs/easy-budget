@@ -1,5 +1,4 @@
 import { BudgetTableCategoryEnum } from "../enums/BudgetTableCategory.enum";
-import { BudgetTableTypeEnum } from "../enums/BudgetTableType.enum";
 import { BudgetTableData } from "../interfaces/BudgetTable.interface";
 
 export const BUDGET_TABLE_DATA_MOCK: BudgetTableData[] = [
@@ -7,40 +6,28 @@ export const BUDGET_TABLE_DATA_MOCK: BudgetTableData[] = [
     id: 1,
     name: "Mercado",
     price: 300,
-    date: "01/01/2024",
+    date: "2024-01-01",
     category: BudgetTableCategoryEnum.FOOD,
-    type: BudgetTableTypeEnum.EXPENSE,
   },
   {
     id: 2,
     name: "Bar",
     price: 100,
-    date: "01/01/2024",
+    date: "2024-01-01",
     category: BudgetTableCategoryEnum.FOOD,
-    type: BudgetTableTypeEnum.EXPENSE,
   },
   {
     id: 3,
-    name: "Salário",
-    price: 3000,
-    date: "01/01/2024",
-    category: BudgetTableCategoryEnum.SALARY,
-    type: BudgetTableTypeEnum.EXPENSE,
+    name: "Uber",
+    price: 45,
+    date: "2024-01-02",
+    category: BudgetTableCategoryEnum.TRANSPORT,
   },
   {
     id: 4,
     name: "Mercado",
-    price: 300,
-    date: "01/01/2024",
+    price: 280,
+    date: "2024-01-08",
     category: BudgetTableCategoryEnum.FOOD,
-    type: BudgetTableTypeEnum.EXPENSE,
-  },
-  {
-    id: 5,
-    name: "Salary",
-    price: 3000,
-    date: "03/01/2024",
-    category: BudgetTableCategoryEnum.SALARY,
-    type: BudgetTableTypeEnum.INCOME,
   },
 ];

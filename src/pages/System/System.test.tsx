@@ -51,8 +51,8 @@ describe("System component", () => {
   it("renders Totalizers, BudgetTable, and Chart components", async () => {
     render(<System user={mockUser} />);
     await waitFor(() => {
-      expect(screen.getByText("Income")).toBeInTheDocument();
-      expect(screen.getByText("Expense")).toBeInTheDocument();
+      expect(screen.getByText("Total spent")).toBeInTheDocument();
+      expect(screen.getByText("Entries")).toBeInTheDocument();
     });
     expect(screen.getByPlaceholderText("Search by name")).toBeInTheDocument();
   });

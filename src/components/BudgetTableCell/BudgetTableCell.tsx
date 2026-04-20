@@ -4,7 +4,6 @@ import editImage from "../../assets/edit.svg";
 import { BudgetTableActionEnum } from "../../enums/BudgetTableAction.enum";
 import { BudgetTableCategoryEnum } from "../../enums/BudgetTableCategory.enum";
 import { BudgetTableHeaderEnum } from "../../enums/BudgetTableHeader.enum";
-import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
 import {
   BudgetTableData,
   BudgetTableHeader,
@@ -27,18 +26,9 @@ const BudgetTableCell: React.FC<BudgetTableCellProps> = ({
     switch (header.key) {
       case BudgetTableHeaderEnum.NAME:
         return (
-          <div className="flex items-center gap-2 sm:gap-4">
-            <div
-              className={`w-3 h-3 border-2 rounded-full ${
-                row.type === BudgetTableTypeEnum.EXPENSE
-                  ? "bg-red-500 border-red-300 dark:border-red-700"
-                  : "bg-green-500 border-green-300 dark:border-green-700"
-              }`}
-            ></div>
-            <span className="text-slate-800 dark:text-slate-200 text-sm sm:text-base truncate">
-              {row[header.key as keyof BudgetTableData]}
-            </span>
-          </div>
+          <span className="text-slate-800 dark:text-slate-200 text-sm sm:text-base truncate">
+            {row[header.key as keyof BudgetTableData]}
+          </span>
         );
 
       case BudgetTableHeaderEnum.PRICE:

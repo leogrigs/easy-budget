@@ -37,8 +37,8 @@ const Auth: React.FC<AuthProps> = ({ onUserLogin }) => {
           </span>
         </h2>
         <h3 className="text-slate-500 dark:text-slate-400 text-base sm:text-lg md:text-xl max-w-2xl lg:max-w-3xl mx-auto font-medium">
-          Track your income and expenses, view all transactions, and understand
-          how your spending is divided.
+          Track your expenses, organize them by category, and understand how
+          your spending is divided.
         </h3>
         <div className="mt-6 flex justify-center">
           <div>

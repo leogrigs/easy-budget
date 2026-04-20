@@ -12,7 +12,6 @@ import { NEW_ENTRY } from "../../consts/entry.options";
 import { MONTH_OPTIONS } from "../../consts/month.options";
 import { useLoading } from "../../contexts/LoadingContext";
 import { BudgetTableActionEnum } from "../../enums/BudgetTableAction.enum";
-import { BudgetTableTypeEnum } from "../../enums/BudgetTableType.enum";
 import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
 import { InputOptions } from "../../interfaces/InputOptions.interface";
 import {
@@ -22,7 +21,6 @@ import {
   initializeUserDocument,
   updateEntryInTable,
 } from "../../services/firestore";
-import { BudgetTableType } from "../../types/BudgetTableType.type";
 
 interface SystemProps {
   user: User | null;
@@ -79,13 +77,8 @@ const System: React.FC<SystemProps> = ({ user }) => {
     });
   };
 
-  const reduceTablePriceByType = (type: BudgetTableType) =>
-    filteredTable().reduce((acc, curr) => {
-      if (curr.type === type) {
-        return acc + curr.price;
-      }
-      return acc;
-    }, 0);
+  const totalSpent = filteredTable().reduce((acc, curr) => acc + curr.price, 0);
+  const entriesCount = filteredTable().length;
 
   const handleTableAction = (
     action: BudgetTableActionEnum,
@@ -140,11 +133,8 @@ const System: React.FC<SystemProps> = ({ user }) => {
 
   return (
     <main className="w-full flex-grow">
-      <div className="flex flex-col sm:flex-row sm:justify-between mt-8 mb-12 md:my-2">
-        <Totalizers
-          income={reduceTablePriceByType(BudgetTableTypeEnum.INCOME)}
-          expense={reduceTablePriceByType(BudgetTableTypeEnum.EXPENSE)}
-        />
+      <div className="flex flex-col mt-4 mb-8">
+        <Totalizers total={totalSpent} count={entriesCount} />
       </div>
 
       <div className="flex flex-col-reverse xl:flex-row gap-8">

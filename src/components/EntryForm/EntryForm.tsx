@@ -1,5 +1,4 @@
 import { CATEGORY_OPTIONS } from "../../consts/category.options";
-import { TYPE_OPTIONS } from "../../consts/type.options";
 import { BudgetTableData } from "../../interfaces/BudgetTable.interface";
 import Input from "../Input";
 import Select from "../Select";
@@ -26,12 +25,12 @@ const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
 
       <div className="flex flex-col min-w-[200px]">
         <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
-          Price
+          Amount
         </label>
         <Input
           value={entry.price}
           type="number"
-          placeholder="Entry price"
+          placeholder="Entry amount"
           onChange={handleChanges}
           name="price"
         />
@@ -58,18 +57,6 @@ const EntryForm: React.FC<EntryFormProps> = ({ entry, handleChanges }) => {
           value={entry.category}
           onChange={handleChanges}
           name="category"
-        />
-      </div>
-
-      <div className="flex flex-col min-w-[200px]">
-        <label className="block mb-2 text-sm font-medium text-slate-700 dark:text-slate-300">
-          Type
-        </label>
-        <Select
-          options={TYPE_OPTIONS}
-          value={entry.type}
-          onChange={handleChanges}
-          name="type"
         />
       </div>
     </form>

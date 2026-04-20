@@ -1,6 +1,5 @@
 import { BudgetTableCategoryEnum } from "../enums/BudgetTableCategory.enum";
 import { BudgetTableHeaderType } from "../types/BudgetTableHeader.type";
-import { BudgetTableType } from "../types/BudgetTableType.type";
 
 export interface BudgetTableData {
   id: number;
@@ -8,7 +7,6 @@ export interface BudgetTableData {
   price: number;
   date: string;
   category: BudgetTableCategoryEnum;
-  type: BudgetTableType;
 }
 
 export interface BudgetTableHeader {

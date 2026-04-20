@@ -33,14 +33,13 @@ describe("BudgetTable Component", () => {
 
   test("handles pagination correctly", () => {
     render(
-      <BudgetTable rows={mockRows} itemsPerPage={2} onAction={mockOnAction} />
+      <BudgetTable rows={mockRows} itemsPerPage={3} onAction={mockOnAction} />
     );
 
     const rowsPage1 = screen.getAllByRole("row");
-    expect(rowsPage1.length).toBe(3);
+    expect(rowsPage1.length).toBe(4);
 
     const nextPageButton = screen.getAllByRole("button").at(-1)!;
-    fireEvent.click(nextPageButton);
     fireEvent.click(nextPageButton);
 
     const rowsPage2 = screen.getAllByRole("row");
