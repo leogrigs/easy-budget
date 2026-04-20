@@ -9,6 +9,7 @@ import { useLoading } from "./contexts/LoadingContext";
 import Auth from "./pages/Auth";
 import Categories from "./pages/Categories";
 import Expenses from "./pages/Expenses";
+import Insights from "./pages/Insights";
 import Settings from "./pages/Settings";
 import { auth } from "./services/firebase";
 import { migrateUserIfNeeded } from "./services/migration";
@@ -53,6 +54,7 @@ function App() {
           <Route element={<AppShell user={user} onLogout={logout} />}>
             <Route index element={<Navigate to="/expenses" replace />} />
             <Route path="/expenses" element={<Expenses uid={user.uid} />} />
+            <Route path="/insights" element={<Insights uid={user.uid} />} />
             <Route path="/categories" element={<Categories uid={user.uid} />} />
             <Route path="/settings" element={<Settings uid={user.uid} />} />
             <Route path="*" element={<Navigate to="/expenses" replace />} />

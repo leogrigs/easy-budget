@@ -21,6 +21,7 @@ interface TopbarProps {
 
 const ROUTE_TITLES: Record<string, string> = {
   "/expenses": "Expenses",
+  "/insights": "Insights",
   "/categories": "Categories",
   "/settings": "Settings",
 };
