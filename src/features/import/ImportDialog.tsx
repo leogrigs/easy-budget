@@ -134,8 +134,15 @@ const ImportDialog = ({
         <DialogHeader>
           <DialogTitle>Import expenses</DialogTitle>
           <DialogDescription>
-            CSV with columns <code>name, amount, date, category</code>. Dates in
-            <code>YYYY-MM-DD</code>.
+            CSV with columns{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-xs">
+              name, amount, date, category
+            </code>
+            . Dates in{" "}
+            <code className="rounded bg-muted px-1 py-0.5 text-xs">
+              YYYY-MM-DD
+            </code>
+            .
           </DialogDescription>
         </DialogHeader>
 

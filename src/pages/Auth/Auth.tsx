@@ -10,8 +10,8 @@ import {
   Upload,
 } from "lucide-react";
 import React, { useEffect } from "react";
-import logo from "../../assets/logo.png";
 import GoogleSignIn from "../../components/GoogleSignIn";
+import Logo from "../../components/Logo";
 import ThemeToggle from "../../components/ThemeToggle";
 import { useLoading } from "../../contexts/LoadingContext";
 import { auth } from "../../services/firebase";
@@ -72,7 +72,7 @@ const Auth: React.FC<AuthProps> = ({ onUserLogin }) => {
 
       <header className="relative z-10 flex items-center justify-between px-6 lg:px-12 py-4">
         <div className="flex items-center gap-2">
-          <img src={logo} alt="Easy Budget" className="h-8 w-8" />
+          <Logo size={28} />
           <span className="font-semibold tracking-tight">Easy Budget</span>
         </div>
         <ThemeToggle />
@@ -178,7 +178,7 @@ const Auth: React.FC<AuthProps> = ({ onUserLogin }) => {
         <footer className="relative z-10 border-t border-border py-8">
           <div className="mx-auto max-w-6xl px-6 lg:px-12 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
             <div className="flex items-center gap-2">
-              <img src={logo} alt="" className="h-5 w-5" />
+              <Logo size={20} />
               <span>
                 © {new Date().getFullYear()} Easy Budget. Built with React +
                 Firebase.

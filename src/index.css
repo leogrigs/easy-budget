@@ -60,7 +60,3 @@
     font-family: "Inter", system-ui, sans-serif;
   }
 }
-
-html.dark input[type="date"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-}

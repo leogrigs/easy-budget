@@ -180,14 +180,18 @@ const Expenses = ({ uid }: ExpensesProps) => {
       {
         accessorKey: "amount",
         header: ({ column }) => (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="-ml-3"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Amount <ArrowUpDown className="ml-1 h-3.5 w-3.5" />
-          </Button>
+          <div className="flex justify-end">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="-mr-3"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            >
+              Amount <ArrowUpDown className="ml-1 h-3.5 w-3.5" />
+            </Button>
+          </div>
         ),
         cell: ({ row }) => (
           <div className="text-right font-medium tabular-nums">
@@ -507,10 +511,10 @@ const Expenses = ({ uid }: ExpensesProps) => {
           Change category
         </Button>
         <Button
-          variant="destructive"
+          variant="ghost"
           size="sm"
           onClick={() => setBulkDeleteOpen(true)}
-          className="rounded-full"
+          className="rounded-full text-destructive hover:text-destructive hover:bg-destructive/10"
         >
           <Trash2 className="h-4 w-4" /> Delete
         </Button>

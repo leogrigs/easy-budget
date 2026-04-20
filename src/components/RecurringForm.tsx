@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import type { Category, RecurringFrequency } from "../types/expense";
+import DatePicker from "./DatePicker";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -155,18 +156,28 @@ const RecurringForm = ({
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="recurring-start">Start date</Label>
-              <Input
+              <DatePicker
                 id="recurring-start"
-                type="date"
-                {...form.register("startDate")}
+                value={form.watch("startDate")}
+                onChange={(iso) =>
+                  form.setValue("startDate", iso, { shouldValidate: true })
+                }
               />
+              {form.formState.errors.startDate && (
+                <p className="text-xs text-destructive">
+                  {form.formState.errors.startDate.message}
+                </p>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="recurring-end">End date (optional)</Label>
-              <Input
+              <DatePicker
                 id="recurring-end"
-                type="date"
-                {...form.register("endDate")}
+                value={form.watch("endDate") ?? ""}
+                onChange={(iso) =>
+                  form.setValue("endDate", iso, { shouldValidate: true })
+                }
+                placeholder="No end date"
               />
               {form.formState.errors.endDate && (
                 <p className="text-xs text-destructive">

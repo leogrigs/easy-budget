@@ -1,6 +1,6 @@
 import { Folder, Receipt, Settings } from "lucide-react";
 import { NavLink } from "react-router-dom";
-import logo from "../assets/logo.png";
+import Logo from "./Logo";
 import { cn } from "../lib/utils";
 
 const NAV = [
@@ -22,7 +22,7 @@ const Sidebar = ({ variant = "rail" }: SidebarProps) => {
   return (
     <aside className={containerClass}>
       <div className="flex items-center gap-2 h-16 px-6 border-b border-border">
-        <img src={logo} alt="Easy Budget" className="h-8 w-8" />
+        <Logo size={28} />
         <span className="font-semibold tracking-tight">Easy Budget</span>
       </div>
       <nav className="flex-1 p-3 space-y-1">

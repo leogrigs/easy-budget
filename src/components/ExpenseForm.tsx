@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import DatePicker from "./DatePicker";
 import { Button } from "./ui/button";
 import {
   Dialog,
@@ -187,10 +188,12 @@ const ExpenseForm = ({
             </div>
             <div className="space-y-2">
               <Label htmlFor="expense-date">Date</Label>
-              <Input
+              <DatePicker
                 id="expense-date"
-                type="date"
-                {...form.register("date")}
+                value={form.watch("date")}
+                onChange={(iso) =>
+                  form.setValue("date", iso, { shouldValidate: true })
+                }
               />
               {form.formState.errors.date && (
                 <p className="text-xs text-destructive">
@@ -269,10 +272,13 @@ const ExpenseForm = ({
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="expense-end">End date (optional)</Label>
-                    <Input
+                    <DatePicker
                       id="expense-end"
-                      type="date"
-                      {...form.register("endDate")}
+                      value={form.watch("endDate") ?? ""}
+                      onChange={(iso) =>
+                        form.setValue("endDate", iso, { shouldValidate: true })
+                      }
+                      placeholder="No end date"
                     />
                     {form.formState.errors.endDate && (
                       <p className="text-xs text-destructive">
