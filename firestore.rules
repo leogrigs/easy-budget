@@ -7,28 +7,114 @@ service cloud.firestore {
       return request.auth != null && request.auth.uid == userId;
     }
 
-    function hasOnlyAllowedFields(data, allowed) {
-      return data.keys().hasOnly(allowed);
+    function isNonEmptyString(v, max) {
+      return v is string && v.size() > 0 && v.size() <= max;
     }
 
-    function isValidTable(table) {
-      return table is list && table.size() <= 5000;
+    function isIsoDate(v) {
+      return v is string && v.matches('^\\d{4}-\\d{2}-\\d{2}$');
+    }
+
+    function isPositiveAmount(v) {
+      return (v is number) && v > 0 && v < 1000000000;
     }
 
     match /users/{userId} {
       allow read: if isOwner(userId);
 
+      // Legacy shape (users/{uid}.table) is still accepted until the migration
+      // field is cleared in a later release. The new shape also allows
+      // `migrated` / `migratedAt` markers.
       allow create: if isOwner(userId)
-        && hasOnlyAllowedFields(request.resource.data, ['table', 'createdAt'])
-        && isValidTable(request.resource.data.table)
-        && request.resource.data.createdAt is timestamp;
+        && request.resource.data.keys().hasOnly(
+          ['table', 'createdAt', 'migrated', 'migratedAt']
+        );
 
       allow update: if isOwner(userId)
-        && hasOnlyAllowedFields(request.resource.data, ['table', 'createdAt'])
-        && isValidTable(request.resource.data.table)
-        && request.resource.data.createdAt == resource.data.createdAt;
+        && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['table', 'migrated', 'migratedAt']);
 
       allow delete: if false;
+
+      match /expenses/{expenseId} {
+        allow read: if isOwner(userId);
+
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasAll(
+            ['name', 'amount', 'date', 'categoryId', 'createdAt', 'updatedAt']
+          )
+          && request.resource.data.keys().hasOnly(
+            ['name', 'amount', 'date', 'categoryId', 'recurringId',
+             'createdAt', 'updatedAt']
+          )
+          && isNonEmptyString(request.resource.data.name, 120)
+          && isPositiveAmount(request.resource.data.amount)
+          && isIsoDate(request.resource.data.date)
+          && isNonEmptyString(request.resource.data.categoryId, 64);
+
+        allow update: if isOwner(userId)
+          && request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(['name', 'amount', 'date', 'categoryId',
+                        'recurringId', 'updatedAt'])
+          && isNonEmptyString(request.resource.data.name, 120)
+          && isPositiveAmount(request.resource.data.amount)
+          && isIsoDate(request.resource.data.date)
+          && isNonEmptyString(request.resource.data.categoryId, 64);
+
+        allow delete: if isOwner(userId);
+      }
+
+      match /categories/{categoryId} {
+        allow read: if isOwner(userId);
+
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasAll(
+            ['name', 'color', 'icon', 'order', 'createdAt']
+          )
+          && request.resource.data.keys().hasOnly(
+            ['name', 'color', 'icon', 'order', 'createdAt']
+          )
+          && isNonEmptyString(request.resource.data.name, 64)
+          && request.resource.data.color is string
+          && request.resource.data.color.matches('^#[0-9a-fA-F]{6}$')
+          && isNonEmptyString(request.resource.data.icon, 64)
+          && request.resource.data.order is int
+          && request.resource.data.order >= 0;
+
+        allow update: if isOwner(userId)
+          && request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(['name', 'color', 'icon', 'order']);
+
+        allow delete: if isOwner(userId);
+      }
+
+      match /recurring/{recurringId} {
+        allow read: if isOwner(userId);
+
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasAll(
+            ['name', 'amount', 'categoryId', 'frequency', 'startDate',
+             'createdAt', 'updatedAt']
+          )
+          && request.resource.data.keys().hasOnly(
+            ['name', 'amount', 'categoryId', 'frequency', 'startDate',
+             'endDate', 'lastGeneratedAt', 'createdAt', 'updatedAt']
+          )
+          && isNonEmptyString(request.resource.data.name, 120)
+          && isPositiveAmount(request.resource.data.amount)
+          && isNonEmptyString(request.resource.data.categoryId, 64)
+          && (request.resource.data.frequency == 'weekly'
+              || request.resource.data.frequency == 'monthly')
+          && isIsoDate(request.resource.data.startDate);
+
+        allow update: if isOwner(userId)
+          && request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(['name', 'amount', 'categoryId', 'frequency',
+                        'startDate', 'endDate', 'lastGeneratedAt',
+                        'updatedAt']);
+
+        allow delete: if isOwner(userId);
+      }
     }
 
     match /{document=**} {
