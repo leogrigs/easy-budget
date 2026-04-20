@@ -1,0 +1,38 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    function hasOnlyAllowedFields(data, allowed) {
+      return data.keys().hasOnly(allowed);
+    }
+
+    function isValidTable(table) {
+      return table is list && table.size() <= 5000;
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+
+      allow create: if isOwner(userId)
+        && hasOnlyAllowedFields(request.resource.data, ['table', 'createdAt'])
+        && isValidTable(request.resource.data.table)
+        && request.resource.data.createdAt is timestamp;
+
+      allow update: if isOwner(userId)
+        && hasOnlyAllowedFields(request.resource.data, ['table', 'createdAt'])
+        && isValidTable(request.resource.data.table)
+        && request.resource.data.createdAt == resource.data.createdAt;
+
+      allow delete: if false;
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
