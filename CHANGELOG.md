@@ -1,3 +1,33 @@
+# [1.1.0](https://github.com/leogrigs/easy-budget/compare/v1.0.4...v1.1.0) (2026-04-20)
+
+
+### Bug Fixes
+
+* **insights:** drop white stroke on the donut chart ([902e71d](https://github.com/leogrigs/easy-budget/commit/902e71d5579e43295255f0177e42ca985f38d3f2))
+* **table:** make pagination controlled and move bar to the top ([ef6176a](https://github.com/leogrigs/easy-budget/commit/ef6176ac765da48bdde3b757dfa85ee00848890e))
+* **ui:** checkbox shows minus icon for indeterminate state ([aeb7a6d](https://github.com/leogrigs/easy-budget/commit/aeb7a6d92ff38c694b580559e79ec2946e278c26))
+* **ui:** currency input with prefix, no native spinners ([e72d411](https://github.com/leogrigs/easy-budget/commit/e72d4119476ed0f31c7c064560ea491bab96c2b8))
+* **ui:** logo mark, date picker unification, table + dialog polish ([d35c2c8](https://github.com/leogrigs/easy-budget/commit/d35c2c8a45036b84d3873af0addf12c8a02fc538))
+
+
+### Features
+
+* **auth:** modern hero landing page ([c1c5d33](https://github.com/leogrigs/easy-budget/commit/c1c5d33bca65a7a91367c53871923d0254c93e87))
+* **categories:** CRUD page with color + icon ([ba030f5](https://github.com/leogrigs/easy-budget/commit/ba030f5a241ca435f0fba320bdef228587798608))
+* **csv:** export and import flows ([6cfc612](https://github.com/leogrigs/easy-budget/commit/6cfc612aeb27e50add1dee849043d822ec199f1e))
+* **expenses:** tanstack DataTable with filters and bulk actions ([003abbf](https://github.com/leogrigs/easy-budget/commit/003abbf283366b42539ccebf4755d30558a82f2a))
+* **firestore:** rules for expenses/categories/recurring subcollections ([28d27af](https://github.com/leogrigs/easy-budget/commit/28d27afbdf6d0e8641d253b153391ddcaa9568f8))
+* **firestore:** subcollection schema, services, hooks ([23c97dd](https://github.com/leogrigs/easy-budget/commit/23c97ddc79b73d2964a7a2ca0e8978c6bc3706ef))
+* **import:** auto-create unmapped categories ([d207d67](https://github.com/leogrigs/easy-budget/commit/d207d67fec5595022379ba1eb6f709cd0410ef33))
+* **insights:** aggregation utilities ([2426a3a](https://github.com/leogrigs/easy-budget/commit/2426a3aab9ab1c561a691ecef27f5d3f25c797e2))
+* **insights:** page, route, and nav entry ([9442ab0](https://github.com/leogrigs/easy-budget/commit/9442ab05580b8d75efb05648fa54d7f3c8decea7))
+* **insights:** period selector, KPI card, and chart components ([e9783e5](https://github.com/leogrigs/easy-budget/commit/e9783e5ce3fcf602d7cf7f985b408e4bef1ebb9c))
+* **layout:** modern shell with sidebar, topbar, and skeletons ([8c26cb9](https://github.com/leogrigs/easy-budget/commit/8c26cb9b0973c16927b2875df5680bca235990dd))
+* **recurring:** recurring expenses with backfill on login ([2ae2efe](https://github.com/leogrigs/easy-budget/commit/2ae2efed36a066ac4089e8ab91357d7cd565a57b))
+* **setup:** wire shadcn tokens, path alias, router shell ([4d8c2e3](https://github.com/leogrigs/easy-budget/commit/4d8c2e3cda14354ba1bd0081327195df2c8f6df2))
+* **ui:** install shadcn primitives ([ec51321](https://github.com/leogrigs/easy-budget/commit/ec51321459569f9d2453bc851014c85505404de3))
+* **ux:** floating selection bar, route + card enter animations ([0b443ce](https://github.com/leogrigs/easy-budget/commit/0b443ce014e37422c097de86bdf4c074c02b8989))
+
 ## [1.0.4](https://github.com/leogrigs/easy-budget/compare/v1.0.3...v1.0.4) (2024-11-12)
 
 
