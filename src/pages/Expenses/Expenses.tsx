@@ -48,6 +48,7 @@ import {
 import { Skeleton } from "../../components/ui/skeleton";
 import { useCategories } from "../../hooks/useCategories";
 import { useExpenses } from "../../hooks/useExpenses";
+import { addCategory } from "../../services/categories";
 import {
   addExpense,
   bulkAddExpenses,
@@ -350,6 +351,19 @@ const Expenses = ({ uid }: ExpensesProps) => {
     await bulkAddExpenses(uid, imports);
   };
 
+  const handleCreateCategories = async (
+    seeds: Array<{ csvName: string; seed: { name: string; color: string; icon: string } }>
+  ): Promise<Record<string, string>> => {
+    const baseOrder = categories.length;
+    const results = await Promise.all(
+      seeds.map(async ({ csvName, seed }, i) => {
+        const id = await addCategory(uid, { ...seed, order: baseOrder + i });
+        return [csvName, id] as const;
+      })
+    );
+    return Object.fromEntries(results);
+  };
+
   const renderToolbar = () => (
     <ExpenseFilters
       categories={categories}
@@ -495,6 +509,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
         categories={categories}
         onOpenChange={setImportOpen}
         onImport={handleImport}
+        onCreateCategories={handleCreateCategories}
       />
 
       <SelectionActionBar visible={selectedIds.length > 0}>
