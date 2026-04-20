@@ -40,7 +40,7 @@ const CategoryBreakdownChart = ({ data }: CategoryBreakdownChartProps) => {
             innerRadius={60}
             outerRadius={100}
             paddingAngle={2}
-            strokeWidth={2}
+            stroke="none"
           >
             {data.map((d) => (
               <Cell key={d.categoryId} fill={d.color} />
