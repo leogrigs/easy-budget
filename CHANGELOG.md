@@ -1,3 +1,20 @@
+# [1.2.0](https://github.com/leogrigs/easy-budget/compare/v1.1.0...v1.2.0) (2026-04-21)
+
+
+### Bug Fixes
+
+* **expenses:** inline refund toggle handler to satisfy useMemo deps ([81117ec](https://github.com/leogrigs/easy-budget/commit/81117ec488a4e4a72f78a57272ca5fdfd5b9d976))
+* **expenses:** tighten mobile layout for header and filters ([123477f](https://github.com/leogrigs/easy-budget/commit/123477fb4c6f10d0cb4723d06fac1b400b00599d))
+* **filters:** keep category dropdown open across multi-select ([4e0ba04](https://github.com/leogrigs/easy-budget/commit/4e0ba04e87c607a661091c298d79d6e967ec14d5))
+* **services:** strip undefined before writing to Firestore ([b9e8db6](https://github.com/leogrigs/easy-budget/commit/b9e8db623fa824ce46aea498298bf6c15ed660d3))
+
+
+### Features
+
+* **expenses:** mark as refunded to exclude from totals and insights ([d36da0c](https://github.com/leogrigs/easy-budget/commit/d36da0c11312b10423e05c9f18f7fe26831567da))
+* **expenses:** month switcher, fixed KPI, and promote to recurring ([044282f](https://github.com/leogrigs/easy-budget/commit/044282f5e6e4b78fdf7faeea8f39e19c46411b1f))
+* **expenses:** show a Repeat icon on rows that are part of a recurring template ([486e98f](https://github.com/leogrigs/easy-budget/commit/486e98fcdc2e8ed40a8e7a896dc64e1f9eeb5e10))
+
 # [1.1.0](https://github.com/leogrigs/easy-budget/compare/v1.0.4...v1.1.0) (2026-04-20)
 
 
