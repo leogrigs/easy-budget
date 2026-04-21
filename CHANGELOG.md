@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/leogrigs/easy-budget/compare/v1.3.0...v1.4.0) (2026-04-21)
+
+
+### Features
+
+* **import:** smart import via Firebase AI Logic + editable review ([e8adf4a](https://github.com/leogrigs/easy-budget/commit/e8adf4aff23925475e16538cd00ceeb6073558ee))
+
 # [1.3.0](https://github.com/leogrigs/easy-budget/compare/v1.2.0...v1.3.0) (2026-04-21)
 
 
