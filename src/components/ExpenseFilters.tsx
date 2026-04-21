@@ -82,6 +82,7 @@ const ExpenseFilters = ({
               <DropdownMenuCheckboxItem
                 key={category.id}
                 checked={value.categoryIds.includes(category.id)}
+                onSelect={(e) => e.preventDefault()}
                 onCheckedChange={(checked) =>
                   toggleCategory(category.id, checked === true)
                 }
