@@ -55,15 +55,26 @@ export const subscribeRecurring = (
   );
 };
 
+const stripUndefined = <T extends Record<string, unknown>>(obj: T): T => {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(obj)) {
+    if (v !== undefined) out[k] = v;
+  }
+  return out as T;
+};
+
 export const addRecurring = async (
   uid: string,
   input: RecurringInput
 ): Promise<string> => {
-  const ref = await addDoc(recurringCol(uid), {
-    ...input,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-  });
+  const ref = await addDoc(
+    recurringCol(uid),
+    stripUndefined({
+      ...input,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    })
+  );
   return ref.id;
 };
 
@@ -72,10 +83,13 @@ export const updateRecurring = async (
   id: string,
   patch: Partial<RecurringInput> & { lastGeneratedAt?: string }
 ): Promise<void> => {
-  await updateDoc(doc(recurringCol(uid), id), {
-    ...patch,
-    updatedAt: serverTimestamp(),
-  });
+  await updateDoc(
+    doc(recurringCol(uid), id),
+    stripUndefined({
+      ...patch,
+      updatedAt: serverTimestamp(),
+    })
+  );
 };
 
 export const deleteRecurring = async (

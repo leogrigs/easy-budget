@@ -49,15 +49,26 @@ export const subscribeExpenses = (
   );
 };
 
+const stripUndefined = <T extends Record<string, unknown>>(obj: T): T => {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(obj)) {
+    if (v !== undefined) out[k] = v;
+  }
+  return out as T;
+};
+
 export const addExpense = async (
   uid: string,
   input: ExpenseInput
 ): Promise<string> => {
-  const ref = await addDoc(expensesCol(uid), {
-    ...input,
-    createdAt: serverTimestamp(),
-    updatedAt: serverTimestamp(),
-  });
+  const ref = await addDoc(
+    expensesCol(uid),
+    stripUndefined({
+      ...input,
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    })
+  );
   return ref.id;
 };
 
@@ -66,10 +77,13 @@ export const updateExpense = async (
   id: string,
   patch: Partial<ExpenseInput>
 ): Promise<void> => {
-  await updateDoc(doc(expensesCol(uid), id), {
-    ...patch,
-    updatedAt: serverTimestamp(),
-  });
+  await updateDoc(
+    doc(expensesCol(uid), id),
+    stripUndefined({
+      ...patch,
+      updatedAt: serverTimestamp(),
+    })
+  );
 };
 
 export const deleteExpense = async (uid: string, id: string): Promise<void> => {
@@ -118,11 +132,14 @@ export const bulkAddExpenses = async (
     const batch = writeBatch(db);
     for (const input of group) {
       const ref = doc(expensesCol(uid));
-      batch.set(ref, {
-        ...input,
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp(),
-      });
+      batch.set(
+        ref,
+        stripUndefined({
+          ...input,
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+        })
+      );
     }
     await batch.commit();
   }

@@ -1,8 +1,9 @@
-import { Hash, Sigma, Wallet } from "lucide-react";
+import { Hash, Repeat, Sigma, Wallet } from "lucide-react";
 
 interface TotalizersProps {
   total: number;
   count: number;
+  fixed: number;
 }
 
 const formatCurrency = (value: number) =>
@@ -11,17 +12,18 @@ const formatCurrency = (value: number) =>
     currency: "BRL",
   }).format(value);
 
-const Totalizers = ({ total, count }: TotalizersProps) => {
+const Totalizers = ({ total, count, fixed }: TotalizersProps) => {
   const average = count > 0 ? total / count : 0;
 
   const cards = [
     { label: "Total spent", value: formatCurrency(total), Icon: Wallet },
     { label: "Entries", value: String(count), Icon: Hash },
     { label: "Avg per entry", value: formatCurrency(average), Icon: Sigma },
+    { label: "Fixed", value: formatCurrency(fixed), Icon: Repeat },
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
       {cards.map(({ label, value, Icon }, i) => (
         <div
           key={label}

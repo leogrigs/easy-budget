@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { CalendarIcon, Filter, Search, X } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import { Button } from "./ui/button";
@@ -13,6 +12,7 @@ import {
 } from "./ui/dropdown-menu";
 import { Input } from "./ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import MonthSwitcher from "./MonthSwitcher";
 import type { Category } from "../types/expense";
 
 export interface ExpenseFiltersState {
@@ -46,12 +46,6 @@ const ExpenseFilters = ({
         ? (categories.find((c) => c.id === value.categoryIds[0])?.name ??
           "1 category")
         : `${value.categoryIds.length} categories`;
-
-  const rangeLabel = value.dateRange?.from
-    ? value.dateRange.to
-      ? `${format(value.dateRange.from, "MMM d")} → ${format(value.dateRange.to, "MMM d")}`
-      : format(value.dateRange.from, "MMM d, yyyy")
-    : "Any date";
 
   const hasActive =
     value.search.length > 0 ||
@@ -88,6 +82,7 @@ const ExpenseFilters = ({
               <DropdownMenuCheckboxItem
                 key={category.id}
                 checked={value.categoryIds.includes(category.id)}
+                onSelect={(e) => e.preventDefault()}
                 onCheckedChange={(checked) =>
                   toggleCategory(category.id, checked === true)
                 }
@@ -99,10 +94,15 @@ const ExpenseFilters = ({
         </DropdownMenuContent>
       </DropdownMenu>
 
+      <MonthSwitcher
+        value={value.dateRange}
+        onChange={(range) => onChange({ ...value, dateRange: range })}
+      />
+
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="outline" className="justify-start">
-            <CalendarIcon className="h-4 w-4" /> {rangeLabel}
+          <Button variant="ghost" size="icon" aria-label="Custom date range">
+            <CalendarIcon className="h-4 w-4" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
