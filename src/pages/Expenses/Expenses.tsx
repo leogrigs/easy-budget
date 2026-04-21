@@ -9,6 +9,7 @@ import {
   MoreHorizontal,
   Pencil,
   Plus,
+  RotateCcw,
   Trash2,
   Upload,
   X,
@@ -128,8 +129,9 @@ const Expenses = ({ uid }: ExpensesProps) => {
   }, [expenses, byId, filters]);
 
   const totals = useMemo(() => {
-    const total = filtered.reduce((acc, e) => acc + e.amount, 0);
-    return { total, count: filtered.length };
+    const nonRefunded = filtered.filter((e) => !e.refunded);
+    const total = nonRefunded.reduce((acc, e) => acc + e.amount, 0);
+    return { total, count: nonRefunded.length };
   }, [filtered]);
 
   const selectedIds = useMemo(
@@ -175,7 +177,22 @@ const Expenses = ({ uid }: ExpensesProps) => {
           </Button>
         ),
         cell: ({ row }) => (
-          <span className="font-medium">{row.original.name}</span>
+          <span className="inline-flex items-center gap-2">
+            <span
+              className={
+                row.original.refunded
+                  ? "font-medium line-through text-muted-foreground"
+                  : "font-medium"
+              }
+            >
+              {row.original.name}
+            </span>
+            {row.original.refunded && (
+              <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                Refunded
+              </span>
+            )}
+          </span>
         ),
       },
       {
@@ -195,7 +212,13 @@ const Expenses = ({ uid }: ExpensesProps) => {
           </div>
         ),
         cell: ({ row }) => (
-          <div className="text-right font-medium tabular-nums">
+          <div
+            className={
+              row.original.refunded
+                ? "text-right font-medium tabular-nums line-through text-muted-foreground"
+                : "text-right font-medium tabular-nums"
+            }
+          >
             {currency.format(row.original.amount)}
           </div>
         ),
@@ -246,6 +269,14 @@ const Expenses = ({ uid }: ExpensesProps) => {
                   }}
                 >
                   <Pencil className="h-4 w-4" /> Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() => handleToggleRefunded(row.original)}
+                >
+                  <RotateCcw className="h-4 w-4" />{" "}
+                  {row.original.refunded
+                    ? "Unmark refunded"
+                    : "Mark as refunded"}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -309,6 +340,14 @@ const Expenses = ({ uid }: ExpensesProps) => {
     await deleteExpense(uid, deleting.id);
     toast.success(`Deleted "${deleting.name}"`);
     setDeleting(null);
+  };
+
+  const handleToggleRefunded = async (expense: Expense) => {
+    const next = !expense.refunded;
+    await updateExpense(uid, expense.id, { refunded: next });
+    toast.success(
+      next ? `Marked "${expense.name}" as refunded` : `Unmarked "${expense.name}"`
+    );
   };
 
   const handleBulkDelete = async () => {

@@ -27,6 +27,7 @@ const mapDoc = (id: string, data: Record<string, unknown>): Expense => ({
   date: data.date as string,
   categoryId: data.categoryId as string,
   recurringId: (data.recurringId as string | undefined) ?? undefined,
+  refunded: (data.refunded as boolean | undefined) ?? false,
   createdAt: data.createdAt as Expense["createdAt"],
   updatedAt: data.updatedAt as Expense["updatedAt"],
 });

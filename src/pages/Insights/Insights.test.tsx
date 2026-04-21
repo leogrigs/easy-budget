@@ -121,4 +121,33 @@ describe("Insights page", () => {
     const trigger = await screen.findByRole("combobox", { name: /period/i });
     expect(trigger).toHaveTextContent(/Last 6 months/i);
   });
+
+  it("excludes refunded expenses from aggregations but keeps the page rendered", async () => {
+    const today = new Date();
+    const y = today.getFullYear();
+    const m = String(today.getMonth() + 1).padStart(2, "0");
+    const within = `${y}-${m}-01`;
+
+    const kept = mkExpense("1", within, 200, "a");
+    kept.name = "Kept expense";
+    const refunded = { ...mkExpense("2", within, 500, "b"), refunded: true };
+    refunded.name = "Refunded expense";
+
+    primeSubscriptions(
+      [kept, refunded],
+      [cat("a", "Food", "#111"), cat("b", "Fun", "#222")]
+    );
+    renderPage();
+
+    // KPIs render (not empty state)
+    expect(await screen.findByText("Top category")).toBeInTheDocument();
+
+    // Refunded expense is absent from the Top 5 list
+    expect(screen.queryByText(/Refunded expense/)).not.toBeInTheDocument();
+    expect(screen.getByText(/Kept expense/)).toBeInTheDocument();
+
+    // Top category reflects the kept expense's category, not the refunded one
+    expect(screen.getAllByText("Food").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Fun")).not.toBeInTheDocument();
+  });
 });
