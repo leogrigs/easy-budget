@@ -198,6 +198,15 @@ const Expenses = ({ uid }: ExpensesProps) => {
             >
               {row.original.name}
             </span>
+            {row.original.recurringId && (
+              <span
+                className="inline-flex items-center text-muted-foreground"
+                title="Recurring"
+                aria-label="Recurring"
+              >
+                <Repeat className="h-3.5 w-3.5" />
+              </span>
+            )}
             {row.original.refunded && (
               <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
                 Refunded
