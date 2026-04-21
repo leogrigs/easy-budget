@@ -1,3 +1,15 @@
+# [1.3.0](https://github.com/leogrigs/easy-budget/compare/v1.2.0...v1.3.0) (2026-04-21)
+
+
+### Bug Fixes
+
+* **insights:** invert delta colors so spending increases read as red ([8d75eca](https://github.com/leogrigs/easy-budget/commit/8d75eca419b7d82f1c3717cc6de95149ea9c1026))
+
+
+### Features
+
+* **insights:** month switcher matching the Expenses pattern ([6677186](https://github.com/leogrigs/easy-budget/commit/66771869c43a1d1cc20316c7d2355651afcdba91))
+
 # [1.2.0](https://github.com/leogrigs/easy-budget/compare/v1.1.0...v1.2.0) (2026-04-21)
 
 
