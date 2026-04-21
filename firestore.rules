@@ -44,22 +44,26 @@ service cloud.firestore {
             ['name', 'amount', 'date', 'categoryId', 'createdAt', 'updatedAt']
           )
           && request.resource.data.keys().hasOnly(
-            ['name', 'amount', 'date', 'categoryId', 'recurringId',
+            ['name', 'amount', 'date', 'categoryId', 'recurringId', 'refunded',
              'createdAt', 'updatedAt']
           )
           && isNonEmptyString(request.resource.data.name, 120)
           && isPositiveAmount(request.resource.data.amount)
           && isIsoDate(request.resource.data.date)
-          && isNonEmptyString(request.resource.data.categoryId, 64);
+          && isNonEmptyString(request.resource.data.categoryId, 64)
+          && (!('refunded' in request.resource.data)
+              || request.resource.data.refunded is bool);
 
         allow update: if isOwner(userId)
           && request.resource.data.diff(resource.data).affectedKeys()
               .hasOnly(['name', 'amount', 'date', 'categoryId',
-                        'recurringId', 'updatedAt'])
+                        'recurringId', 'refunded', 'updatedAt'])
           && isNonEmptyString(request.resource.data.name, 120)
           && isPositiveAmount(request.resource.data.amount)
           && isIsoDate(request.resource.data.date)
-          && isNonEmptyString(request.resource.data.categoryId, 64);
+          && isNonEmptyString(request.resource.data.categoryId, 64)
+          && (!('refunded' in request.resource.data)
+              || request.resource.data.refunded is bool);
 
         allow delete: if isOwner(userId);
       }

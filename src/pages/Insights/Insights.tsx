@@ -40,10 +40,15 @@ interface InsightsProps {
 }
 
 const Insights = ({ uid }: InsightsProps) => {
-  const { expenses, loading: loadingExpenses } = useExpenses(uid);
+  const { expenses: rawExpenses, loading: loadingExpenses } = useExpenses(uid);
   const { categories, byId, loading: loadingCategories } = useCategories(uid);
   const loading = loadingExpenses || loadingCategories;
   const [periodKey, setPeriodKey] = useState<PeriodKey>("last6m");
+
+  const expenses = useMemo(
+    () => rawExpenses.filter((e) => !e.refunded),
+    [rawExpenses]
+  );
 
   const period = useMemo(() => resolvePeriod(periodKey, new Date()), [periodKey]);
   const periodExpenses = useMemo(
@@ -96,7 +101,7 @@ const Insights = ({ uid }: InsightsProps) => {
     );
   }
 
-  if (expenses.length === 0) {
+  if (rawExpenses.length === 0) {
     return (
       <div className="space-y-6">
         {header}

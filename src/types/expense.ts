@@ -7,6 +7,7 @@ export interface Expense {
   date: string;
   categoryId: string;
   recurringId?: string;
+  refunded?: boolean;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }

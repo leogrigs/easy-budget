@@ -3,12 +3,15 @@ import {
   RowSelectionState,
   SortingFn,
 } from "@tanstack/react-table";
+import { endOfMonth, startOfMonth } from "date-fns";
 import {
   ArrowUpDown,
   Download,
   MoreHorizontal,
   Pencil,
   Plus,
+  Repeat,
+  RotateCcw,
   Trash2,
   Upload,
   X,
@@ -25,7 +28,9 @@ import ExpenseFilters, {
 import ExpenseForm, {
   ExpenseFormResult,
 } from "../../components/ExpenseForm";
+import PromoteRecurringDialog from "../../components/PromoteRecurringDialog";
 import Totalizers from "../../components/Totalizers";
+import { describePeriod } from "../../lib/describePeriod";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -83,15 +88,19 @@ const Expenses = ({ uid }: ExpensesProps) => {
   const { expenses, loading } = useExpenses(uid);
   const { categories, byId } = useCategories(uid);
 
-  const [filters, setFilters] = useState<ExpenseFiltersState>({
-    search: "",
-    categoryIds: [],
-    dateRange: undefined,
+  const [filters, setFilters] = useState<ExpenseFiltersState>(() => {
+    const now = new Date();
+    return {
+      search: "",
+      categoryIds: [],
+      dateRange: { from: startOfMonth(now), to: endOfMonth(now) },
+    };
   });
 
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Expense | null>(null);
   const [deleting, setDeleting] = useState<Expense | null>(null);
+  const [promoting, setPromoting] = useState<Expense | null>(null);
   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
   const [bulkCategoryOpen, setBulkCategoryOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
@@ -128,8 +137,12 @@ const Expenses = ({ uid }: ExpensesProps) => {
   }, [expenses, byId, filters]);
 
   const totals = useMemo(() => {
-    const total = filtered.reduce((acc, e) => acc + e.amount, 0);
-    return { total, count: filtered.length };
+    const nonRefunded = filtered.filter((e) => !e.refunded);
+    const total = nonRefunded.reduce((acc, e) => acc + e.amount, 0);
+    const fixed = nonRefunded
+      .filter((e) => !!e.recurringId)
+      .reduce((acc, e) => acc + e.amount, 0);
+    return { total, count: nonRefunded.length, fixed };
   }, [filtered]);
 
   const selectedIds = useMemo(
@@ -175,7 +188,31 @@ const Expenses = ({ uid }: ExpensesProps) => {
           </Button>
         ),
         cell: ({ row }) => (
-          <span className="font-medium">{row.original.name}</span>
+          <span className="inline-flex items-center gap-2">
+            <span
+              className={
+                row.original.refunded
+                  ? "font-medium line-through text-muted-foreground"
+                  : "font-medium"
+              }
+            >
+              {row.original.name}
+            </span>
+            {row.original.recurringId && (
+              <span
+                className="inline-flex items-center text-muted-foreground"
+                title="Recurring"
+                aria-label="Recurring"
+              >
+                <Repeat className="h-3.5 w-3.5" />
+              </span>
+            )}
+            {row.original.refunded && (
+              <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+                Refunded
+              </span>
+            )}
+          </span>
         ),
       },
       {
@@ -195,7 +232,13 @@ const Expenses = ({ uid }: ExpensesProps) => {
           </div>
         ),
         cell: ({ row }) => (
-          <div className="text-right font-medium tabular-nums">
+          <div
+            className={
+              row.original.refunded
+                ? "text-right font-medium tabular-nums line-through text-muted-foreground"
+                : "text-right font-medium tabular-nums"
+            }
+          >
             {currency.format(row.original.amount)}
           </div>
         ),
@@ -247,6 +290,31 @@ const Expenses = ({ uid }: ExpensesProps) => {
                 >
                   <Pencil className="h-4 w-4" /> Edit
                 </DropdownMenuItem>
+                {!row.original.recurringId && (
+                  <DropdownMenuItem
+                    onSelect={() => setPromoting(row.original)}
+                  >
+                    <Repeat className="h-4 w-4" /> Make recurring
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuItem
+                  onSelect={async () => {
+                    const next = !row.original.refunded;
+                    await updateExpense(uid, row.original.id, {
+                      refunded: next,
+                    });
+                    toast.success(
+                      next
+                        ? `Marked "${row.original.name}" as refunded`
+                        : `Unmarked "${row.original.name}"`
+                    );
+                  }}
+                >
+                  <RotateCcw className="h-4 w-4" />{" "}
+                  {row.original.refunded
+                    ? "Unmark refunded"
+                    : "Mark as refunded"}
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-destructive"
@@ -260,7 +328,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
         ),
       },
     ],
-    [byId]
+    [byId, uid]
   );
 
   const handleCreate = async (values: ExpenseFormResult) => {
@@ -309,6 +377,24 @@ const Expenses = ({ uid }: ExpensesProps) => {
     await deleteExpense(uid, deleting.id);
     toast.success(`Deleted "${deleting.name}"`);
     setDeleting(null);
+  };
+
+  const handlePromoteRecurring = async (values: {
+    frequency: "weekly" | "monthly";
+    endDate?: string;
+  }) => {
+    if (!promoting) return;
+    const recurringId = await addRecurring(uid, {
+      name: promoting.name,
+      amount: promoting.amount,
+      categoryId: promoting.categoryId,
+      frequency: values.frequency,
+      startDate: promoting.date,
+      endDate: values.endDate,
+    });
+    await updateExpense(uid, promoting.id, { recurringId });
+    toast.success(`"${promoting.name}" is now recurring`);
+    setPromoting(null);
   };
 
   const handleBulkDelete = async () => {
@@ -382,15 +468,24 @@ const Expenses = ({ uid }: ExpensesProps) => {
           </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={handleExport}>
-            <Download className="h-4 w-4" /> Export CSV
+          <Button
+            variant="outline"
+            onClick={handleExport}
+            className="h-9 w-9 p-0 sm:w-auto sm:px-3"
+            aria-label="Export CSV"
+          >
+            <Download className="h-4 w-4" />
+            <span className="hidden sm:inline ml-2">Export CSV</span>
           </Button>
           <Button
             variant="outline"
             onClick={() => setImportOpen(true)}
             disabled={categories.length === 0}
+            className="h-9 w-9 p-0 sm:w-auto sm:px-3"
+            aria-label="Import"
           >
-            <Upload className="h-4 w-4" /> Import
+            <Upload className="h-4 w-4" />
+            <span className="hidden sm:inline ml-2">Import</span>
           </Button>
           <Button
             onClick={() => {
@@ -399,12 +494,29 @@ const Expenses = ({ uid }: ExpensesProps) => {
             }}
             disabled={categories.length === 0}
           >
-            <Plus className="h-4 w-4" /> New expense
+            <Plus className="h-4 w-4" />
+            <span className="sm:hidden ml-1">New</span>
+            <span className="hidden sm:inline ml-1">New expense</span>
           </Button>
         </div>
       </div>
 
-      <Totalizers total={totals.total} count={totals.count} />
+      <div className="flex items-baseline justify-between gap-2">
+        <div>
+          <h2 className="text-xl font-semibold tracking-tight">
+            {describePeriod(filters.dateRange).label}
+          </h2>
+          <p className="text-xs text-muted-foreground">
+            Reference period for the numbers below
+          </p>
+        </div>
+      </div>
+
+      <Totalizers
+        total={totals.total}
+        count={totals.count}
+        fixed={totals.fixed}
+      />
 
       {loading ? (
         <div className="space-y-2">
@@ -510,6 +622,13 @@ const Expenses = ({ uid }: ExpensesProps) => {
         onOpenChange={setImportOpen}
         onImport={handleImport}
         onCreateCategories={handleCreateCategories}
+      />
+
+      <PromoteRecurringDialog
+        expense={promoting}
+        open={!!promoting}
+        onOpenChange={(open) => !open && setPromoting(null)}
+        onConfirm={handlePromoteRecurring}
       />
 
       <SelectionActionBar visible={selectedIds.length > 0}>
