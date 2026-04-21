@@ -1,11 +1,13 @@
 import { z } from "zod";
 
-const rawSchema = z.object({
+export const importedRowSchema = z.object({
   name: z.string().trim().min(1).max(120),
   amount: z.coerce.number().positive(),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   category: z.string().trim().min(1),
 });
+
+const rawSchema = importedRowSchema;
 
 export type ImportedRaw = z.infer<typeof rawSchema>;
 
