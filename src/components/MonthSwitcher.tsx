@@ -1,6 +1,7 @@
-import { addMonths, endOfMonth, format, isSameDay, startOfMonth } from "date-fns";
+import { addMonths, endOfMonth, format, startOfMonth } from "date-fns";
 import { CalendarDays, ChevronLeft, ChevronRight } from "lucide-react";
 import type { DateRange } from "react-day-picker";
+import { describePeriod } from "../lib/describePeriod";
 import { Button } from "./ui/button";
 
 interface MonthSwitcherProps {
@@ -8,26 +9,13 @@ interface MonthSwitcherProps {
   onChange: (next: DateRange | undefined) => void;
 }
 
-const describe = (
-  value: DateRange | undefined
-): { mode: "month" | "custom" | "all"; month: Date | null } => {
-  if (!value?.from) return { mode: "all", month: null };
-  if (!value.to) return { mode: "custom", month: null };
-  const start = startOfMonth(value.from);
-  const end = endOfMonth(value.from);
-  if (isSameDay(value.from, start) && isSameDay(value.to, end)) {
-    return { mode: "month", month: start };
-  }
-  return { mode: "custom", month: null };
-};
-
 const rangeForMonth = (anchor: Date): DateRange => ({
   from: startOfMonth(anchor),
   to: endOfMonth(anchor),
 });
 
 const MonthSwitcher = ({ value, onChange }: MonthSwitcherProps) => {
-  const state = describe(value);
+  const state = describePeriod(value);
   const label =
     state.mode === "month"
       ? format(state.month!, "MMMM yyyy")

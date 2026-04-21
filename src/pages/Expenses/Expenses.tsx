@@ -30,6 +30,7 @@ import ExpenseForm, {
 } from "../../components/ExpenseForm";
 import PromoteRecurringDialog from "../../components/PromoteRecurringDialog";
 import Totalizers from "../../components/Totalizers";
+import { describePeriod } from "../../lib/describePeriod";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -477,6 +478,17 @@ const Expenses = ({ uid }: ExpensesProps) => {
           >
             <Plus className="h-4 w-4" /> New expense
           </Button>
+        </div>
+      </div>
+
+      <div className="flex items-baseline justify-between gap-2">
+        <div>
+          <h2 className="text-xl font-semibold tracking-tight">
+            {describePeriod(filters.dateRange).label}
+          </h2>
+          <p className="text-xs text-muted-foreground">
+            Reference period for the numbers below
+          </p>
         </div>
       </div>
 
