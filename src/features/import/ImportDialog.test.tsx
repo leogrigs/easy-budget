@@ -8,15 +8,19 @@ vi.mock("sonner", () => ({
     success: vi.fn(),
     error: vi.fn(),
     info: vi.fn(),
+    warning: vi.fn(),
   },
 }));
 
 vi.mock("papaparse", () => ({
   default: {
-    parse: (_file: File, opts: { complete: (r: { data: unknown[] }) => void }) => {
+    parse: (
+      _file: File,
+      opts: { complete: (r: { data: unknown[] }) => void }
+    ) => {
       opts.complete({
         data: [
-          { name: "Coffee", amount: "4.5", date: "2026-04-19", category: "Snacks" },
+          { name: "Coffee", amount: "4.5", date: "2026-04-19", category: "Food" },
           { name: "Gas", amount: "80", date: "2026-04-18", category: "Fuel" },
         ],
       });
@@ -40,16 +44,16 @@ const triggerParse = async () => {
   Object.defineProperty(input, "files", { value: [file] });
   fireEvent.change(input);
   await waitFor(() =>
-    expect(screen.getByText(/Category mapping/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/Expense 1 name/i)).toBeInTheDocument()
   );
 };
 
-describe("ImportDialog — auto-create categories", () => {
+describe("ImportDialog — review table", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
-  it("disables import when categories are unmapped", async () => {
+  it("renders editable rows after parsing a CSV", async () => {
     render(
       <ImportDialog
         open
@@ -61,12 +65,30 @@ describe("ImportDialog — auto-create categories", () => {
     );
     await triggerParse();
 
-    expect(screen.getByText(/2 unmapped categories/i)).toBeInTheDocument();
-    const importBtn = screen.getByRole("button", { name: /Import 2 expenses/i });
+    const nameInput1 = screen.getByLabelText(/Expense 1 name/i) as HTMLInputElement;
+    const nameInput2 = screen.getByLabelText(/Expense 2 name/i) as HTMLInputElement;
+    expect(nameInput1.value).toBe("Coffee");
+    expect(nameInput2.value).toBe("Gas");
+  });
+
+  it("disables import while any row is missing a category", async () => {
+    render(
+      <ImportDialog
+        open
+        categories={[cat("a", "Food", "#eab308")]}
+        onOpenChange={() => {}}
+        onImport={vi.fn()}
+        onCreateCategories={vi.fn()}
+      />
+    );
+    await triggerParse();
+
+    expect(screen.getByText(/1 missing category/i)).toBeInTheDocument();
+    const importBtn = screen.getByRole("button", { name: /Import \d+ expense/i });
     expect(importBtn).toBeDisabled();
   });
 
-  it("clicking Create makes a row resolvable", async () => {
+  it("deleting a row removes it from the table", async () => {
     render(
       <ImportDialog
         open
@@ -78,92 +100,75 @@ describe("ImportDialog — auto-create categories", () => {
     );
     await triggerParse();
 
-    const createButtons = screen.getAllByRole("button", { name: /^Create$/i });
-    fireEvent.click(createButtons[0]);
-
-    expect(screen.getByText(/Will create: Snacks/i)).toBeInTheDocument();
-    expect(screen.getByText(/1 unmapped categor/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /Remove expense 2/i }));
+    expect(screen.queryByLabelText(/Expense 2 name/i)).not.toBeInTheDocument();
   });
 
-  it("Create all generates pending creates for every unmapped row", async () => {
-    render(
-      <ImportDialog
-        open
-        categories={[cat("a", "Food", "#eab308")]}
-        onOpenChange={() => {}}
-        onImport={vi.fn()}
-        onCreateCategories={vi.fn()}
-      />
-    );
-    await triggerParse();
-
-    fireEvent.click(screen.getByRole("button", { name: /Create all \(2\)/i }));
-
-    expect(screen.getByText(/Will create: Snacks/i)).toBeInTheDocument();
-    expect(screen.getByText(/Will create: Fuel/i)).toBeInTheDocument();
-    expect(screen.getByText(/2 will be created/i)).toBeInTheDocument();
-  });
-
-  it("Undo reverts a pending create", async () => {
-    render(
-      <ImportDialog
-        open
-        categories={[cat("a", "Food", "#eab308")]}
-        onOpenChange={() => {}}
-        onImport={vi.fn()}
-        onCreateCategories={vi.fn()}
-      />
-    );
-    await triggerParse();
-
-    fireEvent.click(screen.getAllByRole("button", { name: /^Create$/i })[0]);
-    expect(screen.getByText(/Will create: Snacks/i)).toBeInTheDocument();
-
-    fireEvent.click(
-      screen.getByRole("button", { name: /Undo create Snacks/i })
-    );
-    expect(screen.queryByText(/Will create: Snacks/i)).not.toBeInTheDocument();
-  });
-
-  it("confirm calls onCreateCategories and then onImport with resolved ids", async () => {
+  it("imports with resolved ids when every row matches an existing category", async () => {
     const onImport = vi.fn().mockResolvedValue(undefined);
-    const onCreateCategories = vi.fn().mockResolvedValue({
-      Snacks: "new-snacks-id",
-      Fuel: "new-fuel-id",
-    });
-
     render(
       <ImportDialog
         open
-        categories={[cat("a", "Food", "#eab308")]}
+        categories={[
+          cat("food-id", "Food", "#eab308"),
+          cat("fuel-id", "Fuel", "#22c55e"),
+        ]}
         onOpenChange={() => {}}
         onImport={onImport}
-        onCreateCategories={onCreateCategories}
+        onCreateCategories={vi.fn()}
       />
     );
     await triggerParse();
 
-    fireEvent.click(screen.getByRole("button", { name: /Create all \(2\)/i }));
+    expect(screen.getByText(/2 ready/i)).toBeInTheDocument();
+    const importBtn = screen.getByRole("button", {
+      name: /Import 2 expenses/i,
+    });
+    expect(importBtn).not.toBeDisabled();
+    fireEvent.click(importBtn);
+
+    await waitFor(() => expect(onImport).toHaveBeenCalledTimes(1));
+    const payload = onImport.mock.calls[0][0];
+    expect(payload).toHaveLength(2);
+    expect(payload[0]).toMatchObject({
+      name: "Coffee",
+      amount: 4.5,
+      date: "2026-04-19",
+      categoryId: "food-id",
+    });
+    expect(payload[1]).toMatchObject({
+      name: "Gas",
+      amount: 80,
+      date: "2026-04-18",
+      categoryId: "fuel-id",
+    });
+  });
+
+  it("editing a row updates the imported payload", async () => {
+    const onImport = vi.fn().mockResolvedValue(undefined);
+    render(
+      <ImportDialog
+        open
+        categories={[
+          cat("food-id", "Food", "#eab308"),
+          cat("fuel-id", "Fuel", "#22c55e"),
+        ]}
+        onOpenChange={() => {}}
+        onImport={onImport}
+        onCreateCategories={vi.fn()}
+      />
+    );
+    await triggerParse();
+
+    const nameInput1 = screen.getByLabelText(/Expense 1 name/i) as HTMLInputElement;
+    fireEvent.change(nameInput1, { target: { value: "Breakfast coffee" } });
+
     fireEvent.click(
       screen.getByRole("button", { name: /Import 2 expenses/i })
     );
 
-    await waitFor(() =>
-      expect(onCreateCategories).toHaveBeenCalledWith([
-        expect.objectContaining({
-          csvName: "Snacks",
-          seed: expect.objectContaining({ name: "Snacks", icon: "Package" }),
-        }),
-        expect.objectContaining({
-          csvName: "Fuel",
-          seed: expect.objectContaining({ name: "Fuel", icon: "Package" }),
-        }),
-      ])
-    );
     await waitFor(() => expect(onImport).toHaveBeenCalledTimes(1));
     const payload = onImport.mock.calls[0][0];
-    expect(payload).toHaveLength(2);
-    expect(payload[0].categoryId).toBe("new-snacks-id");
-    expect(payload[1].categoryId).toBe("new-fuel-id");
+    expect(payload[0].name).toBe("Breakfast coffee");
   });
 });
