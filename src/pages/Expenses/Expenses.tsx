@@ -271,7 +271,17 @@ const Expenses = ({ uid }: ExpensesProps) => {
                   <Pencil className="h-4 w-4" /> Edit
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onSelect={() => handleToggleRefunded(row.original)}
+                  onSelect={async () => {
+                    const next = !row.original.refunded;
+                    await updateExpense(uid, row.original.id, {
+                      refunded: next,
+                    });
+                    toast.success(
+                      next
+                        ? `Marked "${row.original.name}" as refunded`
+                        : `Unmarked "${row.original.name}"`
+                    );
+                  }}
                 >
                   <RotateCcw className="h-4 w-4" />{" "}
                   {row.original.refunded
@@ -291,7 +301,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
         ),
       },
     ],
-    [byId]
+    [byId, uid]
   );
 
   const handleCreate = async (values: ExpenseFormResult) => {
@@ -340,14 +350,6 @@ const Expenses = ({ uid }: ExpensesProps) => {
     await deleteExpense(uid, deleting.id);
     toast.success(`Deleted "${deleting.name}"`);
     setDeleting(null);
-  };
-
-  const handleToggleRefunded = async (expense: Expense) => {
-    const next = !expense.refunded;
-    await updateExpense(uid, expense.id, { refunded: next });
-    toast.success(
-      next ? `Marked "${expense.name}" as refunded` : `Unmarked "${expense.name}"`
-    );
   };
 
   const handleBulkDelete = async () => {
