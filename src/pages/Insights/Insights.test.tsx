@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import { format } from "date-fns";
 import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { Category, Expense } from "@/types/expense";
@@ -112,14 +113,17 @@ describe("Insights page", () => {
     expect(screen.getByText(/Top 5 expenses/i)).toBeInTheDocument();
   });
 
-  it("defaults the period selector to Last 6 months", async () => {
+  it("defaults the period to the current month", async () => {
     primeSubscriptions(
       [mkExpense("1", "2025-01-01", 100, "a")],
       [cat("a", "Food", "#111")]
     );
     renderPage();
-    const trigger = await screen.findByRole("combobox", { name: /period/i });
-    expect(trigger).toHaveTextContent(/Last 6 months/i);
+    const expectedLabel = format(new Date(), "MMMM yyyy");
+    // Label shows in both the MonthSwitcher control and the period banner.
+    expect(
+      (await screen.findAllByText(expectedLabel)).length
+    ).toBeGreaterThan(0);
   });
 
   it("excludes refunded expenses from aggregations but keeps the page rendered", async () => {

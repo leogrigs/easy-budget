@@ -1,3 +1,5 @@
+import type { DateRange } from "react-day-picker";
+import { describePeriod } from "@/lib/describePeriod";
 import type { Category, Expense } from "@/types/expense";
 
 export type PeriodKey =
@@ -7,7 +9,8 @@ export type PeriodKey =
   | "last6m"
   | "last12m"
   | "ytd"
-  | "all";
+  | "all"
+  | "custom";
 
 export interface Period {
   key: PeriodKey;
@@ -41,7 +44,28 @@ const addMonths = (d: Date, n: number) =>
 
 const MIN_ISO = "0000-01-01";
 
+export const periodFromDateRange = (
+  range: DateRange | undefined,
+  today: Date
+): Period => {
+  const endIso = toISO(today);
+  const desc = describePeriod(range);
+  if (!range?.from) {
+    return { key: "all", start: MIN_ISO, end: endIso, label: desc.label };
+  }
+  return {
+    key: "custom",
+    start: toISO(range.from),
+    end: range.to ? toISO(range.to) : toISO(range.from),
+    label: desc.label,
+  };
+};
+
 export const resolvePeriod = (key: PeriodKey, today: Date): Period => {
+  if (key === "custom") {
+    // Custom ranges are produced by periodFromDateRange, not this function.
+    return { key, start: toISO(today), end: toISO(today), label: "Custom" };
+  }
   const endIso = toISO(today);
   const label = PERIOD_OPTIONS.find((p) => p.key === key)?.label ?? "";
 

@@ -51,8 +51,8 @@ const KpiCard = ({
           <span
             className={cn(
               "mt-1 inline-flex items-center gap-1 text-xs font-medium",
-              up && "text-emerald-600 dark:text-emerald-400",
-              down && "text-destructive",
+              up && "text-destructive",
+              down && "text-emerald-600 dark:text-emerald-400",
               !up && !down && "text-muted-foreground"
             )}
           >
