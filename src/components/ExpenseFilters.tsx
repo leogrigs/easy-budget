@@ -51,24 +51,8 @@ const ExpenseFilters = ({
     onChange({ ...value, groupIds: next });
   };
 
-  const activeCategoryLabel =
-    value.categoryIds.length === 0
-      ? "All categories"
-      : value.categoryIds.length === 1
-        ? (categories.find((c) => c.id === value.categoryIds[0])?.name ??
-          "1 category")
-        : `${value.categoryIds.length} categories`;
-
-  const groupNameFor = (id: string) => {
-    if (id === NO_GROUP_FILTER) return "No group";
-    return groups?.find((g) => g.id === id)?.name ?? "1 group";
-  };
-  const activeGroupLabel =
-    value.groupIds.length === 0
-      ? "All groups"
-      : value.groupIds.length === 1
-        ? groupNameFor(value.groupIds[0])
-        : `${value.groupIds.length} groups`;
+  const categoryCount = value.categoryIds.length;
+  const groupCount = value.groupIds.length;
 
   const hasGroupsUi = !!groups;
 
@@ -93,8 +77,18 @@ const ExpenseFilters = ({
       <div className="flex flex-wrap items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="justify-start">
-              <Filter className="h-4 w-4" /> {activeCategoryLabel}
+            <Button
+              variant="outline"
+              size={categoryCount === 0 ? "icon" : "default"}
+              aria-label="Filter by category"
+              title="Filter by category"
+            >
+              <Filter className="h-4 w-4" />
+              {categoryCount > 0 && (
+                <span className="ml-1 text-xs font-medium tabular-nums">
+                  {categoryCount}
+                </span>
+              )}
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="start" className="w-56">
@@ -124,8 +118,18 @@ const ExpenseFilters = ({
         {hasGroupsUi && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="justify-start">
-                <Users className="h-4 w-4" /> {activeGroupLabel}
+              <Button
+                variant="outline"
+                size={groupCount === 0 ? "icon" : "default"}
+                aria-label="Filter by group"
+                title="Filter by group"
+              >
+                <Users className="h-4 w-4" />
+                {groupCount > 0 && (
+                  <span className="ml-1 text-xs font-medium tabular-nums">
+                    {groupCount}
+                  </span>
+                )}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start" className="w-56">
