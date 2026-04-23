@@ -1,6 +1,6 @@
 import type { DateRange } from "react-day-picker";
 import { describePeriod } from "@/lib/describePeriod";
-import type { Category, Expense } from "@/types/expense";
+import type { Category, Expense, Group } from "@/types/expense";
 
 export type PeriodKey =
   | "last30"
@@ -179,6 +179,47 @@ export const sumByCategory = (
       categoryId: c.id,
       name: c.name,
       color: c.color,
+      total,
+      pct: grand > 0 ? total / grand : 0,
+    });
+  }
+  rows.sort((a, b) => b.total - a.total);
+  return rows;
+};
+
+export interface GroupTotal {
+  groupId: string;
+  name: string;
+  color: string;
+  total: number;
+  pct: number;
+}
+
+/**
+ * Totals per group, sorted desc by total. Expenses without a groupId are
+ * ignored. `pct` is share of total spending *within grouped expenses* — i.e.
+ * ungrouped spending is excluded from the denominator.
+ */
+export const sumByGroup = (
+  expenses: Expense[],
+  groups: Group[]
+): GroupTotal[] => {
+  const byId = new Map<string, number>();
+  let grand = 0;
+  for (const e of expenses) {
+    if (!e.groupId) continue;
+    byId.set(e.groupId, (byId.get(e.groupId) ?? 0) + e.amount);
+    grand += e.amount;
+  }
+
+  const rows: GroupTotal[] = [];
+  for (const g of groups) {
+    const total = byId.get(g.id) ?? 0;
+    if (total === 0) continue;
+    rows.push({
+      groupId: g.id,
+      name: g.name,
+      color: g.color,
       total,
       pct: grand > 0 ? total / grand : 0,
     });

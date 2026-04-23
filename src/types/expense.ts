@@ -6,6 +6,7 @@ export interface Expense {
   amount: number;
   date: string;
   categoryId: string;
+  groupId?: string;
   recurringId?: string;
   refunded?: boolean;
   createdAt: Timestamp;
@@ -24,6 +25,17 @@ export interface Category {
 }
 
 export type CategoryInput = Omit<Category, "id" | "createdAt">;
+
+export interface Group {
+  id: string;
+  name: string;
+  color: string;
+  icon: string;
+  order: number;
+  createdAt: Timestamp;
+}
+
+export type GroupInput = Omit<Group, "id" | "createdAt">;
 
 export type RecurringFrequency = "weekly" | "monthly";
 

@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
-import type { Category, Expense } from "@/types/expense";
+import type { Category, Expense, Group } from "@/types/expense";
 import {
   computeKpis,
   filterByPeriod,
   resolvePeriod,
   sumByCategory,
+  sumByGroup,
   sumByMonth,
   sumByMonthAndCategory,
   topExpenses,
@@ -17,15 +18,26 @@ const mkExpense = (
   date: string,
   amount: number,
   categoryId: string,
-  name = "X"
+  name = "X",
+  groupId?: string
 ): Expense => ({
   id,
   name,
   amount,
   date,
   categoryId,
+  groupId,
   createdAt: ts,
   updatedAt: ts,
+});
+
+const grp = (id: string, name: string, color: string): Group => ({
+  id,
+  name,
+  color,
+  icon: "Package",
+  order: 0,
+  createdAt: ts,
 });
 
 const cat = (id: string, name: string, color: string): Category => ({
@@ -144,6 +156,43 @@ describe("sumByMonthAndCategory", () => {
       { month: "2026-03", a: 100, b: 0 },
       { month: "2026-04", a: 0, b: 40 },
     ]);
+  });
+});
+
+describe("sumByGroup", () => {
+  const groups = [
+    grp("g1", "Japan", "#111"),
+    grp("g2", "Birthday", "#222"),
+    grp("g3", "Empty", "#333"),
+  ];
+
+  it("aggregates and skips ungrouped expenses, sorted by total desc", () => {
+    const expenses = [
+      mkExpense("1", "2026-04-01", 30, "a", "a", "g1"),
+      mkExpense("2", "2026-04-02", 70, "a", "b", "g2"),
+      mkExpense("3", "2026-04-03", 20, "a", "c", "g1"),
+      mkExpense("4", "2026-04-04", 999, "a", "ungrouped"),
+    ];
+    const rows = sumByGroup(expenses, groups);
+    expect(rows).toEqual([
+      { groupId: "g2", name: "Birthday", color: "#222", total: 70, pct: 70 / 120 },
+      { groupId: "g1", name: "Japan", color: "#111", total: 50, pct: 50 / 120 },
+    ]);
+  });
+
+  it("pct denominator excludes ungrouped spending", () => {
+    const expenses = [
+      mkExpense("1", "2026-04-01", 100, "a", "a", "g1"),
+      mkExpense("2", "2026-04-02", 900, "a", "b"), // ungrouped, should not affect pct
+    ];
+    const rows = sumByGroup(expenses, groups);
+    expect(rows).toHaveLength(1);
+    expect(rows[0].pct).toBe(1);
+  });
+
+  it("empty inputs return []", () => {
+    expect(sumByGroup([], groups)).toEqual([]);
+    expect(sumByGroup([], [])).toEqual([]);
   });
 });
 
