@@ -115,26 +115,24 @@ const Expenses = ({ uid }: ExpensesProps) => {
         onDelete: (e) => setDeleting(e),
         onPromote: (e) => setPromoting(e),
         includeGroup: groups.length > 0,
-        headerFilters: {
-          categories,
-          groups,
-          categoryIds: filters.categoryIds,
-          groupIds: filters.groupIds,
-          onCategoryIdsChange: (categoryIds) =>
-            setFilters((f) => ({ ...f, categoryIds })),
-          onGroupIdsChange: (groupIds) =>
-            setFilters((f) => ({ ...f, groupIds })),
-        },
       }),
-    [
-      uid,
-      byId,
-      groupsById,
-      categories,
-      groups,
-      filters.categoryIds,
-      filters.groupIds,
-    ]
+    [uid, byId, groupsById, groups.length]
+  );
+
+  const tableMeta = useMemo(
+    () => ({
+      headerFilters: {
+        categories,
+        groups,
+        categoryIds: filters.categoryIds,
+        groupIds: filters.groupIds,
+        onCategoryIdsChange: (categoryIds: string[]) =>
+          setFilters((f) => ({ ...f, categoryIds })),
+        onGroupIdsChange: (groupIds: string[]) =>
+          setFilters((f) => ({ ...f, groupIds })),
+      },
+    }),
+    [categories, groups, filters.categoryIds, filters.groupIds]
   );
 
   const handleCreate = async (values: ExpenseFormResult) => {
@@ -353,6 +351,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
           onRowSelectionChange={setRowSelection}
           getRowId={(row) => row.id}
           renderToolbar={renderToolbar}
+          meta={tableMeta}
         />
       )}
 

@@ -45,6 +45,10 @@ export interface ColumnHeaderFilters {
   onGroupIdsChange: (ids: string[]) => void;
 }
 
+export interface ExpenseTableMeta {
+  headerFilters?: ColumnHeaderFilters;
+}
+
 export interface BuildExpenseColumnsOptions {
   uid: string;
   byId: Map<string, Category>;
@@ -54,7 +58,6 @@ export interface BuildExpenseColumnsOptions {
   onPromote?: (expense: Expense) => void;
   includeSelect?: boolean;
   includeGroup?: boolean;
-  headerFilters?: ColumnHeaderFilters;
 }
 
 export const buildExpenseColumns = ({
@@ -66,7 +69,6 @@ export const buildExpenseColumns = ({
   onPromote,
   includeSelect = true,
   includeGroup = false,
-  headerFilters,
 }: BuildExpenseColumnsOptions): ColumnDef<Expense>[] => {
   const columns: ColumnDef<Expense>[] = [];
 
@@ -166,20 +168,23 @@ export const buildExpenseColumns = ({
 
   columns.push({
     id: "category",
-    header: headerFilters
-      ? () => (
-          <ColumnFilterDropdown
-            label="Category"
-            options={headerFilters.categories.map((c) => ({
-              value: c.id,
-              label: c.name,
-            }))}
-            values={headerFilters.categoryIds}
-            onChange={headerFilters.onCategoryIdsChange}
-            emptyMessage="No categories yet"
-          />
-        )
-      : "Category",
+    header: ({ table }) => {
+      const meta = table.options.meta as ExpenseTableMeta | undefined;
+      const f = meta?.headerFilters;
+      if (!f) return <span>Category</span>;
+      return (
+        <ColumnFilterDropdown
+          label="Category"
+          options={f.categories.map((c) => ({
+            value: c.id,
+            label: c.name,
+          }))}
+          values={f.categoryIds}
+          onChange={f.onCategoryIdsChange}
+          emptyMessage="No categories yet"
+        />
+      );
+    },
     cell: ({ row }) => (
       <CategoryBadge category={byId.get(row.original.categoryId)} />
     ),
@@ -190,27 +195,30 @@ export const buildExpenseColumns = ({
   if (includeGroup && groupsById) {
     columns.push({
       id: "group",
-      header: headerFilters
-        ? () => (
-            <ColumnFilterDropdown
-              label="Group"
-              options={[
-                {
-                  value: NO_GROUP_FILTER,
-                  label: "No group",
-                  italic: true,
-                },
-                ...headerFilters.groups.map((g) => ({
-                  value: g.id,
-                  label: g.name,
-                })),
-              ]}
-              values={headerFilters.groupIds}
-              onChange={headerFilters.onGroupIdsChange}
-              emptyMessage="No groups yet"
-            />
-          )
-        : "Group",
+      header: ({ table }) => {
+        const meta = table.options.meta as ExpenseTableMeta | undefined;
+        const f = meta?.headerFilters;
+        if (!f) return <span>Group</span>;
+        return (
+          <ColumnFilterDropdown
+            label="Group"
+            options={[
+              {
+                value: NO_GROUP_FILTER,
+                label: "No group",
+                italic: true,
+              },
+              ...f.groups.map((g) => ({
+                value: g.id,
+                label: g.name,
+              })),
+            ]}
+            values={f.groupIds}
+            onChange={f.onGroupIdsChange}
+            emptyMessage="No groups yet"
+          />
+        );
+      },
       cell: ({ row }) => {
         const g = row.original.groupId
           ? groupsById.get(row.original.groupId)

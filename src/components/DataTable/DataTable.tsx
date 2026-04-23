@@ -38,6 +38,7 @@ interface DataTableProps<TData, TValue> {
   onRowSelectionChange?: (next: RowSelectionState) => void;
   getRowId?: (row: TData, index: number) => string;
   renderToolbar?: (table: TanstackTable<TData>) => React.ReactNode;
+  meta?: Record<string, unknown>;
 }
 
 export function DataTable<TData, TValue>({
@@ -48,6 +49,7 @@ export function DataTable<TData, TValue>({
   onRowSelectionChange,
   getRowId,
   renderToolbar,
+  meta,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
@@ -77,6 +79,7 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     enableRowSelection: !!onRowSelectionChange,
     getRowId,
+    meta,
   });
 
   const filteredRowCount = table.getFilteredRowModel().rows.length;

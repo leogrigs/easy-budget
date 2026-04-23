@@ -46,7 +46,7 @@ const ColumnFilterDropdown = ({
           variant="ghost"
           size="sm"
           className={cn(
-            "-ml-2 h-7 gap-1 font-medium",
+            "-ml-2 h-7 gap-2 font-medium",
             active && "text-primary"
           )}
           aria-label={`Filter by ${label.toLowerCase()}`}
