@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import CategoryBadge from "../../components/CategoryBadge";
+import ColumnFilterDropdown from "../../components/ColumnFilterDropdown";
+import { NO_GROUP_FILTER } from "../../components/ExpenseFilters";
 import { Button } from "../../components/ui/button";
 import { Checkbox } from "../../components/ui/checkbox";
 import {
@@ -34,6 +36,15 @@ const compareByCategoryName =
     return an.localeCompare(bn);
   };
 
+export interface ColumnHeaderFilters {
+  categories: Category[];
+  groups: Group[];
+  categoryIds: string[];
+  groupIds: string[];
+  onCategoryIdsChange: (ids: string[]) => void;
+  onGroupIdsChange: (ids: string[]) => void;
+}
+
 export interface BuildExpenseColumnsOptions {
   uid: string;
   byId: Map<string, Category>;
@@ -43,6 +54,7 @@ export interface BuildExpenseColumnsOptions {
   onPromote?: (expense: Expense) => void;
   includeSelect?: boolean;
   includeGroup?: boolean;
+  headerFilters?: ColumnHeaderFilters;
 }
 
 export const buildExpenseColumns = ({
@@ -54,6 +66,7 @@ export const buildExpenseColumns = ({
   onPromote,
   includeSelect = true,
   includeGroup = false,
+  headerFilters,
 }: BuildExpenseColumnsOptions): ColumnDef<Expense>[] => {
   const columns: ColumnDef<Expense>[] = [];
 
@@ -153,7 +166,20 @@ export const buildExpenseColumns = ({
 
   columns.push({
     id: "category",
-    header: "Category",
+    header: headerFilters
+      ? () => (
+          <ColumnFilterDropdown
+            label="Category"
+            options={headerFilters.categories.map((c) => ({
+              value: c.id,
+              label: c.name,
+            }))}
+            values={headerFilters.categoryIds}
+            onChange={headerFilters.onCategoryIdsChange}
+            emptyMessage="No categories yet"
+          />
+        )
+      : "Category",
     cell: ({ row }) => (
       <CategoryBadge category={byId.get(row.original.categoryId)} />
     ),
@@ -164,7 +190,27 @@ export const buildExpenseColumns = ({
   if (includeGroup && groupsById) {
     columns.push({
       id: "group",
-      header: "Group",
+      header: headerFilters
+        ? () => (
+            <ColumnFilterDropdown
+              label="Group"
+              options={[
+                {
+                  value: NO_GROUP_FILTER,
+                  label: "No group",
+                  italic: true,
+                },
+                ...headerFilters.groups.map((g) => ({
+                  value: g.id,
+                  label: g.name,
+                })),
+              ]}
+              values={headerFilters.groupIds}
+              onChange={headerFilters.onGroupIdsChange}
+              emptyMessage="No groups yet"
+            />
+          )
+        : "Group",
       cell: ({ row }) => {
         const g = row.original.groupId
           ? groupsById.get(row.original.groupId)

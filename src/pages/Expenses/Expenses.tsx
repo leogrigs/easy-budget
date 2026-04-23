@@ -10,6 +10,7 @@ import {
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import BulkChangeCategoryDialog from "../../components/BulkChangeCategoryDialog";
+import BulkChangeGroupDialog from "../../components/BulkChangeGroupDialog";
 import { DataTable } from "../../components/DataTable";
 import SelectionActionBar from "../../components/SelectionActionBar";
 import ExpenseFilters, {
@@ -42,6 +43,7 @@ import {
   bulkAddExpenses,
   bulkDeleteExpenses,
   bulkUpdateCategory,
+  bulkUpdateGroup,
   deleteExpense,
   updateExpense,
 } from "../../services/expenses";
@@ -77,6 +79,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
   const [promoting, setPromoting] = useState<Expense | null>(null);
   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
   const [bulkCategoryOpen, setBulkCategoryOpen] = useState(false);
+  const [bulkGroupOpen, setBulkGroupOpen] = useState(false);
   const [importOpen, setImportOpen] = useState(false);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
@@ -112,8 +115,26 @@ const Expenses = ({ uid }: ExpensesProps) => {
         onDelete: (e) => setDeleting(e),
         onPromote: (e) => setPromoting(e),
         includeGroup: groups.length > 0,
+        headerFilters: {
+          categories,
+          groups,
+          categoryIds: filters.categoryIds,
+          groupIds: filters.groupIds,
+          onCategoryIdsChange: (categoryIds) =>
+            setFilters((f) => ({ ...f, categoryIds })),
+          onGroupIdsChange: (groupIds) =>
+            setFilters((f) => ({ ...f, groupIds })),
+        },
       }),
-    [uid, byId, groupsById, groups.length]
+    [
+      uid,
+      byId,
+      groupsById,
+      categories,
+      groups,
+      filters.categoryIds,
+      filters.groupIds,
+    ]
   );
 
   const handleCreate = async (values: ExpenseFormResult) => {
@@ -203,6 +224,16 @@ const Expenses = ({ uid }: ExpensesProps) => {
     setRowSelection({});
   };
 
+  const handleBulkChangeGroup = async (groupId: string | null) => {
+    await bulkUpdateGroup(uid, selectedIds, groupId);
+    toast.success(
+      groupId === null
+        ? `Cleared group on ${selectedIds.length} expense${selectedIds.length === 1 ? "" : "s"}`
+        : `Moved ${selectedIds.length} expense${selectedIds.length === 1 ? "" : "s"} to a new group`
+    );
+    setRowSelection({});
+  };
+
   const handleExport = () => {
     const source =
       selectedIds.length > 0
@@ -241,12 +272,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
   };
 
   const renderToolbar = () => (
-    <ExpenseFilters
-      categories={categories}
-      groups={groups}
-      value={filters}
-      onChange={setFilters}
-    />
+    <ExpenseFilters value={filters} onChange={setFilters} />
   );
 
   return (
@@ -409,6 +435,14 @@ const Expenses = ({ uid }: ExpensesProps) => {
         onConfirm={handleBulkChangeCategory}
       />
 
+      <BulkChangeGroupDialog
+        open={bulkGroupOpen}
+        count={selectedIds.length}
+        groups={groups}
+        onOpenChange={setBulkGroupOpen}
+        onConfirm={handleBulkChangeGroup}
+      />
+
       <ImportDialog
         open={importOpen}
         categories={categories}
@@ -437,6 +471,16 @@ const Expenses = ({ uid }: ExpensesProps) => {
         >
           Change category
         </Button>
+        {groups.length > 0 && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => setBulkGroupOpen(true)}
+            className="rounded-full"
+          >
+            Change group
+          </Button>
+        )}
         <Button
           variant="ghost"
           size="sm"
