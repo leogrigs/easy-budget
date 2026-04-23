@@ -1,17 +1,8 @@
-import {
-  ColumnDef,
-  RowSelectionState,
-  SortingFn,
-} from "@tanstack/react-table";
+import { RowSelectionState } from "@tanstack/react-table";
 import { endOfMonth, startOfMonth } from "date-fns";
 import {
-  ArrowUpDown,
   Download,
-  MoreHorizontal,
-  Pencil,
   Plus,
-  Repeat,
-  RotateCcw,
   Trash2,
   Upload,
   X,
@@ -19,7 +10,6 @@ import {
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import BulkChangeCategoryDialog from "../../components/BulkChangeCategoryDialog";
-import CategoryBadge from "../../components/CategoryBadge";
 import { DataTable } from "../../components/DataTable";
 import SelectionActionBar from "../../components/SelectionActionBar";
 import ExpenseFilters, {
@@ -42,17 +32,10 @@ import {
   AlertDialogTitle,
 } from "../../components/ui/alert-dialog";
 import { Button } from "../../components/ui/button";
-import { Checkbox } from "../../components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu";
 import { Skeleton } from "../../components/ui/skeleton";
 import { useCategories } from "../../hooks/useCategories";
 import { useExpenses } from "../../hooks/useExpenses";
+import { useGroups } from "../../hooks/useGroups";
 import { addCategory } from "../../services/categories";
 import {
   addExpense,
@@ -66,33 +49,24 @@ import { addRecurring } from "../../services/recurring";
 import type { Expense } from "../../types/expense";
 import { downloadExpenseCsv } from "../../features/export/exportCsv";
 import ImportDialog from "../../features/import/ImportDialog";
+import { buildExpenseColumns } from "./columns";
+import { applyExpenseFilters } from "./filters";
 
 interface ExpensesProps {
   uid: string;
 }
 
-const currency = new Intl.NumberFormat("pt-BR", {
-  style: "currency",
-  currency: "BRL",
-});
-
-const compareByCategoryName =
-  (byId: Map<string, { name: string }>): SortingFn<Expense> =>
-  (a, b) => {
-    const an = byId.get(a.original.categoryId)?.name ?? "";
-    const bn = byId.get(b.original.categoryId)?.name ?? "";
-    return an.localeCompare(bn);
-  };
-
 const Expenses = ({ uid }: ExpensesProps) => {
   const { expenses, loading } = useExpenses(uid);
   const { categories, byId } = useCategories(uid);
+  const { groups, byId: groupsById } = useGroups(uid);
 
   const [filters, setFilters] = useState<ExpenseFiltersState>(() => {
     const now = new Date();
     return {
       search: "",
       categoryIds: [],
+      groupIds: [],
       dateRange: { from: startOfMonth(now), to: endOfMonth(now) },
     };
   });
@@ -106,35 +80,10 @@ const Expenses = ({ uid }: ExpensesProps) => {
   const [importOpen, setImportOpen] = useState(false);
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
 
-  const filtered = useMemo(() => {
-    const search = filters.search.trim().toLowerCase();
-    const fromIso = filters.dateRange?.from
-      ? toIsoDate(filters.dateRange.from)
-      : undefined;
-    const toIso = filters.dateRange?.to
-      ? toIsoDate(filters.dateRange.to)
-      : filters.dateRange?.from
-        ? toIsoDate(filters.dateRange.from)
-        : undefined;
-
-    return expenses.filter((e) => {
-      if (search) {
-        const category = byId.get(e.categoryId)?.name?.toLowerCase() ?? "";
-        if (
-          !e.name.toLowerCase().includes(search) &&
-          !category.includes(search)
-        ) {
-          return false;
-        }
-      }
-      if (filters.categoryIds.length > 0) {
-        if (!filters.categoryIds.includes(e.categoryId)) return false;
-      }
-      if (fromIso && e.date < fromIso) return false;
-      if (toIso && e.date > toIso) return false;
-      return true;
-    });
-  }, [expenses, byId, filters]);
+  const filtered = useMemo(
+    () => applyExpenseFilters(expenses, byId, filters),
+    [expenses, byId, filters]
+  );
 
   const totals = useMemo(() => {
     const nonRefunded = filtered.filter((e) => !e.refunded);
@@ -150,185 +99,21 @@ const Expenses = ({ uid }: ExpensesProps) => {
     [rowSelection]
   );
 
-  const columns = useMemo<ColumnDef<Expense>[]>(
-    () => [
-      {
-        id: "select",
-        header: ({ table }) => (
-          <Checkbox
-            checked={
-              table.getIsAllPageRowsSelected() ||
-              (table.getIsSomePageRowsSelected() && "indeterminate")
-            }
-            onCheckedChange={(value) =>
-              table.toggleAllPageRowsSelected(!!value)
-            }
-            aria-label="Select all"
-          />
-        ),
-        cell: ({ row }) => (
-          <Checkbox
-            checked={row.getIsSelected()}
-            onCheckedChange={(value) => row.toggleSelected(!!value)}
-            aria-label="Select row"
-          />
-        ),
-        enableSorting: false,
-      },
-      {
-        accessorKey: "name",
-        header: ({ column }) => (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="-ml-3"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Name <ArrowUpDown className="ml-1 h-3.5 w-3.5" />
-          </Button>
-        ),
-        cell: ({ row }) => (
-          <span className="inline-flex items-center gap-2">
-            <span
-              className={
-                row.original.refunded
-                  ? "font-medium line-through text-muted-foreground"
-                  : "font-medium"
-              }
-            >
-              {row.original.name}
-            </span>
-            {row.original.recurringId && (
-              <span
-                className="inline-flex items-center text-muted-foreground"
-                title="Recurring"
-                aria-label="Recurring"
-              >
-                <Repeat className="h-3.5 w-3.5" />
-              </span>
-            )}
-            {row.original.refunded && (
-              <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
-                Refunded
-              </span>
-            )}
-          </span>
-        ),
-      },
-      {
-        accessorKey: "amount",
-        header: ({ column }) => (
-          <div className="flex justify-end">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="-mr-3"
-              onClick={() =>
-                column.toggleSorting(column.getIsSorted() === "asc")
-              }
-            >
-              Amount <ArrowUpDown className="ml-1 h-3.5 w-3.5" />
-            </Button>
-          </div>
-        ),
-        cell: ({ row }) => (
-          <div
-            className={
-              row.original.refunded
-                ? "text-right font-medium tabular-nums line-through text-muted-foreground"
-                : "text-right font-medium tabular-nums"
-            }
-          >
-            {currency.format(row.original.amount)}
-          </div>
-        ),
-      },
-      {
-        id: "category",
-        header: "Category",
-        cell: ({ row }) => (
-          <CategoryBadge category={byId.get(row.original.categoryId)} />
-        ),
-        sortingFn: compareByCategoryName(byId),
-        enableSorting: true,
-      },
-      {
-        accessorKey: "date",
-        header: ({ column }) => (
-          <Button
-            variant="ghost"
-            size="sm"
-            className="-ml-3"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Date <ArrowUpDown className="ml-1 h-3.5 w-3.5" />
-          </Button>
-        ),
-        cell: ({ row }) => (
-          <span className="text-muted-foreground">
-            {new Date(row.original.date).toLocaleDateString()}
-          </span>
-        ),
-      },
-      {
-        id: "actions",
-        header: () => <span className="sr-only">Actions</span>,
-        cell: ({ row }) => (
-          <div className="flex justify-end">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Row actions">
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  onSelect={() => {
-                    setEditing(row.original);
-                    setFormOpen(true);
-                  }}
-                >
-                  <Pencil className="h-4 w-4" /> Edit
-                </DropdownMenuItem>
-                {!row.original.recurringId && (
-                  <DropdownMenuItem
-                    onSelect={() => setPromoting(row.original)}
-                  >
-                    <Repeat className="h-4 w-4" /> Make recurring
-                  </DropdownMenuItem>
-                )}
-                <DropdownMenuItem
-                  onSelect={async () => {
-                    const next = !row.original.refunded;
-                    await updateExpense(uid, row.original.id, {
-                      refunded: next,
-                    });
-                    toast.success(
-                      next
-                        ? `Marked "${row.original.name}" as refunded`
-                        : `Unmarked "${row.original.name}"`
-                    );
-                  }}
-                >
-                  <RotateCcw className="h-4 w-4" />{" "}
-                  {row.original.refunded
-                    ? "Unmark refunded"
-                    : "Mark as refunded"}
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="text-destructive"
-                  onSelect={() => setDeleting(row.original)}
-                >
-                  <Trash2 className="h-4 w-4" /> Delete
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        ),
-      },
-    ],
-    [byId, uid]
+  const columns = useMemo(
+    () =>
+      buildExpenseColumns({
+        uid,
+        byId,
+        groupsById,
+        onEdit: (e) => {
+          setEditing(e);
+          setFormOpen(true);
+        },
+        onDelete: (e) => setDeleting(e),
+        onPromote: (e) => setPromoting(e),
+        includeGroup: groups.length > 0,
+      }),
+    [uid, byId, groupsById, groups.length]
   );
 
   const handleCreate = async (values: ExpenseFormResult) => {
@@ -346,6 +131,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
         amount: values.amount,
         date: values.date,
         categoryId: values.categoryId,
+        groupId: values.groupId,
         recurringId,
       });
       toast.success(`Added recurring "${values.name}"`);
@@ -356,17 +142,21 @@ const Expenses = ({ uid }: ExpensesProps) => {
       amount: values.amount,
       date: values.date,
       categoryId: values.categoryId,
+      groupId: values.groupId,
     });
     toast.success(`Added "${values.name}"`);
   };
 
   const handleUpdate = async (values: ExpenseFormResult) => {
     if (!editing) return;
+    const nextGroupId =
+      values.groupId ?? (editing.groupId ? null : undefined);
     await updateExpense(uid, editing.id, {
       name: values.name,
       amount: values.amount,
       date: values.date,
       categoryId: values.categoryId,
+      groupId: nextGroupId,
     });
     toast.success(`Updated "${values.name}"`);
     setEditing(null);
@@ -453,6 +243,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
   const renderToolbar = () => (
     <ExpenseFilters
       categories={categories}
+      groups={groups}
       value={filters}
       onChange={setFilters}
     />
@@ -544,6 +335,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
         title={editing ? "Edit expense" : "New expense"}
         submitLabel={editing ? "Save" : "Add"}
         categories={categories}
+        groups={groups}
         allowRecurring={!editing}
         initialValue={
           editing
@@ -552,6 +344,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
                 amount: editing.amount,
                 date: editing.date,
                 categoryId: editing.categoryId,
+                groupId: editing.groupId,
               }
             : undefined
         }
@@ -665,13 +458,6 @@ const Expenses = ({ uid }: ExpensesProps) => {
       </SelectionActionBar>
     </div>
   );
-};
-
-const toIsoDate = (d: Date) => {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
-  return `${y}-${m}-${day}`;
 };
 
 export default Expenses;

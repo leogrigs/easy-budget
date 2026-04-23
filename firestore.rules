@@ -44,24 +44,28 @@ service cloud.firestore {
             ['name', 'amount', 'date', 'categoryId', 'createdAt', 'updatedAt']
           )
           && request.resource.data.keys().hasOnly(
-            ['name', 'amount', 'date', 'categoryId', 'recurringId', 'refunded',
-             'createdAt', 'updatedAt']
+            ['name', 'amount', 'date', 'categoryId', 'groupId', 'recurringId',
+             'refunded', 'createdAt', 'updatedAt']
           )
           && isNonEmptyString(request.resource.data.name, 120)
           && isPositiveAmount(request.resource.data.amount)
           && isIsoDate(request.resource.data.date)
           && isNonEmptyString(request.resource.data.categoryId, 64)
+          && (!('groupId' in request.resource.data)
+              || isNonEmptyString(request.resource.data.groupId, 64))
           && (!('refunded' in request.resource.data)
               || request.resource.data.refunded is bool);
 
         allow update: if isOwner(userId)
           && request.resource.data.diff(resource.data).affectedKeys()
-              .hasOnly(['name', 'amount', 'date', 'categoryId',
+              .hasOnly(['name', 'amount', 'date', 'categoryId', 'groupId',
                         'recurringId', 'refunded', 'updatedAt'])
           && isNonEmptyString(request.resource.data.name, 120)
           && isPositiveAmount(request.resource.data.amount)
           && isIsoDate(request.resource.data.date)
           && isNonEmptyString(request.resource.data.categoryId, 64)
+          && (!('groupId' in request.resource.data)
+              || isNonEmptyString(request.resource.data.groupId, 64))
           && (!('refunded' in request.resource.data)
               || request.resource.data.refunded is bool);
 
@@ -79,6 +83,30 @@ service cloud.firestore {
             ['name', 'color', 'icon', 'order', 'createdAt']
           )
           && isNonEmptyString(request.resource.data.name, 64)
+          && request.resource.data.color is string
+          && request.resource.data.color.matches('^#[0-9a-fA-F]{6}$')
+          && isNonEmptyString(request.resource.data.icon, 64)
+          && request.resource.data.order is int
+          && request.resource.data.order >= 0;
+
+        allow update: if isOwner(userId)
+          && request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(['name', 'color', 'icon', 'order']);
+
+        allow delete: if isOwner(userId);
+      }
+
+      match /groups/{groupId} {
+        allow read: if isOwner(userId);
+
+        allow create: if isOwner(userId)
+          && request.resource.data.keys().hasAll(
+            ['name', 'color', 'icon', 'order', 'createdAt']
+          )
+          && request.resource.data.keys().hasOnly(
+            ['name', 'color', 'icon', 'order', 'createdAt']
+          )
+          && isNonEmptyString(request.resource.data.name, 80)
           && request.resource.data.color is string
           && request.resource.data.color.matches('^#[0-9a-fA-F]{6}$')
           && isNonEmptyString(request.resource.data.icon, 64)

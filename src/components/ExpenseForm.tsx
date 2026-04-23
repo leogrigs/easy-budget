@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Switch } from "./ui/switch";
-import type { Category, RecurringFrequency } from "../types/expense";
+import type { Category, Group, RecurringFrequency } from "../types/expense";
 
 const schema = z
   .object({
@@ -33,6 +33,7 @@ const schema = z
       .positive("Amount must be greater than zero"),
     date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Pick a date"),
     categoryId: z.string().min(1, "Pick a category"),
+    groupId: z.string().optional(),
     recurring: z.boolean(),
     frequency: z.enum(["weekly", "monthly"]).optional(),
     endDate: z
@@ -65,6 +66,7 @@ export interface ExpenseFormResult {
   amount: number;
   date: string;
   categoryId: string;
+  groupId?: string;
   recurring?: {
     frequency: RecurringFrequency;
     endDate?: string;
@@ -76,11 +78,13 @@ interface ExpenseFormProps {
   title: string;
   submitLabel: string;
   categories: Category[];
+  groups?: Group[];
   initialValue?: {
     name: string;
     amount: number;
     date: string;
     categoryId: string;
+    groupId?: string;
   };
   allowRecurring?: boolean;
   onSubmit: (values: ExpenseFormResult) => Promise<void> | void;
@@ -100,6 +104,7 @@ const ExpenseForm = ({
   title,
   submitLabel,
   categories,
+  groups,
   initialValue,
   allowRecurring = true,
   onSubmit,
@@ -110,6 +115,7 @@ const ExpenseForm = ({
     amount: 0,
     date: today(),
     categoryId: categories[0]?.id ?? "",
+    groupId: "",
     recurring: false,
     frequency: "monthly",
     endDate: "",
@@ -128,7 +134,9 @@ const ExpenseForm = ({
   }, [open, initialValue, categories]);
 
   const categoryId = form.watch("categoryId");
+  const groupId = form.watch("groupId");
   const recurring = form.watch("recurring");
+  const hasGroups = !!groups && groups.length > 0;
 
   const handleSubmit = form.handleSubmit(async (values) => {
     const result: ExpenseFormResult = {
@@ -136,6 +144,7 @@ const ExpenseForm = ({
       amount: values.amount,
       date: values.date,
       categoryId: values.categoryId,
+      groupId: values.groupId ? values.groupId : undefined,
     };
     if (values.recurring && values.frequency) {
       result.recurring = {
@@ -226,6 +235,32 @@ const ExpenseForm = ({
               </p>
             )}
           </div>
+
+          {hasGroups && (
+            <div className="space-y-2">
+              <Label>Group (optional)</Label>
+              <Select
+                value={groupId || "none"}
+                onValueChange={(v) =>
+                  form.setValue("groupId", v === "none" ? "" : v, {
+                    shouldValidate: true,
+                  })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="No group" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">No group</SelectItem>
+                  {groups!.map((g) => (
+                    <SelectItem key={g.id} value={g.id}>
+                      {g.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           {allowRecurring && (
             <div className="rounded-md border border-border p-3 space-y-3">

@@ -1,4 +1,8 @@
 import { initializeApp } from "firebase/app";
+import {
+  initializeAppCheck,
+  ReCaptchaEnterpriseProvider,
+} from "firebase/app-check";
 import { getAI, getGenerativeModel, GoogleAIBackend } from "firebase/ai";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
@@ -13,6 +17,25 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
+if (import.meta.env.MODE !== "test") {
+  const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+  if (siteKey) {
+    if (import.meta.env.DEV) {
+      (
+        self as unknown as { FIREBASE_APPCHECK_DEBUG_TOKEN?: boolean }
+      ).FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+    }
+    initializeAppCheck(app, {
+      provider: new ReCaptchaEnterpriseProvider(siteKey),
+      isTokenAutoRefreshEnabled: true,
+    });
+  } else {
+    console.warn(
+      "[firebase] VITE_RECAPTCHA_SITE_KEY is missing; App Check disabled. See .env.example."
+    );
+  }
+}
 
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();

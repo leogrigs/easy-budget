@@ -1,4 +1,4 @@
-import { CalendarIcon, Filter, Search, X } from "lucide-react";
+import { CalendarIcon, Filter, Search, Users, X } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import { Button } from "./ui/button";
 import { Calendar } from "./ui/calendar";
@@ -13,22 +13,27 @@ import {
 import { Input } from "./ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import MonthSwitcher from "./MonthSwitcher";
-import type { Category } from "../types/expense";
+import type { Category, Group } from "../types/expense";
+
+export const NO_GROUP_FILTER = "__none__";
 
 export interface ExpenseFiltersState {
   search: string;
   categoryIds: string[];
+  groupIds: string[];
   dateRange: DateRange | undefined;
 }
 
 interface ExpenseFiltersProps {
   categories: Category[];
+  groups?: Group[];
   value: ExpenseFiltersState;
   onChange: (next: ExpenseFiltersState) => void;
 }
 
 const ExpenseFilters = ({
   categories,
+  groups,
   value,
   onChange,
 }: ExpenseFiltersProps) => {
@@ -39,6 +44,13 @@ const ExpenseFilters = ({
     onChange({ ...value, categoryIds: next });
   };
 
+  const toggleGroup = (id: string, checked: boolean) => {
+    const next = checked
+      ? [...value.groupIds, id]
+      : value.groupIds.filter((x) => x !== id);
+    onChange({ ...value, groupIds: next });
+  };
+
   const activeCategoryLabel =
     value.categoryIds.length === 0
       ? "All categories"
@@ -47,9 +59,23 @@ const ExpenseFilters = ({
           "1 category")
         : `${value.categoryIds.length} categories`;
 
+  const groupNameFor = (id: string) => {
+    if (id === NO_GROUP_FILTER) return "No group";
+    return groups?.find((g) => g.id === id)?.name ?? "1 group";
+  };
+  const activeGroupLabel =
+    value.groupIds.length === 0
+      ? "All groups"
+      : value.groupIds.length === 1
+        ? groupNameFor(value.groupIds[0])
+        : `${value.groupIds.length} groups`;
+
+  const hasGroupsUi = !!groups;
+
   const hasActive =
     value.search.length > 0 ||
     value.categoryIds.length > 0 ||
+    value.groupIds.length > 0 ||
     !!value.dateRange;
 
   return (
@@ -95,6 +121,47 @@ const ExpenseFilters = ({
           </DropdownMenuContent>
         </DropdownMenu>
 
+        {hasGroupsUi && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="justify-start">
+                <Users className="h-4 w-4" /> {activeGroupLabel}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56">
+              <DropdownMenuLabel>Filter by group</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuCheckboxItem
+                checked={value.groupIds.includes(NO_GROUP_FILTER)}
+                onSelect={(e) => e.preventDefault()}
+                onCheckedChange={(checked) =>
+                  toggleGroup(NO_GROUP_FILTER, checked === true)
+                }
+              >
+                <span className="italic text-muted-foreground">No group</span>
+              </DropdownMenuCheckboxItem>
+              {groups!.length === 0 ? (
+                <div className="px-2 py-1.5 text-sm text-muted-foreground">
+                  No groups yet
+                </div>
+              ) : (
+                groups!.map((group) => (
+                  <DropdownMenuCheckboxItem
+                    key={group.id}
+                    checked={value.groupIds.includes(group.id)}
+                    onSelect={(e) => e.preventDefault()}
+                    onCheckedChange={(checked) =>
+                      toggleGroup(group.id, checked === true)
+                    }
+                  >
+                    {group.name}
+                  </DropdownMenuCheckboxItem>
+                ))
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
+
         <MonthSwitcher
           value={value.dateRange}
           onChange={(range) => onChange({ ...value, dateRange: range })}
@@ -121,7 +188,12 @@ const ExpenseFilters = ({
             variant="ghost"
             size="sm"
             onClick={() =>
-              onChange({ search: "", categoryIds: [], dateRange: undefined })
+              onChange({
+                search: "",
+                categoryIds: [],
+                groupIds: [],
+                dateRange: undefined,
+              })
             }
           >
             <X className="h-4 w-4" /> Clear

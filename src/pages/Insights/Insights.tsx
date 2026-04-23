@@ -27,18 +27,21 @@ import { Skeleton } from "@/components/ui/skeleton";
 import MonthSwitcher from "@/components/MonthSwitcher";
 import { useCategories } from "@/hooks/useCategories";
 import { useExpenses } from "@/hooks/useExpenses";
+import { useGroups } from "@/hooks/useGroups";
 import { describePeriod } from "@/lib/describePeriod";
 import {
   computeKpis,
   filterByPeriod,
   periodFromDateRange,
   sumByCategory,
+  sumByGroup,
   sumByMonth,
   sumByMonthAndCategory,
   topExpenses,
 } from "@/features/insights/aggregate";
 import CategoryBreakdownChart from "@/features/insights/CategoryBreakdownChart";
 import CategoryTrendChart from "@/features/insights/CategoryTrendChart";
+import GroupBreakdownChart from "@/features/insights/GroupBreakdownChart";
 import KpiCard from "@/features/insights/KpiCard";
 import MonthlyTrendChart from "@/features/insights/MonthlyTrendChart";
 import TopExpensesList from "@/features/insights/TopExpensesList";
@@ -51,7 +54,8 @@ interface InsightsProps {
 const Insights = ({ uid }: InsightsProps) => {
   const { expenses: rawExpenses, loading: loadingExpenses } = useExpenses(uid);
   const { categories, byId, loading: loadingCategories } = useCategories(uid);
-  const loading = loadingExpenses || loadingCategories;
+  const { groups, loading: loadingGroups } = useGroups(uid);
+  const loading = loadingExpenses || loadingCategories || loadingGroups;
 
   const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
     const now = new Date();
@@ -83,6 +87,10 @@ const Insights = ({ uid }: InsightsProps) => {
   const byCategory = useMemo(
     () => sumByCategory(periodExpenses, categories),
     [periodExpenses, categories]
+  );
+  const byGroup = useMemo(
+    () => sumByGroup(periodExpenses, groups),
+    [periodExpenses, groups]
   );
   const byMonthCategory = useMemo(
     () => sumByMonthAndCategory(periodExpenses, categories, period),
@@ -253,6 +261,23 @@ const Insights = ({ uid }: InsightsProps) => {
           </CardContent>
         </Card>
       </div>
+
+      {groups.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>By group</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {byGroup.length > 0 ? (
+              <GroupBreakdownChart data={byGroup} />
+            ) : (
+              <p className="text-sm text-muted-foreground py-8 text-center">
+                No expenses are assigned to a group in this period.
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader>

@@ -1,4 +1,4 @@
-import { BarChart3, Folder, Receipt, Settings } from "lucide-react";
+import { BarChart3, Folder, Receipt, Settings, Users } from "lucide-react";
 import { NavLink } from "react-router-dom";
 import Logo from "./Logo";
 import { cn } from "../lib/utils";
@@ -7,6 +7,7 @@ const NAV = [
   { to: "/expenses", label: "Expenses", icon: Receipt },
   { to: "/insights", label: "Insights", icon: BarChart3 },
   { to: "/categories", label: "Categories", icon: Folder },
+  { to: "/groups", label: "Groups", icon: Users },
   { to: "/settings", label: "Settings", icon: Settings },
 ];
 

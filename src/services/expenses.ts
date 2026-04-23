@@ -2,6 +2,7 @@ import {
   addDoc,
   collection,
   deleteDoc,
+  deleteField,
   doc,
   getDocs,
   onSnapshot,
@@ -26,6 +27,7 @@ const mapDoc = (id: string, data: Record<string, unknown>): Expense => ({
   amount: data.amount as number,
   date: data.date as string,
   categoryId: data.categoryId as string,
+  groupId: (data.groupId as string | undefined) ?? undefined,
   recurringId: (data.recurringId as string | undefined) ?? undefined,
   refunded: (data.refunded as boolean | undefined) ?? false,
   createdAt: data.createdAt as Expense["createdAt"],
@@ -57,6 +59,23 @@ const stripUndefined = <T extends Record<string, unknown>>(obj: T): T => {
   return out as T;
 };
 
+// Patch normalizer: `null` → deleteField() sentinel, `undefined` → omitted.
+// Required so update callers can *clear* optional fields like groupId.
+export const normalizePatch = (
+  obj: Record<string, unknown>
+): Record<string, unknown> => {
+  const out: Record<string, unknown> = {};
+  for (const [k, v] of Object.entries(obj)) {
+    if (v === null) out[k] = deleteField();
+    else if (v !== undefined) out[k] = v;
+  }
+  return out;
+};
+
+export type ExpensePatch = Omit<Partial<ExpenseInput>, "groupId"> & {
+  groupId?: string | null;
+};
+
 export const addExpense = async (
   uid: string,
   input: ExpenseInput
@@ -75,15 +94,13 @@ export const addExpense = async (
 export const updateExpense = async (
   uid: string,
   id: string,
-  patch: Partial<ExpenseInput>
+  patch: ExpensePatch
 ): Promise<void> => {
-  await updateDoc(
-    doc(expensesCol(uid), id),
-    stripUndefined({
-      ...patch,
-      updatedAt: serverTimestamp(),
-    })
-  );
+  const normalized = normalizePatch({
+    ...patch,
+    updatedAt: serverTimestamp(),
+  }) as Record<string, never>;
+  await updateDoc(doc(expensesCol(uid), id), normalized);
 };
 
 export const deleteExpense = async (uid: string, id: string): Promise<void> => {
@@ -117,6 +134,24 @@ export const bulkUpdateCategory = async (
     for (const id of group) {
       batch.update(doc(expensesCol(uid), id), {
         categoryId,
+        updatedAt: serverTimestamp(),
+      });
+    }
+    await batch.commit();
+  }
+};
+
+export const bulkUpdateGroup = async (
+  uid: string,
+  ids: string[],
+  groupId: string | null
+): Promise<void> => {
+  const value = groupId === null ? deleteField() : groupId;
+  for (const group of chunk(ids, 450)) {
+    const batch = writeBatch(db);
+    for (const id of group) {
+      batch.update(doc(expensesCol(uid), id), {
+        groupId: value,
         updatedAt: serverTimestamp(),
       });
     }
