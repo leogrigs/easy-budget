@@ -44,7 +44,7 @@ describe("GroupForm", () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  it("submits with { name, color, icon } when valid", async () => {
+  it("submits with { name } when valid", async () => {
     const onSubmit = vi.fn();
     const onOpenChange = vi.fn();
     render(
@@ -65,8 +65,6 @@ describe("GroupForm", () => {
       expect(onSubmit).toHaveBeenCalledTimes(1);
     });
     const values = onSubmit.mock.calls[0][0];
-    expect(values.name).toBe("Japan Trip");
-    expect(values.color).toMatch(/^#[0-9a-fA-F]{6}$/);
-    expect(values.icon.length).toBeGreaterThan(0);
+    expect(values).toEqual({ name: "Japan Trip" });
   });
 });

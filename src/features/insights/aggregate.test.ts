@@ -31,11 +31,9 @@ const mkExpense = (
   updatedAt: ts,
 });
 
-const grp = (id: string, name: string, color: string): Group => ({
+const grp = (id: string, name: string): Group => ({
   id,
   name,
-  color,
-  icon: "Package",
   order: 0,
   createdAt: ts,
 });
@@ -161,9 +159,9 @@ describe("sumByMonthAndCategory", () => {
 
 describe("sumByGroup", () => {
   const groups = [
-    grp("g1", "Japan", "#111"),
-    grp("g2", "Birthday", "#222"),
-    grp("g3", "Empty", "#333"),
+    grp("g1", "Japan"),
+    grp("g2", "Birthday"),
+    grp("g3", "Empty"),
   ];
 
   it("aggregates and skips ungrouped expenses, sorted by total desc", () => {
@@ -175,8 +173,8 @@ describe("sumByGroup", () => {
     ];
     const rows = sumByGroup(expenses, groups);
     expect(rows).toEqual([
-      { groupId: "g2", name: "Birthday", color: "#222", total: 70, pct: 70 / 120 },
-      { groupId: "g1", name: "Japan", color: "#111", total: 50, pct: 50 / 120 },
+      { groupId: "g2", name: "Birthday", total: 70, pct: 70 / 120 },
+      { groupId: "g1", name: "Japan", total: 50, pct: 50 / 120 },
     ]);
   });
 

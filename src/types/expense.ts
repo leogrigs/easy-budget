@@ -29,8 +29,6 @@ export type CategoryInput = Omit<Category, "id" | "createdAt">;
 export interface Group {
   id: string;
   name: string;
-  color: string;
-  icon: string;
   order: number;
   createdAt: Timestamp;
 }

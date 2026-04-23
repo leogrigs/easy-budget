@@ -170,14 +170,7 @@ export const buildExpenseColumns = ({
           ? groupsById.get(row.original.groupId)
           : undefined;
         return g ? (
-          <span className="inline-flex items-center gap-1.5 text-sm">
-            <span
-              className="h-2 w-2 rounded-[2px]"
-              style={{ backgroundColor: g.color }}
-              aria-hidden
-            />
-            <span className="truncate">{g.name}</span>
-          </span>
+          <span className="truncate text-sm">{g.name}</span>
         ) : (
           <span className="text-xs text-muted-foreground">—</span>
         );

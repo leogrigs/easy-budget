@@ -1,17 +1,12 @@
-import { CalendarIcon, Filter, Search, Users, X } from "lucide-react";
+import { Filter, Search, X } from "lucide-react";
 import type { DateRange } from "react-day-picker";
 import { Button } from "./ui/button";
 import { Calendar } from "./ui/calendar";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
+import { Checkbox } from "./ui/checkbox";
 import { Input } from "./ui/input";
+import { Label } from "./ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Separator } from "./ui/separator";
 import MonthSwitcher from "./MonthSwitcher";
 import type { Category, Group } from "../types/expense";
 
@@ -30,6 +25,13 @@ interface ExpenseFiltersProps {
   value: ExpenseFiltersState;
   onChange: (next: ExpenseFiltersState) => void;
 }
+
+const EMPTY: ExpenseFiltersState = {
+  search: "",
+  categoryIds: [],
+  groupIds: [],
+  dateRange: undefined,
+};
 
 const ExpenseFilters = ({
   categories,
@@ -51,16 +53,16 @@ const ExpenseFilters = ({
     onChange({ ...value, groupIds: next });
   };
 
-  const categoryCount = value.categoryIds.length;
-  const groupCount = value.groupIds.length;
-
   const hasGroupsUi = !!groups;
 
-  const hasActive =
-    value.search.length > 0 ||
-    value.categoryIds.length > 0 ||
-    value.groupIds.length > 0 ||
-    !!value.dateRange;
+  const activeCount =
+    value.categoryIds.length +
+    value.groupIds.length +
+    (value.dateRange ? 1 : 0);
+
+  const hasActive = activeCount > 0 || value.search.length > 0;
+
+  const reset = () => onChange(EMPTY);
 
   return (
     <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
@@ -74,132 +76,147 @@ const ExpenseFilters = ({
         />
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+      <div className="flex items-center gap-2 flex-wrap">
+        <Popover>
+          <PopoverTrigger asChild>
             <Button
               variant="outline"
-              size={categoryCount === 0 ? "icon" : "default"}
-              aria-label="Filter by category"
-              title="Filter by category"
+              size={activeCount === 0 ? "icon" : "default"}
+              aria-label="Filters"
+              title="Filters"
             >
               <Filter className="h-4 w-4" />
-              {categoryCount > 0 && (
+              {activeCount > 0 && (
                 <span className="ml-1 text-xs font-medium tabular-nums">
-                  {categoryCount}
+                  {activeCount}
                 </span>
               )}
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="w-56">
-            <DropdownMenuLabel>Filter by category</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {categories.length === 0 ? (
-              <div className="px-2 py-1.5 text-sm text-muted-foreground">
-                No categories yet
-              </div>
-            ) : (
-              categories.map((category) => (
-                <DropdownMenuCheckboxItem
-                  key={category.id}
-                  checked={value.categoryIds.includes(category.id)}
-                  onSelect={(e) => e.preventDefault()}
-                  onCheckedChange={(checked) =>
-                    toggleCategory(category.id, checked === true)
-                  }
-                >
-                  {category.name}
-                </DropdownMenuCheckboxItem>
-              ))
-            )}
-          </DropdownMenuContent>
-        </DropdownMenu>
-
-        {hasGroupsUi && (
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size={groupCount === 0 ? "icon" : "default"}
-                aria-label="Filter by group"
-                title="Filter by group"
-              >
-                <Users className="h-4 w-4" />
-                {groupCount > 0 && (
-                  <span className="ml-1 text-xs font-medium tabular-nums">
-                    {groupCount}
-                  </span>
+          </PopoverTrigger>
+          <PopoverContent align="start" className="w-80 p-0">
+            <div className="p-3 space-y-4">
+              <div className="space-y-2">
+                <Label className="text-xs font-medium text-muted-foreground">
+                  Categories
+                </Label>
+                {categories.length === 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    No categories yet
+                  </p>
+                ) : (
+                  <div className="max-h-48 overflow-auto space-y-1.5 pr-1">
+                    {categories.map((category) => {
+                      const id = `filter-cat-${category.id}`;
+                      const checked = value.categoryIds.includes(category.id);
+                      return (
+                        <label
+                          key={category.id}
+                          htmlFor={id}
+                          className="flex items-center gap-2 text-sm cursor-pointer rounded-sm px-1 py-1 hover:bg-muted"
+                        >
+                          <Checkbox
+                            id={id}
+                            checked={checked}
+                            onCheckedChange={(c) =>
+                              toggleCategory(category.id, c === true)
+                            }
+                          />
+                          <span className="truncate">{category.name}</span>
+                        </label>
+                      );
+                    })}
+                  </div>
                 )}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-56">
-              <DropdownMenuLabel>Filter by group</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuCheckboxItem
-                checked={value.groupIds.includes(NO_GROUP_FILTER)}
-                onSelect={(e) => e.preventDefault()}
-                onCheckedChange={(checked) =>
-                  toggleGroup(NO_GROUP_FILTER, checked === true)
-                }
-              >
-                <span className="italic text-muted-foreground">No group</span>
-              </DropdownMenuCheckboxItem>
-              {groups!.length === 0 ? (
-                <div className="px-2 py-1.5 text-sm text-muted-foreground">
-                  No groups yet
-                </div>
-              ) : (
-                groups!.map((group) => (
-                  <DropdownMenuCheckboxItem
-                    key={group.id}
-                    checked={value.groupIds.includes(group.id)}
-                    onSelect={(e) => e.preventDefault()}
-                    onCheckedChange={(checked) =>
-                      toggleGroup(group.id, checked === true)
-                    }
-                  >
-                    {group.name}
-                  </DropdownMenuCheckboxItem>
-                ))
+              </div>
+
+              {hasGroupsUi && (
+                <>
+                  <Separator />
+                  <div className="space-y-2">
+                    <Label className="text-xs font-medium text-muted-foreground">
+                      Groups
+                    </Label>
+                    <div className="max-h-48 overflow-auto space-y-1.5 pr-1">
+                      <label
+                        htmlFor="filter-grp-none"
+                        className="flex items-center gap-2 text-sm cursor-pointer rounded-sm px-1 py-1 hover:bg-muted"
+                      >
+                        <Checkbox
+                          id="filter-grp-none"
+                          checked={value.groupIds.includes(NO_GROUP_FILTER)}
+                          onCheckedChange={(c) =>
+                            toggleGroup(NO_GROUP_FILTER, c === true)
+                          }
+                        />
+                        <span className="italic text-muted-foreground">
+                          No group
+                        </span>
+                      </label>
+                      {groups!.length === 0 ? (
+                        <p className="px-1 py-1 text-xs text-muted-foreground">
+                          No groups yet
+                        </p>
+                      ) : (
+                        groups!.map((group) => {
+                          const id = `filter-grp-${group.id}`;
+                          const checked = value.groupIds.includes(group.id);
+                          return (
+                            <label
+                              key={group.id}
+                              htmlFor={id}
+                              className="flex items-center gap-2 text-sm cursor-pointer rounded-sm px-1 py-1 hover:bg-muted"
+                            >
+                              <Checkbox
+                                id={id}
+                                checked={checked}
+                                onCheckedChange={(c) =>
+                                  toggleGroup(group.id, c === true)
+                                }
+                              />
+                              <span className="truncate">{group.name}</span>
+                            </label>
+                          );
+                        })
+                      )}
+                    </div>
+                  </div>
+                </>
               )}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        )}
+
+              <Separator />
+              <div className="space-y-2">
+                <Label className="text-xs font-medium text-muted-foreground">
+                  Custom date range
+                </Label>
+                <Calendar
+                  mode="range"
+                  selected={value.dateRange}
+                  onSelect={(range) => onChange({ ...value, dateRange: range })}
+                  numberOfMonths={1}
+                />
+              </div>
+            </div>
+            <Separator />
+            <div className="p-2 flex justify-end">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={reset}
+                disabled={!hasActive}
+              >
+                Clear all
+              </Button>
+            </div>
+          </PopoverContent>
+        </Popover>
 
         <MonthSwitcher
           value={value.dateRange}
           onChange={(range) => onChange({ ...value, dateRange: range })}
         />
 
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button variant="ghost" size="icon" aria-label="Custom date range">
-              <CalendarIcon className="h-4 w-4" />
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode="range"
-              selected={value.dateRange}
-              onSelect={(range) => onChange({ ...value, dateRange: range })}
-              numberOfMonths={2}
-            />
-          </PopoverContent>
-        </Popover>
-
         {hasActive && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() =>
-              onChange({
-                search: "",
-                categoryIds: [],
-                groupIds: [],
-                dateRange: undefined,
-              })
-            }
-          >
+          <Button variant="ghost" size="sm" onClick={reset}>
             <X className="h-4 w-4" /> Clear
           </Button>
         )}
