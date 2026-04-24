@@ -22,8 +22,6 @@ const groupsQuery = (uid: string) =>
 const mapDoc = (id: string, data: Record<string, unknown>): Group => ({
   id,
   name: data.name as string,
-  color: data.color as string,
-  icon: data.icon as string,
   order: (data.order as number) ?? 0,
   createdAt: data.createdAt as Group["createdAt"],
 });

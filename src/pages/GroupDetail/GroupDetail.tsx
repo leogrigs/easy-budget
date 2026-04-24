@@ -1,8 +1,7 @@
-import { ArrowLeft, Hash, Pencil, Trash2, Wallet } from "lucide-react";
+import { ArrowLeft, Hash, Pencil, Trash2, Users, Wallet } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { CategoryIcon } from "../../components/CategoryIcon";
 import { DataTable } from "../../components/DataTable";
 import DeleteGroupDialog, {
   type DeleteGroupAction,
@@ -33,7 +32,6 @@ import { sumByCategory } from "../../features/insights/aggregate";
 import { useCategories } from "../../hooks/useCategories";
 import { useExpenses } from "../../hooks/useExpenses";
 import { useGroups } from "../../hooks/useGroups";
-import { contrastingText } from "../../lib/categoryPalette";
 import { deleteExpense, updateExpense } from "../../services/expenses";
 import { bulkUpdateGroup } from "../../services/expenses";
 import { deleteGroup, updateGroup } from "../../services/groups";
@@ -177,14 +175,8 @@ const GroupDetail = ({ uid }: GroupDetailProps) => {
               <ArrowLeft className="h-4 w-4" />
             </Link>
           </Button>
-          <div
-            className="h-10 w-10 shrink-0 rounded-lg flex items-center justify-center"
-            style={{
-              backgroundColor: group.color,
-              color: contrastingText(group.color),
-            }}
-          >
-            <CategoryIcon name={group.icon} className="h-5 w-5" />
+          <div className="h-10 w-10 shrink-0 rounded-lg bg-muted text-muted-foreground flex items-center justify-center">
+            <Users className="h-5 w-5" />
           </div>
           <div className="min-w-0">
             <h1 className="text-2xl font-semibold tracking-tight truncate">
@@ -259,11 +251,7 @@ const GroupDetail = ({ uid }: GroupDetailProps) => {
         open={editOpen}
         title="Edit group"
         submitLabel="Save"
-        initialValue={{
-          name: group.name,
-          color: group.color,
-          icon: group.icon,
-        }}
+        initialValue={{ name: group.name }}
         onOpenChange={setEditOpen}
         onSubmit={handleEditGroup}
       />

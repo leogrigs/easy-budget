@@ -1,8 +1,7 @@
-import { Pencil, Plus, Trash2 } from "lucide-react";
+import { Pencil, Plus, Trash2, Users } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
-import { CategoryIcon } from "../../components/CategoryIcon";
 import DeleteGroupDialog, {
   type DeleteGroupAction,
 } from "../../components/DeleteGroupDialog";
@@ -14,7 +13,6 @@ import { Card, CardContent } from "../../components/ui/card";
 import { Skeleton } from "../../components/ui/skeleton";
 import { useExpenses } from "../../hooks/useExpenses";
 import { useGroups } from "../../hooks/useGroups";
-import { contrastingText } from "../../lib/categoryPalette";
 import { addGroup, deleteGroup, updateGroup } from "../../services/groups";
 import { bulkUpdateGroup } from "../../services/expenses";
 import type { Group } from "../../types/expense";
@@ -126,17 +124,8 @@ const Groups = ({ uid }: GroupsProps) => {
                       className="flex flex-1 items-center gap-4 min-w-0"
                       aria-label={`Open ${group.name}`}
                     >
-                      <div
-                        className="h-12 w-12 shrink-0 rounded-lg flex items-center justify-center"
-                        style={{
-                          backgroundColor: group.color,
-                          color: contrastingText(group.color),
-                        }}
-                      >
-                        <CategoryIcon
-                          name={group.icon}
-                          className="h-5 w-5"
-                        />
+                      <div className="h-12 w-12 shrink-0 rounded-lg bg-muted text-muted-foreground flex items-center justify-center">
+                        <Users className="h-5 w-5" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="font-medium truncate">
@@ -188,15 +177,7 @@ const Groups = ({ uid }: GroupsProps) => {
         open={formOpen}
         title={editing ? "Edit group" : "New group"}
         submitLabel={editing ? "Save" : "Create"}
-        initialValue={
-          editing
-            ? {
-                name: editing.name,
-                color: editing.color,
-                icon: editing.icon,
-              }
-            : undefined
-        }
+        initialValue={editing ? { name: editing.name } : undefined}
         onOpenChange={setFormOpen}
         onSubmit={editing ? handleUpdate : handleCreate}
       />

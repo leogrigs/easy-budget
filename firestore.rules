@@ -101,21 +101,18 @@ service cloud.firestore {
 
         allow create: if isOwner(userId)
           && request.resource.data.keys().hasAll(
-            ['name', 'color', 'icon', 'order', 'createdAt']
+            ['name', 'order', 'createdAt']
           )
           && request.resource.data.keys().hasOnly(
-            ['name', 'color', 'icon', 'order', 'createdAt']
+            ['name', 'order', 'createdAt']
           )
           && isNonEmptyString(request.resource.data.name, 80)
-          && request.resource.data.color is string
-          && request.resource.data.color.matches('^#[0-9a-fA-F]{6}$')
-          && isNonEmptyString(request.resource.data.icon, 64)
           && request.resource.data.order is int
           && request.resource.data.order >= 0;
 
         allow update: if isOwner(userId)
           && request.resource.data.diff(resource.data).affectedKeys()
-              .hasOnly(['name', 'color', 'icon', 'order']);
+              .hasOnly(['name', 'order']);
 
         allow delete: if isOwner(userId);
       }

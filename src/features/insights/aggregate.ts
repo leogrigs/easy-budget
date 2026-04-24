@@ -190,7 +190,6 @@ export const sumByCategory = (
 export interface GroupTotal {
   groupId: string;
   name: string;
-  color: string;
   total: number;
   pct: number;
 }
@@ -219,7 +218,6 @@ export const sumByGroup = (
     rows.push({
       groupId: g.id,
       name: g.name,
-      color: g.color,
       total,
       pct: grand > 0 ? total / grand : 0,
     });

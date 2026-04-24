@@ -5,6 +5,7 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "@/components/ui/chart";
+import { COLOR_PALETTE } from "@/lib/categoryPalette";
 import { formatBRL } from "./formatBRL";
 import type { GroupTotal } from "./aggregate";
 
@@ -12,9 +13,11 @@ interface GroupBreakdownChartProps {
   data: GroupTotal[];
 }
 
+const colorFor = (i: number) => COLOR_PALETTE[i % COLOR_PALETTE.length];
+
 const GroupBreakdownChart = ({ data }: GroupBreakdownChartProps) => {
   const config: ChartConfig = Object.fromEntries(
-    data.map((d) => [d.groupId, { label: d.name, color: d.color }])
+    data.map((d, i) => [d.groupId, { label: d.name, color: colorFor(i) }])
   );
   const grand = data.reduce((s, d) => s + d.total, 0);
 
@@ -42,18 +45,18 @@ const GroupBreakdownChart = ({ data }: GroupBreakdownChartProps) => {
             paddingAngle={2}
             stroke="none"
           >
-            {data.map((d) => (
-              <Cell key={d.groupId} fill={d.color} />
+            {data.map((d, i) => (
+              <Cell key={d.groupId} fill={colorFor(i)} />
             ))}
           </Pie>
         </PieChart>
       </ChartContainer>
       <ul className="flex-1 space-y-2 w-full">
-        {data.map((d) => (
+        {data.map((d, i) => (
           <li key={d.groupId} className="flex items-center gap-3 text-sm">
             <span
               className="h-2.5 w-2.5 rounded-[3px] shrink-0"
-              style={{ backgroundColor: d.color }}
+              style={{ backgroundColor: colorFor(i) }}
             />
             <span className="flex-1 truncate">{d.name}</span>
             <span className="font-mono font-medium tabular-nums">

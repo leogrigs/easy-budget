@@ -9,6 +9,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import CategoryBadge from "../../components/CategoryBadge";
+import ColumnFilterDropdown from "../../components/ColumnFilterDropdown";
+import { NO_GROUP_FILTER } from "../../components/ExpenseFilters";
 import { Button } from "../../components/ui/button";
 import { Checkbox } from "../../components/ui/checkbox";
 import {
@@ -33,6 +35,19 @@ const compareByCategoryName =
     const bn = byId.get(b.original.categoryId)?.name ?? "";
     return an.localeCompare(bn);
   };
+
+export interface ColumnHeaderFilters {
+  categories: Category[];
+  groups: Group[];
+  categoryIds: string[];
+  groupIds: string[];
+  onCategoryIdsChange: (ids: string[]) => void;
+  onGroupIdsChange: (ids: string[]) => void;
+}
+
+export interface ExpenseTableMeta {
+  headerFilters?: ColumnHeaderFilters;
+}
 
 export interface BuildExpenseColumnsOptions {
   uid: string;
@@ -153,7 +168,23 @@ export const buildExpenseColumns = ({
 
   columns.push({
     id: "category",
-    header: "Category",
+    header: ({ table }) => {
+      const meta = table.options.meta as ExpenseTableMeta | undefined;
+      const f = meta?.headerFilters;
+      if (!f) return <span>Category</span>;
+      return (
+        <ColumnFilterDropdown
+          label="Category"
+          options={f.categories.map((c) => ({
+            value: c.id,
+            label: c.name,
+          }))}
+          values={f.categoryIds}
+          onChange={f.onCategoryIdsChange}
+          emptyMessage="No categories yet"
+        />
+      );
+    },
     cell: ({ row }) => (
       <CategoryBadge category={byId.get(row.original.categoryId)} />
     ),
@@ -164,20 +195,36 @@ export const buildExpenseColumns = ({
   if (includeGroup && groupsById) {
     columns.push({
       id: "group",
-      header: "Group",
+      header: ({ table }) => {
+        const meta = table.options.meta as ExpenseTableMeta | undefined;
+        const f = meta?.headerFilters;
+        if (!f) return <span>Group</span>;
+        return (
+          <ColumnFilterDropdown
+            label="Group"
+            options={[
+              {
+                value: NO_GROUP_FILTER,
+                label: "No group",
+                italic: true,
+              },
+              ...f.groups.map((g) => ({
+                value: g.id,
+                label: g.name,
+              })),
+            ]}
+            values={f.groupIds}
+            onChange={f.onGroupIdsChange}
+            emptyMessage="No groups yet"
+          />
+        );
+      },
       cell: ({ row }) => {
         const g = row.original.groupId
           ? groupsById.get(row.original.groupId)
           : undefined;
         return g ? (
-          <span className="inline-flex items-center gap-1.5 text-sm">
-            <span
-              className="h-2 w-2 rounded-[2px]"
-              style={{ backgroundColor: g.color }}
-              aria-hidden
-            />
-            <span className="truncate">{g.name}</span>
-          </span>
+          <span className="truncate text-sm">{g.name}</span>
         ) : (
           <span className="text-xs text-muted-foreground">—</span>
         );
