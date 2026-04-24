@@ -1,3 +1,17 @@
+# [1.5.0](https://github.com/leogrigs/easy-budget/compare/v1.4.0...v1.5.0) (2026-04-24)
+
+
+### Bug Fixes
+
+* **filters:** keep column-header popover open on select ([3f3c73a](https://github.com/leogrigs/easy-budget/commit/3f3c73aedf3a2e451406c98562b841839ad2fe55))
+
+
+### Features
+
+* **expenses:** column-header filters + bulk change group ([f14995c](https://github.com/leogrigs/easy-budget/commit/f14995c66dbcd42f292132a02d37cc346c360c16))
+* **groups:** group expenses by occasion ([63747e4](https://github.com/leogrigs/easy-budget/commit/63747e4aa3de72f9c643956debf07796315b53a0))
+* **security:** guard Firebase services with App Check + reCAPTCHA Enterprise ([a12da95](https://github.com/leogrigs/easy-budget/commit/a12da95df2ae1385f32c4b40581abb2f54a2c90a))
+
 # [1.4.0](https://github.com/leogrigs/easy-budget/compare/v1.3.0...v1.4.0) (2026-04-21)
 
 
