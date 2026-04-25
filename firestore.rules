@@ -112,7 +112,10 @@ service cloud.firestore {
 
         allow update: if isOwner(userId)
           && request.resource.data.diff(resource.data).affectedKeys()
-              .hasOnly(['name', 'order']);
+              .hasOnly(['name', 'order'])
+          && isNonEmptyString(request.resource.data.name, 80)
+          && request.resource.data.order is int
+          && request.resource.data.order >= 0;
 
         allow delete: if isOwner(userId);
       }
