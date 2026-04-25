@@ -45,7 +45,8 @@ service cloud.firestore {
           )
           && request.resource.data.keys().hasOnly(
             ['name', 'amount', 'date', 'categoryId', 'groupId', 'recurringId',
-             'refunded', 'createdAt', 'updatedAt']
+             'refunded', 'installmentGroupId', 'installmentNumber',
+             'installmentTotal', 'createdAt', 'updatedAt']
           )
           && isNonEmptyString(request.resource.data.name, 120)
           && isPositiveAmount(request.resource.data.amount)
@@ -54,12 +55,23 @@ service cloud.firestore {
           && (!('groupId' in request.resource.data)
               || isNonEmptyString(request.resource.data.groupId, 64))
           && (!('refunded' in request.resource.data)
-              || request.resource.data.refunded is bool);
+              || request.resource.data.refunded is bool)
+          && (!('installmentGroupId' in request.resource.data)
+              || isNonEmptyString(request.resource.data.installmentGroupId, 64))
+          && (!('installmentNumber' in request.resource.data)
+              || (request.resource.data.installmentNumber is int
+                  && request.resource.data.installmentNumber >= 1
+                  && request.resource.data.installmentNumber <= 60))
+          && (!('installmentTotal' in request.resource.data)
+              || (request.resource.data.installmentTotal is int
+                  && request.resource.data.installmentTotal >= 2
+                  && request.resource.data.installmentTotal <= 60));
 
         allow update: if isOwner(userId)
           && request.resource.data.diff(resource.data).affectedKeys()
               .hasOnly(['name', 'amount', 'date', 'categoryId', 'groupId',
-                        'recurringId', 'refunded', 'updatedAt'])
+                        'recurringId', 'refunded', 'installmentGroupId',
+                        'installmentNumber', 'installmentTotal', 'updatedAt'])
           && isNonEmptyString(request.resource.data.name, 120)
           && isPositiveAmount(request.resource.data.amount)
           && isIsoDate(request.resource.data.date)
@@ -67,7 +79,17 @@ service cloud.firestore {
           && (!('groupId' in request.resource.data)
               || isNonEmptyString(request.resource.data.groupId, 64))
           && (!('refunded' in request.resource.data)
-              || request.resource.data.refunded is bool);
+              || request.resource.data.refunded is bool)
+          && (!('installmentGroupId' in request.resource.data)
+              || isNonEmptyString(request.resource.data.installmentGroupId, 64))
+          && (!('installmentNumber' in request.resource.data)
+              || (request.resource.data.installmentNumber is int
+                  && request.resource.data.installmentNumber >= 1
+                  && request.resource.data.installmentNumber <= 60))
+          && (!('installmentTotal' in request.resource.data)
+              || (request.resource.data.installmentTotal is int
+                  && request.resource.data.installmentTotal >= 2
+                  && request.resource.data.installmentTotal <= 60));
 
         allow delete: if isOwner(userId);
       }

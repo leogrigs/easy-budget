@@ -9,6 +9,9 @@ export interface Expense {
   groupId?: string;
   recurringId?: string;
   refunded?: boolean;
+  installmentGroupId?: string;
+  installmentNumber?: number;
+  installmentTotal?: number;
   createdAt: Timestamp;
   updatedAt: Timestamp;
 }
