@@ -1,3 +1,4 @@
+import { addMonths, format } from "date-fns";
 import {
   addDoc,
   collection,
@@ -10,6 +11,7 @@ import {
   query,
   serverTimestamp,
   updateDoc,
+  where,
   writeBatch,
   type DocumentData,
   type UpdateData,
@@ -32,6 +34,12 @@ const mapDoc = (id: string, data: Record<string, unknown>): Expense => ({
   groupId: (data.groupId as string | undefined) ?? undefined,
   recurringId: (data.recurringId as string | undefined) ?? undefined,
   refunded: (data.refunded as boolean | undefined) ?? false,
+  installmentGroupId:
+    (data.installmentGroupId as string | undefined) ?? undefined,
+  installmentNumber:
+    (data.installmentNumber as number | undefined) ?? undefined,
+  installmentTotal:
+    (data.installmentTotal as number | undefined) ?? undefined,
   createdAt: data.createdAt as Expense["createdAt"],
   updatedAt: data.updatedAt as Expense["updatedAt"],
 });
@@ -189,4 +197,67 @@ export const bulkAddExpenses = async (
     }
     await batch.commit();
   }
+};
+
+export interface InstallmentPurchaseInput {
+  name: string;
+  totalAmount: number;
+  parts: number;
+  firstDate: string;
+  categoryId: string;
+  groupId?: string;
+}
+
+// Splits a purchase into N expenses that share an installmentGroupId.
+// Amounts are computed in cents to avoid float drift; any remainder
+// (e.g. R$1000 / 3) is added to the last installment so the per-part
+// amounts sum to the original total exactly.
+export const buildInstallmentInputs = (
+  input: InstallmentPurchaseInput,
+  installmentGroupId: string
+): ExpenseInput[] => {
+  const totalCents = Math.round(input.totalAmount * 100);
+  const baseCents = Math.floor(totalCents / input.parts);
+  const remainderCents = totalCents - baseCents * input.parts;
+  const firstDate = new Date(`${input.firstDate}T00:00:00`);
+
+  const inputs: ExpenseInput[] = [];
+  for (let i = 0; i < input.parts; i++) {
+    const cents = baseCents + (i === input.parts - 1 ? remainderCents : 0);
+    inputs.push({
+      name: input.name,
+      amount: cents / 100,
+      date: format(addMonths(firstDate, i), "yyyy-MM-dd"),
+      categoryId: input.categoryId,
+      groupId: input.groupId,
+      installmentGroupId,
+      installmentNumber: i + 1,
+      installmentTotal: input.parts,
+    });
+  }
+  return inputs;
+};
+
+export const addInstallmentPurchase = async (
+  uid: string,
+  input: InstallmentPurchaseInput
+): Promise<string> => {
+  const installmentGroupId = crypto.randomUUID();
+  const inputs = buildInstallmentInputs(input, installmentGroupId);
+  await bulkAddExpenses(uid, inputs);
+  return installmentGroupId;
+};
+
+export const deleteInstallmentGroup = async (
+  uid: string,
+  installmentGroupId: string
+): Promise<number> => {
+  const q = query(
+    expensesCol(uid),
+    where("installmentGroupId", "==", installmentGroupId)
+  );
+  const snap = await getDocs(q);
+  const ids = snap.docs.map((d) => d.id);
+  if (ids.length > 0) await bulkDeleteExpenses(uid, ids);
+  return ids.length;
 };

@@ -1,9 +1,10 @@
-import { Hash, Repeat, Sigma, Wallet } from "lucide-react";
+import { CreditCard, Repeat, Sigma, Wallet } from "lucide-react";
 
 interface TotalizersProps {
   total: number;
   count: number;
   fixed: number;
+  installments?: number;
 }
 
 const formatCurrency = (value: number) =>
@@ -12,14 +13,27 @@ const formatCurrency = (value: number) =>
     currency: "BRL",
   }).format(value);
 
-const Totalizers = ({ total, count, fixed }: TotalizersProps) => {
+const Totalizers = ({
+  total,
+  count,
+  fixed,
+  installments,
+}: TotalizersProps) => {
   const average = count > 0 ? total / count : 0;
 
   const cards = [
     { label: "Total spent", value: formatCurrency(total), Icon: Wallet },
-    { label: "Entries", value: String(count), Icon: Hash },
     { label: "Avg per entry", value: formatCurrency(average), Icon: Sigma },
     { label: "Fixed", value: formatCurrency(fixed), Icon: Repeat },
+    ...(installments && installments > 0
+      ? [
+          {
+            label: "Installments",
+            value: formatCurrency(installments),
+            Icon: CreditCard,
+          },
+        ]
+      : []),
   ];
 
   return (
