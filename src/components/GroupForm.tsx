@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
@@ -46,11 +46,17 @@ const GroupForm = ({
     defaultValues: { ...DEFAULTS, ...initialValue },
   });
 
+  // Callers pass `initialValue` as an inline object literal, so depending on
+  // it would re-fire this effect on every render. Snapshot via ref and reset
+  // only when the dialog transitions open.
+  const initialValueRef = useRef(initialValue);
+  initialValueRef.current = initialValue;
+
   useEffect(() => {
     if (open) {
-      form.reset({ ...DEFAULTS, ...initialValue });
+      form.reset({ ...DEFAULTS, ...initialValueRef.current });
     }
-  }, [open, initialValue, form]);
+  }, [open, form]);
 
   const handleSubmit = form.handleSubmit(async (values) => {
     await onSubmit(values);
