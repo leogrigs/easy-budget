@@ -1,4 +1,4 @@
-import { CreditCard, Hash, Repeat, Sigma, Wallet } from "lucide-react";
+import { CreditCard, Repeat, Sigma, Wallet } from "lucide-react";
 
 interface TotalizersProps {
   total: number;
@@ -23,7 +23,6 @@ const Totalizers = ({
 
   const cards = [
     { label: "Total spent", value: formatCurrency(total), Icon: Wallet },
-    { label: "Entries", value: String(count), Icon: Hash },
     { label: "Avg per entry", value: formatCurrency(average), Icon: Sigma },
     { label: "Fixed", value: formatCurrency(fixed), Icon: Repeat },
     ...(installments && installments > 0
