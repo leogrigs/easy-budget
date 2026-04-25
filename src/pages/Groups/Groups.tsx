@@ -13,8 +13,11 @@ import { Card, CardContent } from "../../components/ui/card";
 import { Skeleton } from "../../components/ui/skeleton";
 import { useExpenses } from "../../hooks/useExpenses";
 import { useGroups } from "../../hooks/useGroups";
-import { addGroup, deleteGroup, updateGroup } from "../../services/groups";
-import { bulkUpdateGroup } from "../../services/expenses";
+import {
+  addGroup,
+  deleteGroupWithExpenses,
+  updateGroup,
+} from "../../services/groups";
 import type { Group } from "../../types/expense";
 
 interface GroupsProps {
@@ -38,8 +41,14 @@ const Groups = ({ uid }: GroupsProps) => {
     return map;
   }, [expenses]);
 
+  const nextOrder = useMemo(
+    () =>
+      groups.reduce((max, g) => (g.order > max ? g.order : max), -1) + 1,
+    [groups]
+  );
+
   const handleCreate = async (values: GroupFormValues) => {
-    await addGroup(uid, { ...values, order: groups.length });
+    await addGroup(uid, { ...values, order: nextOrder });
     toast.success(`Created group "${values.name}"`);
   };
 
@@ -51,19 +60,23 @@ const Groups = ({ uid }: GroupsProps) => {
 
   const handleDelete = async (args: DeleteGroupAction) => {
     if (!deleting) return;
+    const target = deleting;
     const ids = expenses
-      .filter((e) => e.groupId === deleting.id)
+      .filter((e) => e.groupId === target.id)
       .map((e) => e.id);
-    if (ids.length > 0) {
-      await bulkUpdateGroup(
+    try {
+      await deleteGroupWithExpenses(
         uid,
+        target.id,
         ids,
         args.action === "reassign" ? args.reassignToId : null
       );
+      toast.success(`Deleted group "${target.name}"`);
+      setDeleting(null);
+    } catch (error) {
+      console.error("[groups] delete failed", error);
+      toast.error(`Failed to delete group "${target.name}"`);
     }
-    await deleteGroup(uid, deleting.id);
-    toast.success(`Deleted group "${deleting.name}"`);
-    setDeleting(null);
   };
 
   return (
