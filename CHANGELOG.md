@@ -1,3 +1,14 @@
+# [1.7.0](https://github.com/leogrigs/easy-budget/compare/v1.6.0...v1.7.0) (2026-04-25)
+
+
+### Features
+
+* **expense-form:** installment switch with per-part preview ([a8439dd](https://github.com/leogrigs/easy-budget/commit/a8439ddf31e62a67fa1305036d5ae1e8d2b255d5))
+* **expense:** add installment fields to Expense type and Firestore rules ([4c0c221](https://github.com/leogrigs/easy-budget/commit/4c0c2219a7e0782e5dec44dc389ac31a2651473c))
+* **expenses:** installment purchase service ([5958bf1](https://github.com/leogrigs/easy-budget/commit/5958bf14eb017b78eb1ba63b2da6ef457bbf83a1))
+* **expenses:** wire installment create + delete-entire-purchase flow ([0f7b545](https://github.com/leogrigs/easy-budget/commit/0f7b54592a15be2b241f917c302b3634e30037dd))
+* **totalizers:** optional Installments card ([5850897](https://github.com/leogrigs/easy-budget/commit/585089743412ffb30cf30f2ebeec5b202c0f9611))
+
 # [1.6.0](https://github.com/leogrigs/easy-budget/compare/v1.5.0...v1.6.0) (2026-04-25)
 
 
