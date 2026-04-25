@@ -55,6 +55,7 @@ export interface BuildExpenseColumnsOptions {
   groupsById?: Map<string, Group>;
   onEdit: (expense: Expense) => void;
   onDelete: (expense: Expense) => void;
+  onDeletePurchase?: (expense: Expense) => void;
   onPromote?: (expense: Expense) => void;
   includeSelect?: boolean;
   includeGroup?: boolean;
@@ -66,6 +67,7 @@ export const buildExpenseColumns = ({
   groupsById,
   onEdit,
   onDelete,
+  onDeletePurchase,
   onPromote,
   includeSelect = true,
   includeGroup = false,
@@ -128,6 +130,15 @@ export const buildExpenseColumns = ({
             aria-label="Recurring"
           >
             <Repeat className="h-3.5 w-3.5" />
+          </span>
+        )}
+        {row.original.installmentTotal && (
+          <span
+            className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground tabular-nums"
+            title="Installment"
+            aria-label={`Installment ${row.original.installmentNumber} of ${row.original.installmentTotal}`}
+          >
+            {row.original.installmentNumber}/{row.original.installmentTotal}
           </span>
         )}
         {row.original.refunded && (
@@ -292,8 +303,19 @@ export const buildExpenseColumns = ({
               className="text-destructive"
               onSelect={() => onDelete(row.original)}
             >
-              <Trash2 className="h-4 w-4" /> Delete
+              <Trash2 className="h-4 w-4" />{" "}
+              {row.original.installmentGroupId
+                ? "Delete this installment"
+                : "Delete"}
             </DropdownMenuItem>
+            {onDeletePurchase && row.original.installmentGroupId && (
+              <DropdownMenuItem
+                className="text-destructive"
+                onSelect={() => onDeletePurchase(row.original)}
+              >
+                <Trash2 className="h-4 w-4" /> Delete entire purchase
+              </DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

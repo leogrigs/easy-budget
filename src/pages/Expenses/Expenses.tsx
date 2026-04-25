@@ -40,11 +40,13 @@ import { useGroups } from "../../hooks/useGroups";
 import { addCategory } from "../../services/categories";
 import {
   addExpense,
+  addInstallmentPurchase,
   bulkAddExpenses,
   bulkDeleteExpenses,
   bulkUpdateCategory,
   bulkUpdateGroup,
   deleteExpense,
+  deleteInstallmentGroup,
   updateExpense,
 } from "../../services/expenses";
 import { addRecurring } from "../../services/recurring";
@@ -76,6 +78,9 @@ const Expenses = ({ uid }: ExpensesProps) => {
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<Expense | null>(null);
   const [deleting, setDeleting] = useState<Expense | null>(null);
+  const [deletingPurchase, setDeletingPurchase] = useState<Expense | null>(
+    null
+  );
   const [promoting, setPromoting] = useState<Expense | null>(null);
   const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
   const [bulkCategoryOpen, setBulkCategoryOpen] = useState(false);
@@ -94,7 +99,10 @@ const Expenses = ({ uid }: ExpensesProps) => {
     const fixed = nonRefunded
       .filter((e) => !!e.recurringId)
       .reduce((acc, e) => acc + e.amount, 0);
-    return { total, count: nonRefunded.length, fixed };
+    const installments = nonRefunded
+      .filter((e) => !!e.installmentGroupId)
+      .reduce((acc, e) => acc + e.amount, 0);
+    return { total, count: nonRefunded.length, fixed, installments };
   }, [filtered]);
 
   const selectedIds = useMemo(
@@ -113,6 +121,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
           setFormOpen(true);
         },
         onDelete: (e) => setDeleting(e),
+        onDeletePurchase: (e) => setDeletingPurchase(e),
         onPromote: (e) => setPromoting(e),
         includeGroup: groups.length > 0,
       }),
@@ -136,6 +145,20 @@ const Expenses = ({ uid }: ExpensesProps) => {
   );
 
   const handleCreate = async (values: ExpenseFormResult) => {
+    if (values.installment) {
+      await addInstallmentPurchase(uid, {
+        name: values.name,
+        totalAmount: values.amount,
+        parts: values.installment.parts,
+        firstDate: values.date,
+        categoryId: values.categoryId,
+        groupId: values.groupId,
+      });
+      toast.success(
+        `Added "${values.name}" in ${values.installment.parts}x`
+      );
+      return;
+    }
     if (values.recurring) {
       const recurringId = await addRecurring(uid, {
         name: values.name,
@@ -186,6 +209,27 @@ const Expenses = ({ uid }: ExpensesProps) => {
     await deleteExpense(uid, deleting.id);
     toast.success(`Deleted "${deleting.name}"`);
     setDeleting(null);
+  };
+
+  const handleDeletePurchase = async () => {
+    if (!deletingPurchase?.installmentGroupId) return;
+    const target = deletingPurchase;
+    try {
+      const removed = await deleteInstallmentGroup(
+        uid,
+        target.installmentGroupId!
+      );
+      toast.success(
+        `Deleted "${target.name}" purchase (${removed} installment${
+          removed === 1 ? "" : "s"
+        })`
+      );
+    } catch (error) {
+      console.error("[expenses] delete purchase failed", error);
+      toast.error(`Failed to delete "${target.name}" purchase`);
+    } finally {
+      setDeletingPurchase(null);
+    }
   };
 
   const handlePromoteRecurring = async (values: {
@@ -331,6 +375,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
         total={totals.total}
         count={totals.count}
         fixed={totals.fixed}
+        installments={totals.installments}
       />
 
       {loading ? (
@@ -362,6 +407,7 @@ const Expenses = ({ uid }: ExpensesProps) => {
         categories={categories}
         groups={groups}
         allowRecurring={!editing}
+        allowInstallment={!editing}
         initialValue={
           editing
             ? {
@@ -398,6 +444,30 @@ const Expenses = ({ uid }: ExpensesProps) => {
               onClick={handleDelete}
             >
               Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog
+        open={!!deletingPurchase}
+        onOpenChange={(open) => !open && setDeletingPurchase(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete entire purchase?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will remove all {deletingPurchase?.installmentTotal ?? ""}{" "}
+              installments of &quot;{deletingPurchase?.name}&quot;.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              onClick={handleDeletePurchase}
+            >
+              Delete all
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
