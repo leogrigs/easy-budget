@@ -45,6 +45,7 @@ import {
   bulkUpdateCategory,
   bulkUpdateGroup,
   deleteExpense,
+  resolveGroupIdPatch,
   updateExpense,
 } from "../../services/expenses";
 import { addRecurring } from "../../services/recurring";
@@ -168,14 +169,12 @@ const Expenses = ({ uid }: ExpensesProps) => {
 
   const handleUpdate = async (values: ExpenseFormResult) => {
     if (!editing) return;
-    const nextGroupId =
-      values.groupId ?? (editing.groupId ? null : undefined);
     await updateExpense(uid, editing.id, {
       name: values.name,
       amount: values.amount,
       date: values.date,
       categoryId: values.categoryId,
-      groupId: nextGroupId,
+      groupId: resolveGroupIdPatch(values.groupId, editing.groupId),
     });
     toast.success(`Updated "${values.name}"`);
     setEditing(null);
@@ -207,29 +206,53 @@ const Expenses = ({ uid }: ExpensesProps) => {
   };
 
   const handleBulkDelete = async () => {
-    await bulkDeleteExpenses(uid, selectedIds);
-    toast.success(
-      `Deleted ${selectedIds.length} expense${selectedIds.length === 1 ? "" : "s"}`
-    );
-    setRowSelection({});
+    const count = selectedIds.length;
+    const suffix = count === 1 ? "" : "s";
+    try {
+      await bulkDeleteExpenses(uid, selectedIds);
+      toast.success(`Deleted ${count} expense${suffix}`);
+    } catch (error) {
+      console.error("[expenses] bulk delete failed", error);
+      toast.error(`Failed to delete ${count} expense${suffix}`);
+    } finally {
+      setRowSelection({});
+    }
   };
 
   const handleBulkChangeCategory = async (categoryId: string) => {
-    await bulkUpdateCategory(uid, selectedIds, categoryId);
-    toast.success(
-      `Moved ${selectedIds.length} expense${selectedIds.length === 1 ? "" : "s"} to a new category`
-    );
-    setRowSelection({});
+    const count = selectedIds.length;
+    const suffix = count === 1 ? "" : "s";
+    try {
+      await bulkUpdateCategory(uid, selectedIds, categoryId);
+      const name = byId.get(categoryId)?.name;
+      toast.success(
+        `Moved ${count} expense${suffix} to "${name ?? "category"}"`
+      );
+    } catch (error) {
+      console.error("[expenses] bulk change category failed", error);
+      toast.error(`Failed to change category on ${count} expense${suffix}`);
+    } finally {
+      setRowSelection({});
+    }
   };
 
   const handleBulkChangeGroup = async (groupId: string | null) => {
-    await bulkUpdateGroup(uid, selectedIds, groupId);
-    toast.success(
-      groupId === null
-        ? `Cleared group on ${selectedIds.length} expense${selectedIds.length === 1 ? "" : "s"}`
-        : `Moved ${selectedIds.length} expense${selectedIds.length === 1 ? "" : "s"} to a new group`
-    );
-    setRowSelection({});
+    const count = selectedIds.length;
+    const suffix = count === 1 ? "" : "s";
+    try {
+      await bulkUpdateGroup(uid, selectedIds, groupId);
+      const name = groupId ? groupsById.get(groupId)?.name : null;
+      toast.success(
+        groupId === null
+          ? `Cleared group on ${count} expense${suffix}`
+          : `Moved ${count} expense${suffix} to "${name ?? "group"}"`
+      );
+    } catch (error) {
+      console.error("[expenses] bulk change group failed", error);
+      toast.error(`Failed to change group on ${count} expense${suffix}`);
+    } finally {
+      setRowSelection({});
+    }
   };
 
   const handleExport = () => {
