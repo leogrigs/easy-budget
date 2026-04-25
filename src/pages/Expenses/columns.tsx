@@ -285,12 +285,21 @@ export const buildExpenseColumns = ({
             <DropdownMenuItem
               onSelect={async () => {
                 const next = !row.original.refunded;
-                await updateExpense(uid, row.original.id, { refunded: next });
-                toast.success(
-                  next
-                    ? `Marked "${row.original.name}" as refunded`
-                    : `Unmarked "${row.original.name}"`
-                );
+                try {
+                  await updateExpense(uid, row.original.id, {
+                    refunded: next,
+                  });
+                  toast.success(
+                    next
+                      ? `Marked "${row.original.name}" as refunded`
+                      : `Unmarked "${row.original.name}"`
+                  );
+                } catch (error) {
+                  console.error("[expenses] toggle refunded failed", error);
+                  toast.error(
+                    `Failed to update "${row.original.name}"`
+                  );
+                }
               }}
             >
               <RotateCcw className="h-4 w-4" />{" "}

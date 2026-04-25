@@ -13,6 +13,8 @@ import {
   updateDoc,
   where,
   writeBatch,
+  type DocumentData,
+  type UpdateData,
 } from "firebase/firestore";
 import type { Expense, ExpenseInput } from "../types/expense";
 import { db } from "./firebase";
@@ -71,8 +73,8 @@ const stripUndefined = <T extends Record<string, unknown>>(obj: T): T => {
 // Required so update callers can *clear* optional fields like groupId.
 export const normalizePatch = (
   obj: Record<string, unknown>
-): Record<string, unknown> => {
-  const out: Record<string, unknown> = {};
+): UpdateData<DocumentData> => {
+  const out: UpdateData<DocumentData> = {};
   for (const [k, v] of Object.entries(obj)) {
     if (v === null) out[k] = deleteField();
     else if (v !== undefined) out[k] = v;
@@ -83,6 +85,15 @@ export const normalizePatch = (
 export type ExpensePatch = Omit<Partial<ExpenseInput>, "groupId"> & {
   groupId?: string | null;
 };
+
+// Translates a form's `groupId` (string | undefined) into the patch shape,
+// which needs `null` to signal "clear" (via deleteField). Shared between
+// Expenses.tsx and GroupDetail.tsx edit handlers.
+export const resolveGroupIdPatch = (
+  nextValue: string | undefined,
+  currentValue: string | undefined
+): string | null | undefined =>
+  nextValue ?? (currentValue ? null : undefined);
 
 export const addExpense = async (
   uid: string,
@@ -107,7 +118,7 @@ export const updateExpense = async (
   const normalized = normalizePatch({
     ...patch,
     updatedAt: serverTimestamp(),
-  }) as Record<string, never>;
+  });
   await updateDoc(doc(expensesCol(uid), id), normalized);
 };
 

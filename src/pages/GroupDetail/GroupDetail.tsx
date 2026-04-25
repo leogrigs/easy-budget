@@ -32,9 +32,12 @@ import { sumByCategory } from "../../features/insights/aggregate";
 import { useCategories } from "../../hooks/useCategories";
 import { useExpenses } from "../../hooks/useExpenses";
 import { useGroups } from "../../hooks/useGroups";
-import { deleteExpense, updateExpense } from "../../services/expenses";
-import { bulkUpdateGroup } from "../../services/expenses";
-import { deleteGroup, updateGroup } from "../../services/groups";
+import {
+  deleteExpense,
+  resolveGroupIdPatch,
+  updateExpense,
+} from "../../services/expenses";
+import { deleteGroupWithExpenses, updateGroup } from "../../services/groups";
 import type { Expense } from "../../types/expense";
 import { buildExpenseColumns } from "../Expenses/columns";
 
@@ -98,30 +101,32 @@ const GroupDetail = ({ uid }: GroupDetailProps) => {
 
   const handleDeleteGroup = async (args: DeleteGroupAction) => {
     if (!group) return;
+    const target = group;
     const ids = groupExpenses.map((e) => e.id);
-    if (ids.length > 0) {
-      await bulkUpdateGroup(
+    try {
+      await deleteGroupWithExpenses(
         uid,
+        target.id,
         ids,
         args.action === "reassign" ? args.reassignToId : null
       );
+      toast.success(`Deleted group "${target.name}"`);
+      setDeleting(false);
+      navigate("/groups");
+    } catch (error) {
+      console.error("[groups] delete failed", error);
+      toast.error(`Failed to delete group "${target.name}"`);
     }
-    await deleteGroup(uid, group.id);
-    toast.success(`Deleted group "${group.name}"`);
-    setDeleting(false);
-    navigate("/groups");
   };
 
   const handleUpdateExpense = async (values: ExpenseFormResult) => {
     if (!editingExpense) return;
-    const nextGroupId =
-      values.groupId ?? (editingExpense.groupId ? null : undefined);
     await updateExpense(uid, editingExpense.id, {
       name: values.name,
       amount: values.amount,
       date: values.date,
       categoryId: values.categoryId,
-      groupId: nextGroupId,
+      groupId: resolveGroupIdPatch(values.groupId, editingExpense.groupId),
     });
     toast.success(`Updated "${values.name}"`);
     setEditingExpense(null);

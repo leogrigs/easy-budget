@@ -1,3 +1,18 @@
+# [1.6.0](https://github.com/leogrigs/easy-budget/compare/v1.5.0...v1.6.0) (2026-04-25)
+
+
+### Bug Fixes
+
+* **expenses:** robust error handling on bulk actions and refunded toggle ([6af6187](https://github.com/leogrigs/easy-budget/commit/6af6187fc1819dba6cf0e677843e37d2ae465639))
+* **group-detail:** adopt deleteGroupWithExpenses and resolveGroupIdPatch ([f289760](https://github.com/leogrigs/easy-budget/commit/f2897607d0f47ab2d61622e409250051b9d0415e))
+* **group-form:** snapshot initialValue in a ref to stop reset loops ([633a6ff](https://github.com/leogrigs/easy-budget/commit/633a6ff9dfa48fb9b11c831e7898f3547b8fcd7c))
+* **groups:** use atomic delete and a stable order on create ([13b617b](https://github.com/leogrigs/easy-budget/commit/13b617bc1e1c7417ed734427a5d4059b8c12691e))
+
+
+### Features
+
+* **groups:** atomic deleteGroupWithExpenses + stricter update rule ([716b03e](https://github.com/leogrigs/easy-budget/commit/716b03e550691e87e97099ccb10acce2d749729c))
+
 # [1.5.0](https://github.com/leogrigs/easy-budget/compare/v1.4.0...v1.5.0) (2026-04-24)
 
 
