@@ -41,6 +41,8 @@ const schema = z
       .regex(/^\d{4}-\d{2}-\d{2}$/)
       .optional()
       .or(z.literal("")),
+    installment: z.boolean(),
+    parts: z.number().int().optional(),
   })
   .superRefine((v, ctx) => {
     if (v.recurring && !v.frequency) {
@@ -57,6 +59,22 @@ const schema = z
         message: "End date must be after the start date",
       });
     }
+    if (v.installment && v.recurring) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["installment"],
+        message: "Pick either recurring or installment, not both",
+      });
+    }
+    if (v.installment) {
+      if (!v.parts || v.parts < 2 || v.parts > 60) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["parts"],
+          message: "Parts must be between 2 and 60",
+        });
+      }
+    }
   });
 
 export type ExpenseFormValues = z.infer<typeof schema>;
@@ -70,6 +88,9 @@ export interface ExpenseFormResult {
   recurring?: {
     frequency: RecurringFrequency;
     endDate?: string;
+  };
+  installment?: {
+    parts: number;
   };
 }
 
@@ -87,6 +108,7 @@ interface ExpenseFormProps {
     groupId?: string;
   };
   allowRecurring?: boolean;
+  allowInstallment?: boolean;
   onSubmit: (values: ExpenseFormResult) => Promise<void> | void;
   onOpenChange: (open: boolean) => void;
 }
@@ -99,6 +121,46 @@ const today = (): string => {
   return `${y}-${m}-${day}`;
 };
 
+const currency = new Intl.NumberFormat("pt-BR", {
+  style: "currency",
+  currency: "BRL",
+});
+
+// Mirrors the cents split in buildInstallmentInputs so the preview shows
+// exactly what will be persisted (the last part carries any remainder).
+const InstallmentPreview = ({
+  total,
+  parts,
+}: {
+  total: number;
+  parts: number | undefined;
+}) => {
+  if (!parts || parts < 2 || !total || total <= 0) {
+    return (
+      <div className="h-10 flex items-center text-sm text-muted-foreground">
+        —
+      </div>
+    );
+  }
+  const totalCents = Math.round(total * 100);
+  const baseCents = Math.floor(totalCents / parts);
+  const lastCents = totalCents - baseCents * (parts - 1);
+  const base = baseCents / 100;
+  const last = lastCents / 100;
+  return (
+    <div className="h-10 flex flex-col justify-center">
+      <span className="text-sm font-medium tabular-nums">
+        {currency.format(base)}
+      </span>
+      {base !== last && (
+        <span className="text-xs text-muted-foreground">
+          last: {currency.format(last)}
+        </span>
+      )}
+    </div>
+  );
+};
+
 const ExpenseForm = ({
   open,
   title,
@@ -107,6 +169,7 @@ const ExpenseForm = ({
   groups,
   initialValue,
   allowRecurring = true,
+  allowInstallment = true,
   onSubmit,
   onOpenChange,
 }: ExpenseFormProps) => {
@@ -119,6 +182,8 @@ const ExpenseForm = ({
     recurring: false,
     frequency: "monthly",
     endDate: "",
+    installment: false,
+    parts: 2,
   };
 
   const form = useForm<ExpenseFormValues>({
@@ -136,6 +201,9 @@ const ExpenseForm = ({
   const categoryId = form.watch("categoryId");
   const groupId = form.watch("groupId");
   const recurring = form.watch("recurring");
+  const installment = form.watch("installment");
+  const amount = form.watch("amount");
+  const parts = form.watch("parts");
   const hasGroups = !!groups && groups.length > 0;
 
   const handleSubmit = form.handleSubmit(async (values) => {
@@ -151,6 +219,9 @@ const ExpenseForm = ({
         frequency: values.frequency,
         endDate: values.endDate || undefined,
       };
+    }
+    if (values.installment && values.parts) {
+      result.installment = { parts: values.parts };
     }
     await onSubmit(result);
     onOpenChange(false);
@@ -182,7 +253,9 @@ const ExpenseForm = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="expense-amount">Amount</Label>
+              <Label htmlFor="expense-amount">
+                {installment ? "Total amount" : "Amount"}
+              </Label>
               <CurrencyInput
                 id="expense-amount"
                 {...form.register("amount", { valueAsNumber: true })}
@@ -275,9 +348,14 @@ const ExpenseForm = ({
                 <Switch
                   id="expense-recurring"
                   checked={recurring}
-                  onCheckedChange={(v) =>
-                    form.setValue("recurring", v, { shouldValidate: true })
-                  }
+                  onCheckedChange={(v) => {
+                    form.setValue("recurring", v, { shouldValidate: true });
+                    if (v) {
+                      form.setValue("installment", false, {
+                        shouldValidate: true,
+                      });
+                    }
+                  }}
                 />
               </div>
               {recurring && (
@@ -320,6 +398,62 @@ const ExpenseForm = ({
                     )}
                   </div>
                 </div>
+              )}
+            </div>
+          )}
+
+          {allowInstallment && (
+            <div className="rounded-md border border-border p-3 space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label htmlFor="expense-installment">Installment</Label>
+                  <p className="text-xs text-muted-foreground">
+                    Split a single purchase into fixed monthly parts.
+                  </p>
+                </div>
+                <Switch
+                  id="expense-installment"
+                  checked={installment}
+                  onCheckedChange={(v) => {
+                    form.setValue("installment", v, { shouldValidate: true });
+                    if (v) {
+                      form.setValue("recurring", false, {
+                        shouldValidate: true,
+                      });
+                    }
+                  }}
+                />
+              </div>
+              {installment && (
+                <>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-2">
+                      <Label htmlFor="expense-parts">Parts</Label>
+                      <Input
+                        id="expense-parts"
+                        type="number"
+                        min={2}
+                        max={60}
+                        step={1}
+                        {...form.register("parts", { valueAsNumber: true })}
+                      />
+                      {form.formState.errors.parts && (
+                        <p className="text-xs text-destructive">
+                          {form.formState.errors.parts.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Per installment</Label>
+                      <InstallmentPreview total={amount} parts={parts} />
+                    </div>
+                  </div>
+                  {form.formState.errors.installment && (
+                    <p className="text-xs text-destructive">
+                      {form.formState.errors.installment.message}
+                    </p>
+                  )}
+                </>
               )}
             </div>
           )}
