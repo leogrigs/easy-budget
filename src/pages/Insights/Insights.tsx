@@ -54,8 +54,8 @@ interface InsightsProps {
 const Insights = ({ uid }: InsightsProps) => {
   const { expenses: rawExpenses, loading: loadingExpenses } = useExpenses(uid);
   const { categories, byId, loading: loadingCategories } = useCategories(uid);
-  const { groups, loading: loadingGroups } = useGroups(uid);
-  const loading = loadingExpenses || loadingCategories || loadingGroups;
+  const { groups } = useGroups(uid);
+  const loading = loadingExpenses || loadingCategories;
 
   const [dateRange, setDateRange] = useState<DateRange | undefined>(() => {
     const now = new Date();
