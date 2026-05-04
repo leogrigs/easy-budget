@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/leogrigs/easy-budget/compare/v1.7.0...v1.7.1) (2026-05-04)
+
+
+### Bug Fixes
+
+* **deploy:** add SPA rewrite so client routes survive a refresh ([2ab78ed](https://github.com/leogrigs/easy-budget/commit/2ab78ed9853cfc3fa9141059528650932c78afa8))
+
 # [1.7.0](https://github.com/leogrigs/easy-budget/compare/v1.6.0...v1.7.0) (2026-04-25)
 
 
